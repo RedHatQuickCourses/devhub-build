@@ -1,6 +1,6 @@
 site:
-  title: Placeholder Course Title
-  start_page: placeholder-course-name::index.adoc
+  title: Building Developer Portals with Red Hat Developer Hub
+  start_page: devhub-build::index.adoc
 
 content:
   sources:

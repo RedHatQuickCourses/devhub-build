@@ -1,3 +1,11 @@
-= Chapter 1
+= Software Templates
+:navtitle: Software Templates
 
-This is the home page of _Chapter_ 1 in the *hello* quick course...
+In this chapter, you will take a deeper look at the RHDH `Software Catalog`, and how to create and use `Software Templates` to populate the Catalog.
+
+== Objectives
+
+* Create types of entities in the Software Catalog
+* Different ways to populate the Software Catalog
+* Create Software Templates in Red Hat Developer Hub
+* Create and deploy applications from the Software Template

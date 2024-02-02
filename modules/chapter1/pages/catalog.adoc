@@ -1,0 +1,28 @@
+= A Deeper Dive into the RHDH Software Catalog
+:navtitle: Software Catalog Deep Dive
+
+== Concepts and Terminology
+
+Explain different types of components...
+
+== Adding Components to the Catalog
+
+=== Manual Registration of Components
+
+=== New Components with Software Templates
+
+=== Adding Components from remote URLs
+
+=== Updating Components
+
+== Querying the Catalog
+
+== Plugins
+
+== Lab: Populating the Catalog
+
+== References
+
+* https://backstage.io/docs/features/software-catalog[Backstage Software Catalog^]
+* https://backstage.io/docs/features/software-catalog/system-model[Catalog System Model^]
+* https://backstage.io/docs/features/software-catalog/descriptor-format[Catalog YAML Format^]
