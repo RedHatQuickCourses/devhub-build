@@ -137,7 +137,7 @@
 </ol>
 </div>
 <div class="paragraph">
-<p>The outcome of the last phase is the <code>Catalog API</code> along with search metadata stored locally in RHDH for fast querying. Various plugins and other components in RHDH use the Catalog API to perform various actions and display some information to the user, or pass on the processed data to other parts in RHDH. You can consider the Catalog as the main <strong>static</strong> data around which various <strong>dynamic</strong> actions are composed.</p>
+<p>The outcome of the last phase is the <code>Catalog API</code> along with search metadata stored locally in RHDH for fast querying. Various plugins and other components in RHDH use the Catalog API to perform different types of actions and display some information to the user, or pass on the processed data to other parts in RHDH. You can consider the Catalog as the main <strong>static</strong> data around which various <strong>dynamic</strong> actions are composed.</p>
 </div>
 <div class="paragraph">
 <p>For more details on each of the phases, consult the references section at the bottom of this section.</p>
@@ -301,6 +301,30 @@
 </div>
 <div class="paragraph">
 <p>To remove entities from the Catalog, you can delete them from the RHDH component details page. This action will delete the entity and all dependent entities related to it.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Deleting or moving the catalog YAML files from your Git repositories will not automatically delete the entities in the RHDH web UI. You must remove them manually. Consult the backstage reference documentation for orphan deletion strategy to understand the nuances of the deletion workflow.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Deleting entities from the RHDH web UI for auto-discovered entities is not recommended and will not delete the entities. The next scheduled fetch using auto-discovery will re-populate the entities in the Catalog. Delete the original source YAML files in the remote Git repository and then clean up the catalog.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -556,15 +580,15 @@ If you see any warnings or errors about missing entity references, them correct 
 </li>
 <li>
 <p>Click on the <code>DEPENDENCIES</code> tab in the component details page. Notice how RHDH has created a nice visualization of your application&#8217;s dependencies, systems, and owners.</p>
-</li>
-<li>
-<p>Switch back to the <code>Catalog</code> page and note you now have many more options in the <code>Kind</code> drop-down. Filter the catalog by selecting different options for <code>Kind</code> and <code>Type</code>. You can 'star' the component and have it appear on your RHDH home page for convenient access.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/comp-deps.png" alt="comp deps" width="600">
 </div>
 <div class="title">Figure 5. Component Dependencies</div>
 </div>
+</li>
+<li>
+<p>Switch back to the <code>Catalog</code> page and note you now have many more options in the <code>Kind</code> drop-down. Filter the catalog by selecting different options for <code>Kind</code> and <code>Type</code>. You can 'star' the component and have it appear on your RHDH home page for convenient access.</p>
 </li>
 <li>
 <p>Clean up. Delete the entities you imported. From the component details page, expand the menu in the top right corner (three vertical dots) and select <code>Unregister entity</code>. You will be prompted to review the details of the component and a warning will be provided that this component and all its dependencies will be deleted from the catalog. Click <code>UNREGISTER LOCATION</code> to remove the component.</p>
@@ -607,7 +631,7 @@ There are several nuances to deleting entities from the catalog. For example, du
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Inspect the <code><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/tree/main/rhdh-discovery/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/tree/main/rhdh-discovery/catalog-info.yaml</a></code> file, which declares an <code>API</code> entity for the <code>Petstore</code> sample application. Note the <code>Kind</code> declaration of <code>API</code>, and the <code>spec</code> declaration for the <code>type</code> and <code>definition</code> pointing to the OpenAPI YAML file describing the API end points for the Petstore backend service.</p>
+<p>Inspect the <code><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/tree/main/rhdh-discovery/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/tree/main/rhdh-discovery/catalog-info.yaml</a></code> file, which references the <code>petstore-api.yaml' file. The `petstore-api.yaml' file declares an `API</code> entity for the <code>Petstore</code> sample application. Note the <code>Kind</code> declaration of <code>API</code>, and the <code>spec</code> declaration for the <code>type</code> and <code>definition</code> pointing to the OpenAPI YAML file describing the API end points for the Petstore backend service.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
@@ -650,6 +674,18 @@ metadata:
           frequency: { minutes: 5 }
           timeout: { minutes: 3 }</code></pre>
 </div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+In production systems, ensure that you set the schedule at a higher value (for example, 60 minutes or even more) to avoid frequent scans of your Git repository. You may be throttled or denied access if the scanning is too frequent.
+</td>
+</tr>
+</table>
 </div>
 </li>
 <li>
