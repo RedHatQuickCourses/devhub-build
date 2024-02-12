@@ -19,7 +19,7 @@ To populate an entity in the Catalog typically involves three phases correspondi
 . *Processors* validate, analyze, enrich, and transform the raw entity data into its final form
 . *Stitchers*  gather data emitted by various processors and populate the Catalog API.
 
-The outcome of the last phase is the `Catalog API` along with search metadata stored locally in RHDH for fast querying. Various plugins and other components in RHDH use the Catalog API to perform various actions and display some information to the user, or pass on the processed data to other parts in RHDH. You can consider the Catalog as the main *static* data around which various *dynamic* actions are composed.
+The outcome of the last phase is the `Catalog API` along with search metadata stored locally in RHDH for fast querying. Various plugins and other components in RHDH use the Catalog API to perform different types of actions and display some information to the user, or pass on the processed data to other parts in RHDH. You can consider the Catalog as the main *static* data around which various *dynamic* actions are composed.
 
 For more details on each of the phases, consult the references section at the bottom of this section.
 
@@ -122,6 +122,10 @@ catalog:
 To update component details, teams owning the corresponding Git repository where the catalog YAML files live, update it using normal Git workflow policies. RHDH then automatically fetches the updated information based on a configurable schedule (minutes, hours or days) and then re-indexes and updates the Catalog.
 
 To remove entities from the Catalog, you can delete them from the RHDH component details page. This action will delete the entity and all dependent entities related to it.
+
+WARNING: Deleting or moving the catalog YAML files from your Git repositories will not automatically delete the entities in the RHDH web UI. You must remove them manually. Consult the backstage reference documentation for orphan deletion strategy to understand the nuances of the deletion workflow.
+
+NOTE: Deleting entities from the RHDH web UI for auto-discovered entities is not recommended and will not delete the entities. The next scheduled fetch using auto-discovery will re-populate the entities in the Catalog. Delete the original source YAML files in the remote Git repository and then clean up the catalog.
 
 == Catalog Processing Interval and Scheduling
 
@@ -269,10 +273,10 @@ image::view-component-imported.png[title=myapp Details Imported Successfully,wid
 NOTE: If you see any warnings or errors about missing entity references, them correct your YAML files and re-import the entities. Every reference to an entity must in the Catalog (either pre-existing, or created along with the entity you are populating into the Catalog).
 
 . Click on the `DEPENDENCIES` tab in the component details page. Notice how RHDH has created a nice visualization of your application's dependencies, systems, and owners.
-
-. Switch back to the `Catalog` page and note you now have many more options in the `Kind` drop-down. Filter the catalog by selecting different options for `Kind` and `Type`. You can 'star' the component and have it appear on your RHDH home page for convenient access.
 +
 image::comp-deps.png[title=Component Dependencies,width=600]
+
+. Switch back to the `Catalog` page and note you now have many more options in the `Kind` drop-down. Filter the catalog by selecting different options for `Kind` and `Type`. You can 'star' the component and have it appear on your RHDH home page for convenient access.
 
 . Clean up. Delete the entities you imported. From the component details page, expand the menu in the top right corner (three vertical dots) and select `Unregister entity`. You will be prompted to review the details of the component and a warning will be provided that this component and all its dependencies will be deleted from the catalog. Click `UNREGISTER LOCATION` to remove the component.
 +
@@ -288,7 +292,7 @@ In this lab, you will configure RHDH to auto-discover catalog YAML descriptor fi
 
 ==== Steps
 
-. Inspect the `https://github.com/RedHatQuickCourses/devhub-qc-apps/tree/main/rhdh-discovery/catalog-info.yaml` file, which declares an `API` entity for the `Petstore` sample application. Note the `Kind` declaration of `API`, and the `spec` declaration for the `type` and `definition` pointing to the OpenAPI YAML file describing the API end points for the Petstore backend service.
+. Inspect the `https://github.com/RedHatQuickCourses/devhub-qc-apps/tree/main/rhdh-discovery/catalog-info.yaml` file, which references the `petstore-api.yaml' file. The `petstore-api.yaml' file declares an `API` entity for the `Petstore` sample application. Note the `Kind` declaration of `API`, and the `spec` declaration for the `type` and `definition` pointing to the OpenAPI YAML file describing the API end points for the Petstore backend service.
 +
 [subs=+quotes,yaml]
 ----
@@ -329,6 +333,8 @@ catalog:
           frequency: { minutes: 5 }
           timeout: { minutes: 3 }
 ```
++
+WARNING: In production systems, ensure that you set the schedule at a higher value (for example, 60 minutes or even more) to avoid frequent scans of your Git repository. You may be throttled or denied access if the scanning is too frequent.
 
 . To make RHDH auto-discover this entity, enable the GitHub auto-discovery plugin in the RHDH Helm chart. Navigate to the `rhdh` helm chart and click `Upgrade`. Switch to the form view, adn then navigate to `global -> Dynamic plugins configuration -> List of dynamic plugins that should be installed in the backstage application -> Package specification of the dynamic plugin to install`, add the following value:
 +
