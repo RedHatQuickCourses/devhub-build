@@ -1,2 +1,3 @@
 * xref:index.adoc[]
 ** xref:catalog.adoc[]
+** xref:techdocs.adoc[]
