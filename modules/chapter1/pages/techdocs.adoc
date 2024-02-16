@@ -48,6 +48,11 @@ This is the recommended set up for production. CI/CD workflows convert the markd
 
 The following labs will cover these scenarios and give you hands-on experience with configuring and writing TechDocs.
 
+
+== Search
+
+You do not have to configure anything extra for search. RHDH automatically indexes your documentation and enables rapid search find functionality for your developers.
+
 == Lab: Basic TechDocs in Local Mode
 
 Enabling TechDocs in "all local" mode involves three major tasks:
@@ -143,12 +148,15 @@ techdocs: <2>
 +
 image::techdocs-render.png[title=Rendered Documentation]
 
+. Click the `Search` button in the top left corner of the RHDH sidebar (in the RHDH home page). Enter `lorem` in the `Search field`, and observe that RHDH quickly presents you with a list of results where it found the term.
++
+image::search-results.png[title=Search Results]
+
 == Optional Challenge Lab: Advanced TechDocs using External Generators and Publishers
 
 The blog post at https://janus-idp.io/blog/2023/06/03/production-ready-techdocs provides detailed instructions on how to configure TechDocs to use an external builder and publisher, along with CI/CD workflow automation to rebuild the markdown source based on Git webhook triggers. Make changes to your configuration to get the TechDocs plugin working with this set up.
 
 Credits for Lab: Jason Froehlich (https://github.com/jayfray12)
-
 
 == References
 
