@@ -211,6 +211,7 @@ metadata: <i class="conum" data-value="2"></i><b>(2)</b>
         allowedHosts: ['github.com']
         description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
+        repoVisibility: public # default is private
 
     - id: register
       name: Register
@@ -253,7 +254,7 @@ metadata: <i class="conum" data-value="2"></i><b>(2)</b>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>Built-in template actions. In this scenario, fetch template, publish repo and register catalog entity</td>
+<td>Built-in template actions. In this scenario, fetch template, publish repo and register catalog entity. Default visibility of created Git repository is private. You need to set <code>repoVisibility</code> to public for the scaffolder to create public repository</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="7"></i><b>7</b></td>
