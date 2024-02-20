@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>A Deeper Dive into the RHDH Software Catalog :: Building Developer Portals with Red Hat Developer Hub</title>
     <link rel="prev" href="index.html">
-    <link rel="next" href="techdocs.html">
+    <link rel="next" href="templates.html">
     <meta name="generator" content="Antora 3.1.3">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>var uiRootPath = '../../../_'</script>
@@ -51,6 +51,9 @@
 <ul class="nav-list">
   <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="catalog.html">Software Catalog Deep Dive</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="templates.html">Software Templates</a>
   </li>
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="techdocs.html">TechDocs and Search</a>
@@ -99,51 +102,675 @@
 </aside>
 <article class="doc">
 <h1 class="page">A Deeper Dive into the RHDH Software Catalog</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Before you learn about Software Templates in RHDH, you need to understand the concepts and terminology behind the Software Catalog. This section takes a closer look at the Catalog.</p>
+</div>
+<div class="paragraph">
+<p>The first course in the learning path for RHDH introduced you to the general concept of the <code>Software Catalog</code> or just <code>Catalog</code>. The aptly named Catalog is a collection of <code>Components</code>, also called <code>Entities</code>. Entities can be of different types corresponding to things like APIs, internal and external applications (SaaS), templates, locations where other entities can be found, and many more.</p>
+</div>
+<div class="paragraph">
+<p>This section walks you though a hands-on experience of populating the Catalog with different types of entities, using many different approaches.</p>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_concepts_and_terminology"><a class="anchor" href="#_concepts_and_terminology"></a>Concepts and Terminology</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Explain different types of components&#8230;&#8203;</p>
+<p>The following diagram provides a brief overview of how components and entities are populated in the Catalog.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/catalog-concepts.png" alt="catalog concepts">
+</div>
+<div class="title">Figure 1. Catalog Import Process</div>
+</div>
+<div class="paragraph">
+<p>To populate an entity in the Catalog typically involves three phases corresponding to three logical software components in RHDH:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Entity Providers</strong> are responsible for communicating with different types of entities and import raw data into RHDH.</p>
+</li>
+<li>
+<p><strong>Processors</strong> validate, analyze, enrich, and transform the raw entity data into its final form</p>
+</li>
+<li>
+<p><strong>Stitchers</strong>  gather data emitted by various processors and populate the Catalog API.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The outcome of the last phase is the <code>Catalog API</code> along with search metadata stored locally in RHDH for fast querying. Various plugins and other components in RHDH use the Catalog API to perform different types of actions and display some information to the user, or pass on the processed data to other parts in RHDH. You can consider the Catalog as the main <strong>static</strong> data around which various <strong>dynamic</strong> actions are composed.</p>
+</div>
+<div class="paragraph">
+<p>For more details on each of the phases, consult the references section at the bottom of this section.</p>
+</div>
+<div class="paragraph">
+<p>The following are some of the most commonly used types of entities in the Catalog:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Components</dt>
+<dd>
+<p>A <code>Component</code> is a generic piece of software (web app, mobile app, a back end service, a front end app, CLI tools, and many more) that can be tracked in a version control system like Git. A component can implement <code>APIs</code> that other components consume, or consume APIs implemented by other components.</p>
+</dd>
+<dt class="hdlist1">API</dt>
+<dd>
+<p><code>APIs</code> are implemented by components and provide formal interfaces between components. APIs are described using many different standards (REST, gRPC, GraphQL, and more) that are ideally machine readable. RHDH has support for documenting, importing, indexing and searching APIs of many different types and exposes them in the Catalog for discovery and exploration by developers across your organization.</p>
+</dd>
+<dt class="hdlist1">Resource</dt>
+<dd>
+<p>Resources are infrastructure dependencies that a component needs to operate at runtime (Databases, Message Queues, Storage systems, Servers, VMs, and more).</p>
+</dd>
+<dt class="hdlist1">User</dt>
+<dd>
+<p>A user describes a person, such as an employee, or external users like contractors and anyone whom you want to track in RHDH that are part of your software ecosystem.</p>
+</dd>
+<dt class="hdlist1">Group</dt>
+<dd>
+<p>A group describes a set of <code>Users</code> logically grouped into a parent entity (development teams, business units, and more).</p>
+</dd>
+<dt class="hdlist1">Location</dt>
+<dd>
+<p>A location acts as proxy that references other locations to look for catalog data (YAML files).</p>
+</dd>
+<dt class="hdlist1">Template</dt>
+<dd>
+<p>A <code>Template</code> is an RHDH entity that describes a set of source files and structure, from which you can instantiate instances of applications,services, CI/CD pipelines, Infrastructure as Code (IaC) playbooks, operating system and virtual machine provisioning scripts, and more. These instances are then automatically populated and tracked in the RHDH Software Catalog. A Template can contain a mix of source code, configuration files, build system configuration, and all the dependencies that are required for an application or a service. The Template is parsed by RHDH, and it then provides a visual interface to create application instances from it. Dynamic parts that meed user input are modeled as <code>Parameters</code> in the template. Input forms corresponding to the parameters are automatically created by RHDH in the front end portal.</p>
+</dd>
+<dt class="hdlist1">System</dt>
+<dd>
+<p>A <code>System</code> is a logical grouping of <code>Resources</code> and <code>Components</code> that provides one or more <code>APIs</code>. A System abstracts away the resources and private APIs between the components for any consumers. This means that as the owner, you can evolve the implementation, in terms of components and resources, without your consumers being affected.</p>
+</dd>
+<dt class="hdlist1">Domain</dt>
+<dd>
+<p>While <code>Systems</code> are the basic level of encapsulation for related entities, it is often useful to group a collection of systems that share terminology, domain models, metrics, KPIs, business purpose, or documentation into a higher level abstraction called a <code>Domain</code>.</p>
+</dd>
+</dl>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_adding_components_to_the_catalog"><a class="anchor" href="#_adding_components_to_the_catalog"></a>Adding Components to the Catalog</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Components to be populated in the Catalog are described using YAML files, mostly inspired by Kubernetes configuration files. These YAML files are typically stored in a Git repository alongside the component they describe, and served remotely over HTTP/HTTPS to RHDH for bulk import. There are several different ways of populating the Catalog.</p>
+</div>
+<div class="sect2">
+<h3 id="_static_configuration_of_catalog"><a class="anchor" href="#_static_configuration_of_catalog"></a>Static Configuration of Catalog</h3>
+<div class="paragraph">
+<p>You can directly embed the location if your catalog YAML files in the <code>app-config-rhdh</code> YAML files:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">catalog:
+  locations:
+    - type: url
+      target: &lt;location of your YAML&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Adding a lot of small catalog YAML files in this manner is not recommended as you need to redeploy the RHDH container for the changes to take effect.</p>
+</div>
+<div class="paragraph">
+<p>Instead, you can provide the URL of a top-level YAML file that includes other YAML files. This way, you can change the included YAML files without requiring updates to the <code>app-config</code> YAML files.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="https://github.com/janus-idp/backstage-showcase/blob/main/app-config.yaml#L154" class="bare">https://github.com/janus-idp/backstage-showcase/blob/main/app-config.yaml#L154</a> for an example of this technique.</p>
+</div>
+</div>
 <div class="sect2">
 <h3 id="_manual_registration_of_components"><a class="anchor" href="#_manual_registration_of_components"></a>Manual Registration of Components</h3>
-
+<div class="paragraph">
+<p>You can manually add components to the Catalog by navigating to the <code>Catalog</code> page in RHDH and then navigating to the <code>CREATE &gt; REGISTER EXISTING COMPONENT</code>. Alternatively, you can click <code>Create&#8230;&#8203;</code> in the RHDH left navigation sidebar and then click <code>REGISTER EXISTING COMPONENT</code>.</p>
+</div>
+<div class="paragraph">
+<p>You will then be prompted to enter a remote URL which locates the YAML file declaring the details of the new component. RHDH will then fetch the YAML file, parse it and populate the Catalog if the YAML file has valid syntax.</p>
+</div>
+<div class="paragraph">
+<p>This approach is useful for already existing components and APIs that you want to import into RHDH. You store the catalog YAML file in the same Git repository as the source code of the component.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_new_components_with_software_templates"><a class="anchor" href="#_new_components_with_software_templates"></a>New Components with Software Templates</h3>
-
+<div class="paragraph">
+<p>Instantiating a Template will automatically populate the Catalog with the instance of the application. This is a fast, efficient, less error prone way to create new components providing self-service capabilities to your developers. You will learn how to create Software Templates and instantiate applications from them in more detail in the next section.</p>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_adding_components_from_remote_urls"><a class="anchor" href="#_adding_components_from_remote_urls"></a>Adding Components from remote URLs</h3>
-
+<h3 id="_github_auto_discovery"><a class="anchor" href="#_github_auto_discovery"></a>GitHub Auto-Discovery</h3>
+<div class="paragraph">
+<p>RHDH provides a GitHub auto-discovery plugin for importing entities into the Catalog automatically (based on a configurable interval). You need to set up GitHub integration in your <code>app-config-rhdh</code> ConfigMap for this to work correctly. You can configure auto-discovery rules so that RHDH can scan your GitHub organization for catalog YAML files based on regular expression patterns, along with custom file and directory structure layouts. By default, the auto-discovery plugin looks for files named <code>catalog-info.yaml</code>.</p>
 </div>
-<div class="sect2">
-<h3 id="_updating_components"><a class="anchor" href="#_updating_components"></a>Updating Components</h3>
-
+<div class="paragraph">
+<p>The GitHub auto-discovery dynamic plugin needs to be enabled by editing the helm chart, and then you need to add the configuration for the discovery process under the <code>catalog.providers.github</code> key in your <code>app-config-rhdh</code> ConfigMap as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">catalog:
+  rules:
+    - allow: [Component, System, API, Template, Location, Resource, User, Group, Domain] <i class="conum" data-value="1"></i><b>(1)</b>
+  providers:
+    githubOrg:
+      default:
+        id: development
+        orgUrl: ${GITHUB_ORG_URL}
+    github: <i class="conum" data-value="2"></i><b>(2)</b>
+      providerId:
+        organization: RedHatQuickCourses <i class="conum" data-value="3"></i><b>(3)</b>
+        catalogPath: '/rhdh-discovery/catalog-info.yaml' <i class="conum" data-value="4"></i><b>(4)</b>
+        filters:
+          branch: 'main' <i class="conum" data-value="5"></i><b>(5)</b>
+          repository: '.*' <i class="conum" data-value="6"></i><b>(6)</b>
+        schedule: <i class="conum" data-value="7"></i><b>(7)</b>
+          frequency: { minutes: 5 }
+          timeout: { minutes: 3 }</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Allow entities of different types to be populated in the Catalog. By default, only <code>Component</code>, <code>API</code>, and <code>Location</code> is allowed.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>github</code> provider (having a github integration under <code>app.integrations</code> is required)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The GitHub Organization under which RHDH should scan for catalog YAML descriptor files</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Path to the catalog YAML files (can use wildcards here)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Tells RHDH to look for YAML files in the mentioned GitHub branch (Optional)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Regular expression matching the repository names(s) - in this case all repositories in the GitHub Org (Optional)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Scheduled interval at which RHDH should fetch and update catalog information. (Optional)</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>See <a href="https://backstage.io/docs/integrations/github/discovery/" class="bare">https://backstage.io/docs/integrations/github/discovery/</a> for full details about the different ways you can configure <code>catalogPath</code>, <code>branch</code>, and <code>repository</code> settings.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_updating_and_deleting_components"><a class="anchor" href="#_updating_and_deleting_components"></a>Updating and Deleting Components</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To update component details, teams owning the corresponding Git repository where the catalog YAML files live, update it using normal Git workflow policies. RHDH then automatically fetches the updated information based on a configurable schedule (minutes, hours or days) and then re-indexes and updates the Catalog.</p>
+</div>
+<div class="paragraph">
+<p>To remove entities from the Catalog, you can delete them from the RHDH component details page. This action will delete the entity and all dependent entities related to it.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Deleting or moving the catalog YAML files from your Git repositories will not automatically delete the entities in the RHDH web UI. You must remove them manually. Consult the backstage reference documentation for orphan deletion strategy to understand the nuances of the deletion workflow.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Deleting entities from the RHDH web UI for auto-discovered entities is not recommended and will not delete the entities. The next scheduled fetch using auto-discovery will re-populate the entities in the Catalog. Delete the original source YAML files in the remote Git repository and then clean up the catalog.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_catalog_processing_interval_and_scheduling"><a class="anchor" href="#_catalog_processing_interval_and_scheduling"></a>Catalog Processing Interval and Scheduling</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Catalog pulls data from external sources at periodic intervals. The default is 100-150 seconds (just over 2 minutes). Depending on how many entities to fetch and process, RHDH auto adjusts this interval to avoid overloading the processing loop. It is not a good idea to keep the interval at very low values due to the fact that external sources, for example, GitHub/GitLab etc may have throttling limits, and you may be denied access if the provider feels you are orchestrating a denial of service type attack (DDoS).</p>
+</div>
+<div class="paragraph">
+<p>You can set the processing interval in your <code>app-config-rhdh</code> ConfigMap as follows. Values of 60 minutes or more, depending on your use-case is recommended. See <a href="https://backstage.io/docs/features/software-catalog/configuration/#processing-interval" class="bare">https://backstage.io/docs/features/software-catalog/configuration/#processing-interval</a> for more details on the possible configuration values.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">catalog:
+  processingInterval: { minutes: 60 }</code></pre>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_querying_the_catalog"><a class="anchor" href="#_querying_the_catalog"></a>Querying the Catalog</h2>
 <div class="sectionbody">
-
+<div class="paragraph">
+<p>The information contained in the catalog YAML files are presented in the <code>Catalog</code> page of RHDH. You can then filter and search for component information, and have various built-in and custom plugins work on processing the items in the Catalog.</p>
+</div>
+<div class="paragraph">
+<p>Most of the plugins (core, community provided, and Red Hat provided) act on information indexed by RHDH, and by integrating with the RHDH Catalog API which provides a uniform interface to the information in the catalog.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_plugins"><a class="anchor" href="#_plugins"></a>Plugins</h2>
+<h2 id="_catalog_rules"><a class="anchor" href="#_catalog_rules"></a>Catalog Rules</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>By default, the catalog will only allow the ingestion of entities with the kind <code>Component</code>, <code>API</code>, and <code>Location</code>. In order to allow entities of other kinds to be added, you need to add <strong>rules</strong> to the catalog. Rules are added either in a separate <code>catalog.rules</code> key or added to statically configured locations.</p>
+</div>
+<div class="paragraph">
+<p>For example, given the following configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">catalog:
+  rules:
+    - allow: [Component, API, Location, Template, User]
 
+  locations:
+    - type: url
+      target: https://github.com/org/example/blob/master/org-data.yaml
+      rules:
+        - allow: [Group]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We are able to add entities of kind <code>Component</code>, <code>API</code>, <code>Location</code>, <code>User</code> and <code>Template</code> from any location, and <code>Group</code> entities from the <code>org-data.yaml</code> file, which will also be read as a statically configured location.</p>
+</div>
+<div class="paragraph">
+<p>Note that if the <code>catalog.rules</code> key is present, it will override the default value, so you need to add rules for the default kinds if you want them to be allowed.</p>
+</div>
+<div class="paragraph">
+<p>The following configuration will reject any kind of entities from being added to the catalog:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">catalog:
+  rules: []</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_lab_populating_the_catalog"><a class="anchor" href="#_lab_populating_the_catalog"></a>Lab: Populating the Catalog</h2>
+<h2 id="_hands_on_labs"><a class="anchor" href="#_hands_on_labs"></a>Hands on Labs</h2>
 <div class="sectionbody">
-
+<div class="sect2">
+<h3 id="_pre_requisites"><a class="anchor" href="#_pre_requisites"></a>Pre-requisites</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>A running RHDH instance with valid authentication set up correctly for GitHub authentication.</p>
+</li>
+<li>
+<p>You will use catalog YAML files from the <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps</a> GitHub repository. You can either use this repository directly, or fork a copy under your own organization that you created for RHDH integration in the previous course. Note that for GitHub auto-discovery to work correctly, you need to set up integration with GitHub using OAuth2 Apps correctly as outlined in the previous course (<code>Developer Hub Administration</code>).</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_lab_1_populating_the_catalog_manually"><a class="anchor" href="#_lab_1_populating_the_catalog_manually"></a>Lab 1: Populating the Catalog Manually</h3>
+<div class="paragraph">
+<p>In this lab , you will import an example web application called <code>myapp</code> into the RHDH Catalog. <code>myapp</code> depends on a PostgreSQL database resource. The catalog YAML descriptor files are stored in a GitHub repository.</p>
+</div>
+<div class="sect3">
+<h4 id="_steps"><a class="anchor" href="#_steps"></a>Steps</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Inspect the top level catalog YAML file at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/catalog-info.yaml</a>. It contains a <code>Location</code> entity pointing to a set of entities that make up the <code>myapp</code> application.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
+kind: Location <i class="conum" data-value="1"></i><b>(1)</b>
+metadata:
+  name: myapp-location <i class="conum" data-value="2"></i><b>(2)</b>
+  description: A collection of all the catalog entities in the 'myapp' example app
+spec:
+  targets: <i class="conum" data-value="3"></i><b>(3)</b>
+    - ./group.yaml
+    - ./system.yaml
+    - ./myapp-db.yaml
+    - ./myapp.yaml</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Indicates that this is a <code>Location</code> kind</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>A unique name that identifies this location entity</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>A list of entities that are provided by this Location. In this case, a <code>Group</code>, a <code>System</code>, a database <code>Resource</code> and a <code>Component</code> respectively</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Inspect the <code>group.yaml</code>, <code>system.yaml</code>, and <code>myapp-db.yaml</code> catalog descriptor files in the same repository. Note the different uses of the <code>Kind</code> and the <code>spec</code> section defining attributes for this type of entity (who owns it, what it depends on, and more). You can also reference entities from the catalog that were populated automatically - for example, teams and users information from GitHub Organizations.</p>
+</li>
+<li>
+<p>Finally, inspect the <code>myapp</code> definition at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/myapp.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/myapp.yaml</a></p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
+kind: Component <i class="conum" data-value="1"></i><b>(1)</b>
+metadata:
+  name: myapp <i class="conum" data-value="2"></i><b>(2)</b>
+  title: Example component for RHDH
+  description: |
+    This is the example component for RHDH
+  links: <i class="conum" data-value="3"></i><b>(3)</b>
+    - title: MyApp Website
+      url: https://myapp.example.com
+    - title: MyApp Issues
+      url: https://jira.myapp.com
+    - title: Blog
+      url: https://myapp.example.com/blog
+    - title: Slack
+      url: https://myapp.example.slack.com
+  annotations: <i class="conum" data-value="4"></i><b>(4)</b>
+    argocd/app-name: 'myapp'
+    backstage.io/kubernetes-id: 'myapp'
+    github.com/project-slug: myorg/myapp
+    quay.io/repository-slug: myorg/myapp
+    backstage.io/kubernetes-namespace: myapp
+spec:
+  type: website <i class="conum" data-value="5"></i><b>(5)</b>
+  system: myapp <i class="conum" data-value="6"></i><b>(6)</b>
+  owner: myapp-dev-team <i class="conum" data-value="7"></i><b>(7)</b>
+  lifecycle: production <i class="conum" data-value="8"></i><b>(8)</b>
+  dependsOn:
+    - resource:myappdb <i class="conum" data-value="9"></i><b>(9)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Indicates that this entity describes a <strong>Component</strong></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>A unique name for this component</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>A set of links related to this application. For example, where issues are tracked, the communication channels, the QA testing links etc</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>A set of annotations, mostly for plugins. Consult the plugin documentation for supported annotations</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Declare this component of type website</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>This component belongs to a system named <code>myapp</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>This component is owned by the <code>myapp-dev-team</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>This component is part of the <code>production</code> environment. You can type any arbitrary string value here, for example, Dev, QA, Staging etc</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>This component depends on a database resource called <code>myappdb</code> declared previously in the <code>myapp-db.yaml</code> file</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Many of these annotations and dependencies and details mentioned in the <code>spec</code> section are used by RHDH to create UI visualizations for you in the portal.</p>
+</div>
+</li>
+<li>
+<p>Navigate to the RHDH home page and then click <code>Create&#8230;&#8203; &gt; REGISTER EXISTING COMPONENT</code>. Provide the link to the top level <code>Location</code> entity, that is <code><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/catalog-info.yaml</a></code> as the value in the <code>Select URL</code> field.</p>
+</li>
+<li>
+<p>Click <code>ANALYZE</code>. If the YAML is valid, you will be shown the results of the analysis. Otherwise, you will a descriptive error message. Fix the error in the YAML files, and proceed with the import.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/post-analysis.png" alt="post analysis" width="600">
+</div>
+<div class="title">Figure 2. Result of YAML Analysis</div>
+</div>
+</li>
+<li>
+<p>Review the results of the analysis, and then Click <code>IMPORT</code>.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/import-myapp-success.png" alt="import myapp success" width="600">
+</div>
+<div class="title">Figure 3. Analysis Results</div>
+</div>
+</li>
+<li>
+<p>Click on <code>VIEW COMPONENT</code> to view the imported details.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/view-component-imported.png" alt="view component imported" width="600">
+</div>
+<div class="title">Figure 4. myapp Details Imported Successfully</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you see any warnings or errors about missing entity references, then correct your YAML files and re-import the entities. Every reference to an entity must be in the Catalog (either pre-existing, or created along with the entity you are populating into the Catalog).
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Click on the <code>DEPENDENCIES</code> tab in the component details page. Notice how RHDH has created a nice visualization of your application&#8217;s dependencies, systems, and owners.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/comp-deps.png" alt="comp deps" width="600">
+</div>
+<div class="title">Figure 5. Component Dependencies</div>
+</div>
+</li>
+<li>
+<p>Switch back to the <code>Catalog</code> page and note you now have many more options in the <code>Kind</code> drop-down. Filter the catalog by selecting different options for <code>Kind</code> and <code>Type</code>. You can 'star' the component and have it appear on your RHDH home page for convenient access.</p>
+</li>
+<li>
+<p>Clean up. Delete the entities you imported. From the component details page, expand the menu in the top right corner (three vertical dots) and select <code>Unregister entity</code>. You will be prompted to review the details of the component and a warning will be provided that this component and all its dependencies will be deleted from the catalog. Click <code>UNREGISTER LOCATION</code> to remove the component.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/unregister-entity.png" alt="unregister entity">
+</div>
+<div class="title">Figure 6. Unregister Entity</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/remove-entity.png" alt="remove entity" width="600">
+</div>
+<div class="title">Figure 7. Remove Entity from Catalog</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+There are several nuances to deleting entities from the catalog. For example, due to human error, some child entities could become dissociated from parent entities. RHDH detects these changes and marks these entities with no association as <code>orphaned</code> and does not delete them. Read more about the details of the deletion strategy at <a href="https://backstage.io/docs/features/software-catalog/life-of-an-entity#orphaning" class="bare">https://backstage.io/docs/features/software-catalog/life-of-an-entity#orphaning</a>
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_lab_2_github_auto_discovery_of_api_components"><a class="anchor" href="#_lab_2_github_auto_discovery_of_api_components"></a>Lab 2: GitHub Auto-Discovery of API Components</h3>
+<div class="paragraph">
+<p>In this lab, you will configure RHDH to auto-discover catalog YAML descriptor files for an <code>API</code> entity from repositories in your GitHub organization. YAML files matching certain patterns are automatically imported into the Catalog.</p>
+</div>
+<div class="sect3">
+<h4 id="_steps_2"><a class="anchor" href="#_steps_2"></a>Steps</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Inspect the <code><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/tree/main/rhdh-discovery/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/tree/main/rhdh-discovery/catalog-info.yaml</a></code> file, which references the <code>petstore-api.yaml</code> file. The <code>petstore-api.yaml' file declares an `API</code> entity for the <code>Petstore</code> sample application. Note the <code>Kind</code> declaration of <code>API</code>, and the <code>spec</code> declaration for the <code>type</code> and <code>definition</code> pointing to the OpenAPI YAML file describing the API end points for the Petstore backend service.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
+kind: <strong>API</strong>
+metadata:
+  ...
+<strong>spec</strong>:
+  <strong>type: openapi</strong>
+  system: petstore
+  owner: petstore-devs
+  lifecycle: staging
+  <strong>definition:
+    $openapi: https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/petstore.yaml</strong></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Configure the GitHub auto-discovery plugin in the <code>app-config-rhdh</code> ConfigMap. Notice that you do not mention the repositories where the catalog YAML files live, but only provide a regular expression path where you expect the YAML files to leave for each of the components you want to import into RHDH.</p>
+<div class="paragraph">
+<p>This configuration needs a disciplined approach to creating and maintaining the catalog YAML files, where every component you want to import into RHDH needs to follow the folder structure, naming convention of the YAML file, branch naming scheme described in the configuration.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">catalog:
+  rules:
+    - allow: [Component, System, API, Template, Location, Resource, User, Group, Domain]
+  providers:
+    githubOrg:
+      default:
+        id: development
+        orgUrl: ${GITHUB_ORG_URL}
+    github:
+      providerId:
+        organization: RedHatQuickCourses
+        catalogPath: '/rhdh-discovery/catalog-info.yaml'
+        filters:
+          branch: 'main'
+          repository: '.*'
+        schedule:
+          frequency: { minutes: 5 }
+          timeout: { minutes: 3 }</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+In production systems, ensure that you set the schedule at a higher value (for example, 60 minutes or even more) to avoid frequent scans of your Git repository. You may be throttled or denied access if the scanning is too frequent.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>To make RHDH auto-discover this entity, enable the GitHub auto-discovery plugin in the RHDH Helm chart. Navigate to the <code>rhdh</code> helm chart and click <code>Upgrade</code>. Switch to the form view, adn then navigate to <code>global &#8594; Dynamic plugins configuration &#8594; List of dynamic plugins that should be installed in the backstage application &#8594; Package specification of the dynamic plugin to install</code>, add the following value:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-dynamic</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Click <code>Upgrade</code> and wait for the RHDH pods to be recreated. RHDH will auto-discover your catalog YAML descriptor files under your GitHub Organization based on the <code>schedule</code> configuration. Inspect the RHDH container logs if you see any errors and fix the configuration in <code>app-config-rhdh</code> and redeploy. A successful scan by the plugin should result in logs like the following:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">... catalog info Read 16 GitHub repositories (14 matching the pattern) type=plugin target=github-provider:providerId class=GithubEntityProvider...</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Log in to RHDH as an authenticated user and click on <code>APIs</code>. Notice that RHDH has populated the Catalog based on your YAML descriptor file.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/petstore-api.png" alt="petstore api">
+</div>
+<div class="title">Figure 8. API auto-discovered by RHDH</div>
+</div>
+</li>
+<li>
+<p>Click on the <code>Petstore Backend API</code> entry to view the details of the imported API.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/petstore-api-details.png" alt="petstore api details">
+</div>
+<div class="title">Figure 9. Petstore API Details</div>
+</div>
+</li>
+<li>
+<p>Click in the <code>DEFINITION</code> tab and notice how RHDH has detected the OpenAPI definition for this API and renders a nice swagger page for the API end points.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/petstore-swagger.png" alt="petstore swagger" width="600">
+</div>
+<div class="title">Figure 10. OpenAPI documentation</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_optional_hands_on_exercise"><a class="anchor" href="#_optional_hands_on_exercise"></a>Optional Hands-on Exercise</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If you have forked the <code>devhub-qc-apps</code> repository into your own GitHub organization, update the YAML files and verify that RHDH re-imports and updates the Catalog.</p>
+</li>
+<li>
+<p>Explore the more detailed showcase example application at <a href="https://github.com/janus-idp/backstage-showcase/blob/main/catalog-entities/all.yaml" class="bare">https://github.com/janus-idp/backstage-showcase/blob/main/catalog-entities/all.yaml</a>. Note the nested includes of various YAML files to better organize a large system, and a set of its related applications and dependencies.</p>
+</li>
+<li>
+<p>If your GitHub organization has thousands of repositories, and you want more control over how the GitHub auto-discovery plugin scans your repositories, you need to optimize the <code>catalogPath</code> and <code>filter</code> attributes in <code>app-config-rhdh</code>. See <a href="https://backstage.io/docs/integrations/github/discovery#configuration" class="bare">https://backstage.io/docs/integrations/github/discovery#configuration</a> for more examples.</p>
+</li>
+</ol>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -160,13 +787,16 @@
 <li>
 <p><a href="https://backstage.io/docs/features/software-catalog/descriptor-format" target="_blank" rel="noopener">Catalog YAML Format</a></p>
 </li>
+<li>
+<p><a href="https://backstage.io/docs/features/software-catalog/life-of-an-entity" target="_blank" rel="noopener">Lifecycle of an Entity</a></p>
+</li>
 </ul>
 </div>
 </div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="index.html">Software Templates</a></span>
-  <span class="next"><a href="techdocs.html">TechDocs and Search</a></span>
+  <span class="next"><a href="templates.html">Software Templates</a></span>
 </nav>
 </article>
   </div>

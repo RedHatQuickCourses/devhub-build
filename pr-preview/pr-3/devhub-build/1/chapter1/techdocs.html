@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>TechDocs and Search :: Building Developer Portals with Red Hat Developer Hub</title>
-    <link rel="prev" href="catalog.html">
+    <link rel="prev" href="templates.html">
     <meta name="generator" content="Antora 3.1.3">
     <link rel="stylesheet" href="../../../_/css/site.css">
     <script>var uiRootPath = '../../../_'</script>
@@ -50,6 +50,9 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="catalog.html">Software Catalog Deep Dive</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="templates.html">Software Templates</a>
   </li>
   <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="techdocs.html">TechDocs and Search</a>
@@ -112,7 +115,7 @@
 <p>TechDocs uses the popular MkDocs library to generate documentation for your applications. You write markdown files (.md file extension) alongside your application&#8217;s source code, and store either in the same repository where you maintain the application, or an external repository which can then be referenced in your catalog YAML files.</p>
 </div>
 <div class="paragraph">
-<p>RHDH will then convert your raw plain text markdown files to HTML, and then render it in the RHDH web UI. There are several ways to configure how RHDH fetches, generates and publishes documents.</p>
+<p>Your raw plain text source markdown files are then converted to HTML, and then displayed as HTML in the RHDH web UI. There are several ways to configure how RHDH fetches, generates and publishes documents.</p>
 </div>
 </div>
 </div>
@@ -163,12 +166,12 @@
 <p>The RHDH backend converts the raw markdown to HTML and publishes it to the local file system inside the container.</p>
 </li>
 <li>
-<p>The client is then sent the generated HTML files from local file system storage.</p>
+<p>The client is then sent the generated HTML files from local file system storage. RHDH intelligently caches the generated HTML files so that subsequent requests to documentation are faster.</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>The "all local" approach is recommended only for small to medium sized installations of RHDH with a few components. This approach will not scale to large installations with hundreds or thousands of components. Since RHDH is running as containers, this approach results is duplicating the HTML files and other processes across all the RHDH pods.</p>
+<p>The "all local" approach is recommended only for small sized installations of RHDH with a few components. This approach will not scale to medium sized and large installations with hundreds or thousands of components. Since RHDH is running as containers, this approach results is duplicating the HTML files and other processes across all the RHDH pods.</p>
 </div>
 <div class="paragraph">
 <p>The following diagram illustrates the production recommended external publication and builder configuration of TechDocs:</p>
@@ -192,6 +195,18 @@
 </li>
 </ol>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The source document conversion and publication process happens completely detached (asynchronously) the in CI/CD workflow (in github actions, gitlab pipeline runners, etc.), irrespective of user requests for documentation.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>This is the recommended set up for production. CI/CD workflows convert the markdown to HTML asynchronously based on webhook triggers on the documentation repository and publish the generated HTML to external cloud storage. RHDH acts as a pure stateless engine and fetches the HTML for a component based on client request. This approach can scale to large installations with hundreds or thousands of components.</p>
 </div>
@@ -204,7 +219,7 @@
 <h2 id="_search"><a class="anchor" href="#_search"></a>Search</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You do not have to configure anything extra for search. RHDH automatically indexes your documentation and enables rapid search find functionality for your developers.</p>
+<p>You do not have to configure anything extra for basic search functionality in RHDH. RHDH automatically indexes your documentation and enables rapid search functionality for your developers. For more complex search requirements for large installations, consult the documentation at <a href="https://backstage.io/docs/features/search" class="bare">https://backstage.io/docs/features/search</a> for details.</p>
 </div>
 </div>
 </div>
@@ -312,12 +327,8 @@ nav: <i class="conum" data-value="2"></i><b>(2)</b>
 <p>Edit the <code>app-config-rhdh</code> ConfigMap and make the following changes:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">enabled:
-...
-  techdocs: true <i class="conum" data-value="1"></i><b>(1)</b>
-...
-
-techdocs: <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">...
+techdocs: <i class="conum" data-value="1"></i><b>(1)</b>
   generator:
     runIn: local
   builder: local
@@ -329,17 +340,13 @@ techdocs: <i class="conum" data-value="2"></i><b>(2)</b>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Enable the TechDocs plugin</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
 <td>Configure TechDocs for "all local" mode</td>
 </tr>
 </table>
 </div>
 </li>
 <li>
-<p>As a final step, you need to enable the TechDocs dynamic plugin (It is disabled by default). In the OpenShift web console, navigate to <code>Helm &gt; Upgrade option for the rhdh release</code> and select the <code>Form view</code>. Expand <code>Root Schema &gt; global &gt; Dynamic plugins configuration &gt; List of dynamic plugins that should be installed in the backstage application</code>. Scroll to the bottom of the list and click <code>Add List of dynamic plugins that should be installed</code>, and add the following two plugins to the list. Ensure you do not remove the already existing plugins from the list:</p>
+<p>As a final step, you need to enable the TechDocs dynamic plugin (It is disabled by default). In the OpenShift web console, navigate to <code>Helm &gt; Upgrade option for the rhdh release</code> and select the <code>Form view</code>. Expand <code>Root Schema &gt; global &gt; Dynamic plugins configuration &gt; List of dynamic plugins that should be installed in the backstage application</code>. Scroll to the bottom of the list and click <code>Add List of dynamic plugins that should be installed</code>, and add the following two plugins to the list. Ensure you do not remove the already existing plugins from the list. You must ensure that <code>Disabled</code> option must not be selected for each of these plugins:</p>
 <div class="literalblock">
 <div class="content">
 <pre>./dynamic-plugins/dist/backstage-plugin-techdocs
@@ -421,7 +428,7 @@ techdocs: <i class="conum" data-value="2"></i><b>(2)</b>
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="catalog.html">Software Catalog Deep Dive</a></span>
+  <span class="prev"><a href="templates.html">Software Templates</a></span>
 </nav>
 </article>
   </div>
