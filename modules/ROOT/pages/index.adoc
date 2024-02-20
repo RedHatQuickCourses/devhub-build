@@ -27,6 +27,8 @@ If you have completed the previous two courses in the learning path, and have an
 
 If you have not provisioned an RHDH instance consult the `Classroom Environment` section in the `Red Hat Developer Hub Administration` course.
 
+The hands-on labs for this course have been tested on *RHDH v1.0-200*. The labs should mostly work in minor update releases of RHDH. If you encounter any issues, please open a GitHub issue in the course repository.
+
 == Prerequisites
 
 * You must have completed the first two courses in the Red Hat Developer Hub learning path, and have an installed RHDH instance to work on:
