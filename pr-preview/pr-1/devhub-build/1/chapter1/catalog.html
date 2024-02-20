@@ -173,7 +173,7 @@
 </dd>
 <dt class="hdlist1">Template</dt>
 <dd>
-<p>A <code>Template</code> is an RHDH entity that describes a set of source files and structure, from which you can instantiate instances of applications, which are then automatically populated and tracked in the RHDH Software Catalog. A Template can contain a mix of source code, configuration files, build system configuration and all the dependencies that are required for an application. The Template is parsed by RHDH, and it then provides a visual interface to create application instances from it. Dynamic parts that meed user input are modeled as <code>Parameters</code> in the template. Input forms corresponding to the parameters are automatically created by RHDH in the front end portal.</p>
+<p>A <code>Template</code> is an RHDH entity that describes a set of source files and structure, from which you can instantiate instances of applications,services, CI/CD pipelines, Infrastructure as Code (IaC) playbooks, operating system and virtual machine provisioning scripts, and more. These instances are then automatically populated and tracked in the RHDH Software Catalog. A Template can contain a mix of source code, configuration files, build system configuration, and all the dependencies that are required for an application or a service. The Template is parsed by RHDH, and it then provides a visual interface to create application instances from it. Dynamic parts that meed user input are modeled as <code>Parameters</code> in the template. Input forms corresponding to the parameters are automatically created by RHDH in the front end portal.</p>
 </dd>
 <dt class="hdlist1">System</dt>
 <dd>
@@ -207,7 +207,13 @@
 </div>
 </div>
 <div class="paragraph">
-<p>This approach is not recommended as you need to redeploy the RHDH container for the changes to take effect.</p>
+<p>Adding a lot of small catalog YAML files in this manner is not recommended as you need to redeploy the RHDH container for the changes to take effect.</p>
+</div>
+<div class="paragraph">
+<p>Instead, you can provide the URL of a top-level YAML file that includes other YAML files. This way, you can change the included YAML files without requiring updates to the <code>app-config</code> YAML files.</p>
+</div>
+<div class="paragraph">
+<p>See <a href="https://github.com/janus-idp/backstage-showcase/blob/main/app-config.yaml#L154" class="bare">https://github.com/janus-idp/backstage-showcase/blob/main/app-config.yaml#L154</a> for an example of this technique.</p>
 </div>
 </div>
 <div class="sect2">
@@ -231,7 +237,7 @@
 <div class="sect2">
 <h3 id="_github_auto_discovery"><a class="anchor" href="#_github_auto_discovery"></a>GitHub Auto-Discovery</h3>
 <div class="paragraph">
-<p>RHDH provides a GitHub auto-discovery plugin for importing entities into the Catalog automatically (based on a configurable interval). You need to set up GitHub integration in your <code>app-config-rhdh</code> ConfigMap for this to work correctly. You can configure auto-discovery rules so that RHDH can scan your GitHub organization for catalog YAML files based on regular expression patterns, along with custom file and directory structure layouts.</p>
+<p>RHDH provides a GitHub auto-discovery plugin for importing entities into the Catalog automatically (based on a configurable interval). You need to set up GitHub integration in your <code>app-config-rhdh</code> ConfigMap for this to work correctly. You can configure auto-discovery rules so that RHDH can scan your GitHub organization for catalog YAML files based on regular expression patterns, along with custom file and directory structure layouts. By default, the auto-discovery plugin looks for files named <code>catalog-info.yaml</code>.</p>
 </div>
 <div class="paragraph">
 <p>The GitHub auto-discovery dynamic plugin needs to be enabled by editing the helm chart, and then you need to add the configuration for the discovery process under the <code>catalog.providers.github</code> key in your <code>app-config-rhdh</code> ConfigMap as follows:</p>
@@ -274,21 +280,24 @@
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Path to the catalog YAML files (can use regular expressions here)</td>
+<td>Path to the catalog YAML files (can use wildcards here)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Tells RHDH to look for YAML files in the mentioned GitHub branch</td>
+<td>Tells RHDH to look for YAML files in the mentioned GitHub branch (Optional)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>Regular expression matching the repository names(s) - in this case all repositories in the GitHub Org</td>
+<td>Regular expression matching the repository names(s) - in this case all repositories in the GitHub Org (Optional)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="7"></i><b>7</b></td>
-<td>Scheduled interval at which RHDH should fetch and update catalog information.</td>
+<td>Scheduled interval at which RHDH should fetch and update catalog information. (Optional)</td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>See <a href="https://backstage.io/docs/integrations/github/discovery/" class="bare">https://backstage.io/docs/integrations/github/discovery/</a> for full details about the different ways you can configure <code>catalogPath</code>, <code>branch</code>, and <code>repository</code> settings.</p>
 </div>
 </div>
 </div>
@@ -572,7 +581,7 @@ spec:
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-If you see any warnings or errors about missing entity references, them correct your YAML files and re-import the entities. Every reference to an entity must in the Catalog (either pre-existing, or created along with the entity you are populating into the Catalog).
+If you see any warnings or errors about missing entity references, then correct your YAML files and re-import the entities. Every reference to an entity must be in the Catalog (either pre-existing, or created along with the entity you are populating into the Catalog).
 </td>
 </tr>
 </table>
@@ -631,7 +640,7 @@ There are several nuances to deleting entities from the catalog. For example, du
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Inspect the <code><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/tree/main/rhdh-discovery/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/tree/main/rhdh-discovery/catalog-info.yaml</a></code> file, which references the <code>petstore-api.yaml' file. The `petstore-api.yaml' file declares an `API</code> entity for the <code>Petstore</code> sample application. Note the <code>Kind</code> declaration of <code>API</code>, and the <code>spec</code> declaration for the <code>type</code> and <code>definition</code> pointing to the OpenAPI YAML file describing the API end points for the Petstore backend service.</p>
+<p>Inspect the <code><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/tree/main/rhdh-discovery/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/tree/main/rhdh-discovery/catalog-info.yaml</a></code> file, which references the <code>petstore-api.yaml</code> file. The <code>petstore-api.yaml' file declares an `API</code> entity for the <code>Petstore</code> sample application. Note the <code>Kind</code> declaration of <code>API</code>, and the <code>spec</code> declaration for the <code>type</code> and <code>definition</code> pointing to the OpenAPI YAML file describing the API end points for the Petstore backend service.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
