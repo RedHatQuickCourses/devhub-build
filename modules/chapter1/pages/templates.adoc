@@ -91,6 +91,7 @@ metadata: <2>
         allowedHosts: ['github.com']
         description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
+        repoVisibility: public # default is private
 
     - id: register
       name: Register
@@ -114,7 +115,7 @@ metadata: <2>
 <3> Template parameter list. Inputs to the template
 <4> Properties of parameter. UI hints, types and validation rules
 <5> A list of steps to be performed when processing the template
-<6> Built-in template actions. In this scenario, fetch template, publish repo and register catalog entity
+<6> Built-in template actions. In this scenario, fetch template, publish repo and register catalog entity. Default visibility of created Git repository is private. You need to set `repoVisibility` to public for the scaffolder to create public repository
 <7> Output of template processing. A link to the generated entity catalog detail and the published Git repository URL
 
 == Lab: Creating a Simple Software Template
