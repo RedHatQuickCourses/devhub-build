@@ -107,4 +107,6 @@ dist
 # Local VSCode settings
 .vscode/settings*
 
-.DS_Store
+**/.DS_Store
+
+
