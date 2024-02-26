@@ -1,3 +1,82 @@
 = Kubernetes and Topology Plugin
 
-NOTE: This section is under development...
+== Kubernetes Plugin
+
+The Kubernetes plugin provides a *read-only* high level overview of your applications and services deployed on Kubernetes or OpenShift platform. Developers can easily check the status of their workloads across many different clusters (that is, cluster where RHDH is deployed, or one or more external clusters hosting your applications and services).
+
+It will display errors, if any, and provide a high level glance at the deployments, pods, and other Kubernetes resources for a catalog item.
+
+image::kube-plugin.png[Kubernetes Plugin View]
+
+The Kubernetes plugin is made up of two separate smaller plugins, one back-end plugin that communicates with Kubernetes clusters, and a front end plugin that visualizes the data in the RHDH component details page. To configure the Kubernetes plugin, you need to enable these two plugins in your helm chart YAML configuration:
+
+  ./dynamic-plugins/dist/backstage-plugin-kubernetes
+  ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic
+
+Apart from enabling the plugins, you need to configure the backend plugin to access the Kubernetes clusters. You do this by creating a new Kubernetes `ClusterRole` with cluster-wide read-only permissions, and then assign this role to a service account for the plugin.
+
+As a final step, you need to configure the plugin parameters (Kubernetes API Server URL, credentials, service accounts and a list of custom resources that need to be fetched from the cluster) in the *kubernetes:* section of your *app-config.yaml* files.
+
+== Topology Plugin
+
+The Topology plugin enables you to visualize Kubernetes resources such as `Deployment`, `Job`, `Daemonset`, `Statefulset`, `CronJob`, and `Pods` for any service deployed on the Kubernetes cluster. It requires the Kubernetes plugin to be enabled and configured for it to fetch data from clusters.
+
+To configure the Topology plugin, you need to enable the plugin in your helm chart YAML configuration:
+
+  ./dynamic-plugins/dist/janus-idp-backstage-plugin-topology
+
+== Kubernetes Resource Labels and Catalog YAML Annotations
+
+You may not want to visualize all workloads and resources in your Kubernetes cluster in RHDH. RHDH provides a flexible label and annotation mechanism to filter and identify resources that need to be visualized.
+
+In your *catalog-info.yaml* files, you need to add `backstage.io/kubernetes-id` annotation under your components `metadata` field:
+
+```yaml
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hello
+  title: Hello service
+  ...
+  annotations:
+    backstage.io/kubernetes-id: 'hello'
+```
+
+Correspondingly on the Kubernetes resource side, you need to add a `backstage.io/kubernetes-id` label to the resources you want to track in RHDH:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello
+  labels:
+    app: hello
+    backstage.io/kubernetes-id: 'hello'
+```
+
+Adding this label to each and every resource on the Kubernetes side quickly becomes repetitive and difficult to manage, especially when you have a large number of workloads deployed, and each workload has numerous resources deployed in the cluster.
+
+To simplify resource discovery, you can use label selectors to query the Kubernetes API server and return a list of resources matching your label. For example, to fetch all resources matching the label `app=hello`, add a `backstage.io/kubernetes-label-selector` annotation to your component catalog descriptor:
+
+```yaml
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hello
+  title: Hello service
+  ...
+  annotations:
+    backstage.io/kubernetes-label-selector: 'app=hello'
+```
+
+The label selector annotation makes use of the fact that adding labels to resources like `Deployment` types, applies the labels to all resources (Pods, Services, Routes etc.) that are a result of a successful deployment. This annotation and label selector mechanism also works for custom resources like Tekton's `Pipeline` resource, where resources generated from a pipeline run like `Pipelinerun` and `Taskrun` resources, all inherit labels applied on the parent `Pipeline` resource.
+
+The following hands-on labs describe the detailed steps to enable and configure the Kubernetes and Topology plugins.
+
+== Lab 1: Enabling the Kubernetes Plugin
+
+== Lab 2: Enabling the Topology Plugin
+
+== References
+
+* https://backstage.io/docs/features/kubernetes/configuration[Backstage Kubernetes Plugin Configuration]
