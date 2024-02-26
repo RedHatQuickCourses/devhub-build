@@ -1,0 +1,12 @@
+= RHDH Plugins
+:navtitle: RHDH Plugins
+
+In this chapter, you will take a deeper look at some useful RHDH plugins developed by Red Hat.
+
+== Objectives
+
+* Describe the concept of dynamic plugins in RHDH
+* Configure the Kubernetes and Topology plugin
+* Configure the Quay container registry plugin
+* Configure the Tekton plugin
+* Configure the ArgoCD plugin
