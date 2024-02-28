@@ -4,7 +4,7 @@ This section briefly explains the rationale for dynamic plugins and how to enabl
 
 == Dynamic Plugins in RHDH
 
-Ass you already learnt in the first introductory course in the learning path, RHDH, as a platform consists of a small modular core, and an extensive set of plugins that provide most of the functionality. In the upstream *Backstage.io* platform, enabling a plugin means modifying the source code of the platform to load a bunch of TypeScript/JavaScript, and other static files (HTML, CSS, images etc.). You then have to stop and restart the runtime for the plugin to be enabled.
+As you already learnt in the first introductory course in the learning path, RHDH, as a platform consists of a small modular core, and an extensive set of plugins that provide most of the functionality. In the upstream *Backstage.io* platform, enabling a plugin means modifying the source code of the platform to load a bunch of TypeScript/JavaScript, and other static files (HTML, CSS, images etc.). You then have to stop and restart the runtime for the plugin to be enabled.
 
 This approach of changing source code and restarting for enabling plugins will not work for RHDH, because you need to recompile the source code, build a new container image and then re-deploy the new container image. 
 
