@@ -132,6 +132,12 @@
 <div class="paragraph">
 <p>The RHDH Tekton plugin provides a quick, read-only visualization of your Tekton continuous integration (CI) pipelines and task runs in the RHDH web UI. This allows developers to get quick feedback about their CI builds and status without ever leaving the RHDH web UI. The plugin displays the latest status of pipeline runs and the status of the tasks in the pipelines. Developers can easily identify tasks that failed and take quick, remedial action.</p>
 </div>
+<div class="paragraph">
+<p>The Tekton depends on the Kubernetes plugin for set up and configuration. You must ensure that the Kubernetes plugin is aware of custom resources specific to Tekton (pipeline runs and task runs), and has read-only permissions to fetch information from the Kubernetes API server.</p>
+</div>
+<div class="paragraph">
+<p>You must also ensure that you have a <code>janus-idp.io/tekton</code> annotation in your catalog YAML descriptor files that match the name of the pipeline resource. You can, as usual, use label selectors to query pipeline resources (<code>Pipelinerun</code> and <code>Taskrun</code> resources inherit labels from their parent <code>Pipeline</code>).</p>
+</div>
 </div>
 </div>
 <div class="sect1">
