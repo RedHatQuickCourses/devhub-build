@@ -138,7 +138,7 @@
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Configure a proxy end point in <code>app-config.yaml</code></p>
+<p>Configure a proxy endpoint in <code>app-config.yaml</code></p>
 </li>
 <li>
 <p>Enable the Quay dynamic plugin in your helm chart YAML values file</p>
@@ -151,10 +151,10 @@
 <h2 id="_configure_a_proxy_endpoint_for_quay"><a class="anchor" href="#_configure_a_proxy_endpoint_for_quay"></a>Configure a Proxy Endpoint for Quay</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>RHDH comes with a generic <code>proxy</code> component that acts as a lightweight reverse proxy to make calls to external APIs, and pass on the output to frontend plugins for visualization in the RHDH web UI. The Quay plugin supports both the public Quay.io container image registry, as well as self-hosted on-premise Quay enterprise versions.</p>
+<p>RHDH comes with a generic <code>proxy</code> component that acts as a lightweight reverse proxy to make calls to external APIs and pass on the output to frontend plugins for visualization in the RHDH web UI. The Quay plugin supports both the public Quay.io container image registry, as well as self-hosted on-premise Quay enterprise versions.</p>
 </div>
 <div class="paragraph">
-<p>In your <code>app-config.yaml</code> add a proxy end point for Quay:</p>
+<p>In your <code>app-config.yaml</code> add a proxy endpoint for Quay:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -174,11 +174,11 @@
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Proxy end point for the Quay front end plugin</td>
+<td>Proxy endpoint for the Quay front-end plugin</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Target - value should be <code><a href="https://quay.io" class="bare">https://quay.io</a></code> for public registry, or the full URL to your self-hosted Quay registry</td>
+<td>Target - value should be <code><a href="https://quay.io" class="bare">https://quay.io</a></code> for the public registry, or the full URL to your self-hosted Quay registry</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
@@ -213,7 +213,7 @@
 <div class="ulist">
 <ul>
 <li>
-<p>If you want to use a private container registry then you need to generate authentication tokens for your account in the <a href="https://quay.io" class="bare">https://quay.io</a> website</p>
+<p>If you want to use a private container registry then you need to generate authentication tokens for your account on the <a href="https://quay.io" class="bare">https://quay.io</a> website</p>
 </li>
 <li>
 <p>Consult the product documentation for Quay enterprise registry to install and set up account authentication.</p>
@@ -229,7 +229,7 @@
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Edit the <code>app-config-rhdh</code> ConfigMap and add a proxy end point for Quay.io</p>
+<p>Edit the <code>app-config-rhdh</code> ConfigMap and add a proxy endpoint for Quay.io</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">proxy:
@@ -285,13 +285,13 @@ spec:
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Annotation to identify the registry from which container images metadata need to be fetched. In this case the <code>OKD</code> project registry. If you have a private registry with your own organization, then change this slug to reflect the path to your registry. The same path information applies for privately hosted Quay enterprise registries.</td>
+<td>Annotation to identify the registry from which container image metadata needs to be fetched. In this case the <code>OKD</code> project registry. If you have a private registry with your own organization, then change this slug to reflect the path to your registry. The same path information applies to privately hosted Quay enterprise registries.</td>
 </tr>
 </table>
 </div>
 </li>
 <li>
-<p>Import this component into RHDH using the <code>Create &gt; REGISTER EXISTING COMPONENT</code> page. Once imported, click the <code>Example Quay Registry</code> item in the RHDH Catalog page</p>
+<p>Import this component into RHDH using the <code>Create &gt; REGISTER EXISTING COMPONENT</code> page. Once imported, click the <code>Example Quay Registry</code> item on the RHDH Catalog page</p>
 </li>
 <li>
 <p>Observe that a new tab named <code>IMAGE REGISTRY</code> is visible. Click on this tab to view the information for container images contained in the <code>openshift/okd</code> registry</p>
