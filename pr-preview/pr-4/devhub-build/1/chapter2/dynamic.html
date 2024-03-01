@@ -138,13 +138,13 @@
 <h2 id="_dynamic_plugins_in_rhdh"><a class="anchor" href="#_dynamic_plugins_in_rhdh"></a>Dynamic Plugins in RHDH</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>As you already learnt in the first introductory course in the learning path, RHDH, as a platform consists of a small modular core, and an extensive set of plugins that provide most of the functionality. In the upstream <strong>Backstage.io</strong> platform, enabling a plugin means modifying the source code of the platform to load a bunch of TypeScript/JavaScript, and other static files (HTML, CSS, images etc.). You then have to stop and restart the runtime for the plugin to be enabled.</p>
+<p>As you already learnt in the first introductory course in the learning path, RHDH, as a platform consists of a small modular core and an extensive set of plugins that provide most of the functionality. In the upstream <strong>Backstage.io</strong> platform, enabling a plugin means modifying the platform&#8217;s source code to load a bunch of TypeScript/JavaScript, and other static files (HTML, CSS, images etc.). You then have to stop and restart the runtime to enable the plugin.</p>
 </div>
 <div class="paragraph">
 <p>This approach of changing source code and restarting for enabling plugins will not work for RHDH, because you need to recompile the source code, build a new container image and then re-deploy the new container image.</p>
 </div>
 <div class="paragraph">
-<p>RedHat has introduced the concept of a <strong>dynamic plugin</strong> to overcome this hurdle. A set of curated plugins are pre-baked into the container image, but not enabled by default. The dynamic plugin framework is based on the Node.js Scalprum library (<a href="https://github.com/scalprum/scaffolding" class="bare">https://github.com/scalprum/scaffolding</a>). To enable or disable a plugin, you edit the <strong>app-config.yaml</strong> or the RHDH Helm chart YAML values, and turn plugins on or off. In this manner, RHDH allows you to control plugin lifecycle and configuration without recompiling or rebuilding container images.</p>
+<p>RedHat has introduced the concept of a <strong>dynamic plugin</strong> to overcome this hurdle. A set of curated plugins are pre-baked into the container image, but not enabled by default. The dynamic plugin framework is based on the Node.js Scalprum library (<a href="https://github.com/scalprum/scaffolding" class="bare">https://github.com/scalprum/scaffolding</a>). To enable or disable a plugin, you edit the <strong>app-config.yaml</strong> or the RHDH Helm chart YAML values and turn plugins on or off. In this manner, RHDH allows you to control plugin lifecycle and configuration without recompiling or rebuilding container images.</p>
 </div>
 <div class="paragraph">
 <p>RHDH is pre-loaded with a selection of dynamic plugins. Most of these dynamic plugins are disabled by default due to the need for mandatory configuration. For a complete list of dynamic plugins that are included, see the <a href="https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html-single/administration_guide_for_red_hat_developer_hub/index#dynamic-plugins-matrix">dynamic plugins matrix</a> section in the <code>Administration guide for Red Hat Developer Hub</code>.</p>
@@ -221,7 +221,7 @@ Red Hat fully supports certain plugins (Topology, Tekton, Quay), while others ar
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Simply enabling a dynamic plugin in the helm chart may not provide the required functionality. You may need to edit your <strong>app-config.yaml</strong> files to add plugin specific configuration (for example, set different environment variables) to make the plugin work correctly. Consult the corresponding plugin documentation for the required configuration.
+Simply enabling a dynamic plugin in the helm chart may not provide the required functionality. You may need to edit your <strong>app-config.yaml</strong> files to add plugin-specific configuration (for example, set different environment variables) to make the plugin work correctly. Consult the corresponding plugin documentation for the required configuration.
 </td>
 </tr>
 </table>
