@@ -133,7 +133,7 @@
 <p>The RHDH Tekton plugin provides a quick, read-only visualization of your Tekton continuous integration (CI) pipelines and task runs in the RHDH web UI. This allows developers to get quick feedback about their CI builds and status without ever leaving the RHDH web UI. The plugin displays the latest status of pipeline runs and the status of the tasks in the pipelines. Developers can easily identify tasks that failed and take quick, remedial action.</p>
 </div>
 <div class="paragraph">
-<p>The Tekton depends on the Kubernetes plugin for set up and configuration. You must ensure that the Kubernetes plugin is aware of custom resources specific to Tekton (pipeline runs and task runs), and has read-only permissions to fetch information from the Kubernetes API server.</p>
+<p>The Tekton depends on the Kubernetes plugin for set-up and configuration. You must ensure that the Kubernetes plugin is aware of custom resources specific to Tekton (pipeline runs and task runs), and has read-only permissions to fetch information from the Kubernetes API server.</p>
 </div>
 <div class="paragraph">
 <p>You must also ensure that you have a <code>janus-idp.io/tekton</code> annotation in your catalog YAML descriptor files that match the name of the pipeline resource. You can, as usual, use label selectors to query pipeline resources (<code>Pipelinerun</code> and <code>Taskrun</code> resources inherit labels from their parent <code>Pipeline</code>).</p>
@@ -167,7 +167,7 @@
 <p>Log in to the OpenShift cluster as the cluster administrator using the <code>oc</code> CLI.</p>
 </li>
 <li>
-<p>Download and inspect the sample Tekton CI pipeline at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/pipeline.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/pipeline.yaml</a>. For simplicity sake, the pipeline consists of 4 tasks that each print a message to the console. You can use much more complex pipelines with more realistic workflows if you wish.</p>
+<p>Download and inspect the sample Tekton CI pipeline at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/pipeline.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/pipeline.yaml</a>. For simplicity&#8217;s sake, the pipeline consists of 4 tasks that each print a message to the console. You can use much more complex pipelines with more realistic workflows if you wish.</p>
 </li>
 <li>
 <p>Create the pipeline in the <code>myapps</code> namespace.</p>
@@ -202,7 +202,7 @@ $ oc apply -f run-fail.yaml</pre>
 <p>Click <code>Upgrade</code> to re-deploy the chart and for the new configuration to take effect. Wait until the RHDH container is fully up and running.</p>
 </li>
 <li>
-<p>Finally, inspect the catalog YAML descriptor file for this component at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/catalog-info.yaml</a>. Adjust the values for your environment. Note the <code>janus-idp.io/tekton</code> annotation to match the name of the pipeline resource (<code>mypipeline</code>), plus label selector for the pipeline.</p>
+<p>Finally, inspect the catalog YAML descriptor file for this component at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/catalog-info.yaml</a>. Adjust the values for your environment. Note the <code>janus-idp.io/tekton</code> annotation to match the name of the pipeline resource (<code>mypipeline</code>), plus the label selector for the pipeline.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
@@ -227,7 +227,7 @@ spec:
 <p>Import the component into the RHDH catalog from the <code>Create &gt; REGISTER EXISTING COMPONENT</code> page, and provide the full path to the <code>catalog-info.yml</code> file from the previous step. After the component is imported, verify that the component is listed in the <code>Catalog</code> page and click on <code>A Simple Tekton Pipeline</code> to view the component details.</p>
 </li>
 <li>
-<p>Verify that you can see a new tab named <code>CI</code> in the component details page. You should see the result of the two pipeline runs.</p>
+<p>Verify that you can see a new tab named <code>CI</code> on the component details page. You should see the result of the two pipeline runs.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/pipeline-runs.png" alt="Pipeline Runs">
@@ -235,7 +235,7 @@ spec:
 </div>
 </li>
 <li>
-<p>Mouse over the <code>TASK STATUS</code> column and you should see a high level summary of the tasks (how many passed, failed, or skipped).</p>
+<p>Mouse over the <code>TASK STATUS</code> column and you should see a high-level summary of the tasks (how many passed, failed, or skipped).</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/task-status.png" alt="Task Status">
