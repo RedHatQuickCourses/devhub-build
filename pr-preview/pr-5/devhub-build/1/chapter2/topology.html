@@ -131,10 +131,10 @@
 <h2 id="_kubernetes_plugin"><a class="anchor" href="#_kubernetes_plugin"></a>Kubernetes Plugin</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Kubernetes plugin provides a <strong>read-only</strong> high level overview of your applications and services deployed on Kubernetes or OpenShift platform. Developers can easily check the status of their workloads across many different clusters (that is, cluster where RHDH is deployed, or one or more external clusters hosting your applications and services).</p>
+<p>The Kubernetes plugin provides a <strong>read-only</strong> high-level overview of your applications and services deployed on Kubernetes or OpenShift platform. Developers can easily check the status of their workloads across many different clusters (that is, a cluster where RHDH is deployed, or one or more external clusters hosting your applications and services).</p>
 </div>
 <div class="paragraph">
-<p>It will display errors, if any, and provide a high level glance at the deployments, pods, and other Kubernetes resources for a catalog item.</p>
+<p>It will display errors, if any, and provide a high-level glance at the deployments, pods, and other Kubernetes resources for a catalog item.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -142,7 +142,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p>The Kubernetes plugin is made up of two separate smaller plugins, one back-end plugin that communicates with Kubernetes clusters, and a front end plugin that visualizes the data in the RHDH component details page. To configure the Kubernetes plugin, you need to enable these two plugins in your helm chart YAML configuration:</p>
+<p>The Kubernetes plugin is made up of two separate smaller plugins, one back-end plugin that communicates with Kubernetes clusters, and a front-end plugin that visualizes the data in the RHDH component details page. To configure the Kubernetes plugin, you need to enable these two plugins in your helm chart YAML configuration:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -151,7 +151,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p>Apart from enabling the plugins, you need to configure the backend plugin to access the Kubernetes clusters. You do this by creating a new Kubernetes <code>ClusterRole</code> with cluster-wide read-only permissions, and then assign this role to a service account for the plugin.</p>
+<p>Apart from enabling the plugins, you need to configure the backend plugin to access the Kubernetes clusters. You do this by creating a new Kubernetes <code>ClusterRole</code> with cluster-wide read-only permissions and then assigning this role to a service account for the plugin.</p>
 </div>
 <div class="paragraph">
 <p>As a final step, you need to configure the plugin parameters (Kubernetes API Server URL, credentials, service accounts and a list of custom resources that need to be fetched from the cluster) in the <strong>kubernetes:</strong> section of your <strong>app-config.yaml</strong> files.</p>
@@ -210,7 +210,7 @@ metadata:
 </div>
 </div>
 <div class="paragraph">
-<p>Adding this label to each and every resource on the Kubernetes side quickly becomes repetitive and difficult to manage, especially when you have a large number of workloads deployed, and each workload has numerous resources deployed in the cluster.</p>
+<p>Adding this label to every resource on the Kubernetes side quickly becomes repetitive and difficult to manage, especially when you have a large number of workloads deployed, and each workload has numerous resources deployed in the cluster.</p>
 </div>
 <div class="paragraph">
 <p>To simplify resource discovery, you can use label selectors to query the Kubernetes API server and return a list of resources matching your label. For example, to fetch all resources matching the label <code>app=hello</code>, add a <code>backstage.io/kubernetes-label-selector</code> annotation to your component catalog descriptor:</p>
@@ -362,11 +362,11 @@ rules:
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Kubernetes Cluster API Server end point (Get this from your RHDP Service Details page)</td>
+<td>Kubernetes Cluster API Server endpoint (Get this from your RHDP Service Details page)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>A unique name for this Kubernetes cluster. You can add multiple Kubernetes clusters under the <code>clusters:</code> key, each with it&#8217;s own unique name and configuration.</td>
+<td>A unique name for this Kubernetes cluster. You can add multiple Kubernetes clusters under the <code>clusters:</code> key, each with its own unique name and configuration.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
@@ -555,7 +555,7 @@ Due to the browser caching static assets like HTML and Javascript files, you may
 </div>
 </li>
 <li>
-<p>You should see a the Topology plugin displaying the details of the nginx application similar to how it is displayed in the OpenShift web console:</p>
+<p>You should see the Topology plugin displaying the details of the nginx application similar to how it is displayed in the OpenShift web console:</p>
 <div class="paragraph">
 <p><span class="image"><img src="_images/topology-plugin-view.png" alt="topology plugin view" title="Topology Plugin Overview"></span></p>
 </div>
@@ -567,7 +567,7 @@ Due to the browser caching static assets like HTML and Javascript files, you may
 </div>
 </li>
 <li>
-<p>Click on the <code>Resources</code> tab in the right side panel to view the details of the pods. You should see two pods as per the Deployment definition for the nginx application. You should also see the service and route definition.</p>
+<p>Click on the <code>Resources</code> tab in the right-side panel to view the details of the pods. You should see two pods as per the Deployment definition for the nginx application. You should also see the service and route definition.</p>
 <div class="paragraph">
 <p><span class="image"><img src="_images/topology-pods.png" alt="topology pods" title="Topology Pod Details"></span></p>
 </div>
