@@ -2,18 +2,18 @@
 
 == Kubernetes Plugin
 
-The Kubernetes plugin provides a *read-only* high level overview of your applications and services deployed on Kubernetes or OpenShift platform. Developers can easily check the status of their workloads across many different clusters (that is, cluster where RHDH is deployed, or one or more external clusters hosting your applications and services).
+The Kubernetes plugin provides a *read-only* high-level overview of your applications and services deployed on Kubernetes or OpenShift platform. Developers can easily check the status of their workloads across many different clusters (that is, a cluster where RHDH is deployed, or one or more external clusters hosting your applications and services).
 
-It will display errors, if any, and provide a high level glance at the deployments, pods, and other Kubernetes resources for a catalog item.
+It will display errors, if any, and provide a high-level glance at the deployments, pods, and other Kubernetes resources for a catalog item.
 
 image::kube-plugin.png[Kubernetes Plugin View]
 
-The Kubernetes plugin is made up of two separate smaller plugins, one back-end plugin that communicates with Kubernetes clusters, and a front end plugin that visualizes the data in the RHDH component details page. To configure the Kubernetes plugin, you need to enable these two plugins in your helm chart YAML configuration:
+The Kubernetes plugin is made up of two separate smaller plugins, one back-end plugin that communicates with Kubernetes clusters, and a front-end plugin that visualizes the data in the RHDH component details page. To configure the Kubernetes plugin, you need to enable these two plugins in your helm chart YAML configuration:
 
   ./dynamic-plugins/dist/backstage-plugin-kubernetes
   ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic
 
-Apart from enabling the plugins, you need to configure the backend plugin to access the Kubernetes clusters. You do this by creating a new Kubernetes `ClusterRole` with cluster-wide read-only permissions, and then assign this role to a service account for the plugin.
+Apart from enabling the plugins, you need to configure the backend plugin to access the Kubernetes clusters. You do this by creating a new Kubernetes `ClusterRole` with cluster-wide read-only permissions and then assigning this role to a service account for the plugin.
 
 As a final step, you need to configure the plugin parameters (Kubernetes API Server URL, credentials, service accounts and a list of custom resources that need to be fetched from the cluster) in the *kubernetes:* section of your *app-config.yaml* files.
 
@@ -54,7 +54,7 @@ metadata:
     backstage.io/kubernetes-id: 'hello'
 ```
 
-Adding this label to each and every resource on the Kubernetes side quickly becomes repetitive and difficult to manage, especially when you have a large number of workloads deployed, and each workload has numerous resources deployed in the cluster.
+Adding this label to every resource on the Kubernetes side quickly becomes repetitive and difficult to manage, especially when you have a large number of workloads deployed, and each workload has numerous resources deployed in the cluster.
 
 To simplify resource discovery, you can use label selectors to query the Kubernetes API server and return a list of resources matching your label. For example, to fetch all resources matching the label `app=hello`, add a `backstage.io/kubernetes-label-selector` annotation to your component catalog descriptor:
 
@@ -161,8 +161,8 @@ Copy the generated token to the clipboard for use in the next steps.
                   plural: 'taskruns'
 ```
 +
-<1> Kubernetes Cluster API Server end point (Get this from your RHDP Service Details page)
-<2> A unique name for this Kubernetes cluster. You can add multiple Kubernetes clusters under the `clusters:` key, each with it's own unique name and configuration.
+<1> Kubernetes Cluster API Server endpoint (Get this from your RHDP Service Details page)
+<2> A unique name for this Kubernetes cluster. You can add multiple Kubernetes clusters under the `clusters:` key, each with its own unique name and configuration.
 <3> Use service accounts for authentication
 <4> Token for the service account that connects to the Kubernetes API server
 <5> Kubernetes custom resources that should be visible in RHDH. The base Kubernetes plugin only understands the vanilla Kubernetes API resources. Routes, pipelines and tasks are additions on top of the base Kubernetes API added by layered products like OpenShift Pipelines and the OpenShift platform router.
@@ -264,7 +264,7 @@ image::kubernetes-resources-view.png[title=Kubernetes Pod View]
 +
 NOTE: Due to the browser caching static assets like HTML and Javascript files, you may have to refresh the page, or open the component details page in the browser incognito/private mode for the `TOPOLOGY` tab to be seen. 
 
-. You should see a the Topology plugin displaying the details of the nginx application similar to how it is displayed in the OpenShift web console:
+. You should see the Topology plugin displaying the details of the nginx application similar to how it is displayed in the OpenShift web console:
 +
 image:topology-plugin-view.png[title=Topology Plugin Overview]
 
@@ -272,7 +272,7 @@ image:topology-plugin-view.png[title=Topology Plugin Overview]
 +
 image:topology-details.png[title=Topology Plugin Details]
 
-. Click on the `Resources` tab in the right side panel to view the details of the pods. You should see two pods as per the Deployment definition for the nginx application. You should also see the service and route definition.
+. Click on the `Resources` tab in the right-side panel to view the details of the pods. You should see two pods as per the Deployment definition for the nginx application. You should also see the service and route definition.
 +
 image:topology-pods.png[title=Topology Pod Details]
 
