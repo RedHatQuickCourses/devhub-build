@@ -133,7 +133,7 @@
 <p>The RHDH Tekton plugin provides a quick, read-only visualization of your Tekton continuous integration (CI) pipelines and task runs in the RHDH web UI. This allows developers to get quick feedback about their CI builds and status without ever leaving the RHDH web UI. The plugin displays the latest status of pipeline runs and the status of the tasks in the pipelines. Developers can easily identify tasks that failed and take quick, remedial action.</p>
 </div>
 <div class="paragraph">
-<p>The Tekton depends on the Kubernetes plugin for set-up and configuration. You must ensure that the Kubernetes plugin is aware of custom resources specific to Tekton (pipeline runs and task runs), and has read-only permissions to fetch information from the Kubernetes API server.</p>
+<p>The Tekton plugin depends on the Kubernetes plugin for set-up and configuration. You must ensure that the Kubernetes plugin is aware of custom resources specific to Tekton (pipeline runs and task runs), and has read-only permissions to fetch information from the Kubernetes API server.</p>
 </div>
 <div class="paragraph">
 <p>You must also ensure that you have a <code>janus-idp.io/tekton</code> annotation in your catalog YAML descriptor files that match the name of the pipeline resource. You can, as usual, use label selectors to query pipeline resources (<code>Pipelinerun</code> and <code>Taskrun</code> resources inherit labels from their parent <code>Pipeline</code>).</p>
@@ -178,7 +178,7 @@
 </div>
 </li>
 <li>
-<p>Typically, pipelines are triggered by a Git repository commit, but for the purposes of this lab, we can launch the pipeline using the <code>oc</code> CLI and YAML files describing <code>Pipeline</code> run resources. Inspect the <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml</a> and <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml</a> file. These simulate a successful and failed pipeline run respectively.</p>
+<p>Typically, pipelines are triggered by a Git repository commit, but for the purposes of this lab, we can launch the pipeline using the <code>oc</code> CLI and YAML files describing <code>PipelineRun</code> resources. Inspect the <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml</a> and <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml</a> file. These simulate a successful and failed pipeline run respectively.</p>
 </li>
 <li>
 <p>Start the pipeline runs</p>
@@ -227,35 +227,39 @@ spec:
 <p>Import the component into the RHDH catalog from the <code>Create &gt; REGISTER EXISTING COMPONENT</code> page, and provide the full path to the <code>catalog-info.yml</code> file from the previous step. After the component is imported, verify that the component is listed in the <code>Catalog</code> page and click on <code>A Simple Tekton Pipeline</code> to view the component details.</p>
 </li>
 <li>
-<p>Verify that you can see a new tab named <code>CI</code> on the component details page. You should see the result of the two pipeline runs.</p>
+<p>Verify that you can see a new tab named <code>CI</code> on the component details page. Click on it to open the details page. You should see the result of the two pipeline runs.</p>
 <div class="imageblock">
 <div class="content">
-<img src="_images/pipeline-runs.png" alt="Pipeline Runs">
+<img src="_images/pipeline-runs.png" alt="pipeline runs">
 </div>
+<div class="title">Figure 1. Pipeline Runs</div>
 </div>
 </li>
 <li>
 <p>Mouse over the <code>TASK STATUS</code> column and you should see a high-level summary of the tasks (how many passed, failed, or skipped).</p>
 <div class="imageblock">
 <div class="content">
-<img src="_images/task-status.png" alt="Task Status">
+<img src="_images/task-status.png" alt="task status">
 </div>
+<div class="title">Figure 2. Task Status</div>
 </div>
 </li>
 <li>
 <p>You can expand each of the pipeline runs (by expanding the greater than symbol to left of the pipelinerun name) and view the detailed status. Note that the <code>tests</code> task has failed in the <code>run-fail</code> pipeline run.</p>
 <div class="imageblock">
 <div class="content">
-<img src="_images/expand-pipeline-runs.png" alt="Pipeline Run Details">
+<img src="_images/expand-pipeline-runs.png" alt="expand pipeline runs">
 </div>
+<div class="title">Figure 3. Pipeline Run Details</div>
 </div>
 </li>
 <li>
 <p>Click on the failed <code>tests</code> task in the <code>run-fail</code> pipeline run to view the logs. In an actual application, you will see the unit test failure stack trace and other logs. In this case, the task simply prints a message.</p>
 <div class="imageblock">
 <div class="content">
-<img src="_images/failed-task.png" alt="Failed Task Log">
+<img src="_images/failed-task.png" alt="failed task">
 </div>
+<div class="title">Figure 4. Failed Task Log</div>
 </div>
 </li>
 </ol>
