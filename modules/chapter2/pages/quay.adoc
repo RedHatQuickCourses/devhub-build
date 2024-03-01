@@ -4,14 +4,14 @@ The Quay plugin displays information about your container images (in a Quay regi
 
 The process to enable and configure the Quay plugin consists of two major steps:
 
-. Configure a proxy end point in `app-config.yaml`
+. Configure a proxy endpoint in `app-config.yaml`
 . Enable the Quay dynamic plugin in your helm chart YAML values file
 
 == Configure a Proxy Endpoint for Quay
 
-RHDH comes with a generic `proxy` component that acts as a lightweight reverse proxy to make calls to external APIs, and pass on the output to frontend plugins for visualization in the RHDH web UI. The Quay plugin supports both the public Quay.io container image registry, as well as self-hosted on-premise Quay enterprise versions.
+RHDH comes with a generic `proxy` component that acts as a lightweight reverse proxy to make calls to external APIs and pass on the output to frontend plugins for visualization in the RHDH web UI. The Quay plugin supports both the public Quay.io container image registry, as well as self-hosted on-premise Quay enterprise versions.
 
-In your `app-config.yaml` add a proxy end point for Quay:
+In your `app-config.yaml` add a proxy endpoint for Quay:
 
 ```yaml
 proxy:
@@ -25,8 +25,8 @@ proxy:
     quay:
       uiUrl: 'https://quay.io' <2>
 ```
-<1> Proxy end point for the Quay front end plugin
-<2> Target - value should be `https://quay.io` for public registry, or the full URL to your self-hosted Quay registry
+<1> Proxy endpoint for the Quay front-end plugin
+<2> Target - value should be `https://quay.io` for the public registry, or the full URL to your self-hosted Quay registry
 <3> Authentication Token. Not needed for publicly available registries. Mandatory for private registries. You can generate tokens in the Quay.io `Account Settings > Generate Encrypted Password > `Encrypted Password` page.
 
 == Enable the Quay Dynamic Plugin
@@ -44,14 +44,14 @@ Enable the Quay dynamic plugin in the RHDH helm chart Upgrade page (YAML view):
 
 This hands-on lab uses a publicly available container registry that is freely accessible and hosted in the https://quay.io container registry.
 
-* If you want to use a private container registry then you need to generate authentication tokens for your account in the https://quay.io website
+* If you want to use a private container registry then you need to generate authentication tokens for your account on the https://quay.io website
 * Consult the product documentation for Quay enterprise registry to install and set up account authentication.
 
 === Steps
 
 In this lab, you will configure the Quay plugin to access the publicly accessible container registry for the `OpenShift OKD` project at https://quay.io/repository/openshift/okd.
 
-. Edit the `app-config-rhdh` ConfigMap and add a proxy end point for Quay.io
+. Edit the `app-config-rhdh` ConfigMap and add a proxy endpoint for Quay.io
 +
 ```yaml
 proxy:
@@ -95,9 +95,9 @@ spec:
 ```
 +
 <1> Metadata for this component - name, description and links to the public quay.io registry
-<2> Annotation to identify the registry from which container images metadata need to be fetched. In this case the `OKD` project registry. If you have a private registry with your own organization, then change this slug to reflect the path to your registry. The same path information applies for privately hosted Quay enterprise registries.
+<2> Annotation to identify the registry from which container image metadata needs to be fetched. In this case the `OKD` project registry. If you have a private registry with your own organization, then change this slug to reflect the path to your registry. The same path information applies to privately hosted Quay enterprise registries.
 
-. Import this component into RHDH using the `Create > REGISTER EXISTING COMPONENT` page. Once imported, click the `Example Quay Registry` item in the RHDH Catalog page
+. Import this component into RHDH using the `Create > REGISTER EXISTING COMPONENT` page. Once imported, click the `Example Quay Registry` item on the RHDH Catalog page
 
 . Observe that a new tab named `IMAGE REGISTRY` is visible. Click on this tab to view the information for container images contained in the `openshift/okd` registry
 +
