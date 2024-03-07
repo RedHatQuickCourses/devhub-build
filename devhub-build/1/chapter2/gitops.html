@@ -126,17 +126,172 @@
 </aside>
 <article class="doc">
 <h1 class="page">ArgoCD Plugin</h1>
-<div class="admonitionblock note">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The RHDH ArgoCD plugin provides a read-only visualization of your ArgoCD and OpenShift GitOps application deployments in the RHDH web UI. This allows developers to get quick feedback about their application deployment status without ever leaving the RHDH web UI. The plugin displays the latest deployment status, as well as information about historical deployments. Developers can easily identify deployments that failed and take quick, remedial action.</p>
+</div>
+<div class="paragraph">
+<p>When importing ArgoCD <code>Application</code> resources into RHDH, you must ensure that you have a <code>argocd/app-name</code> annotation in your catalog YAML descriptor files that match the name of the ArgoCD <code>Application</code> resource.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lab_configuring_the_tekton_plugin"><a class="anchor" href="#_lab_configuring_the_tekton_plugin"></a>Lab: Configuring the Tekton Plugin</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_pre_requisites"><a class="anchor" href="#_pre_requisites"></a>Pre-requisites</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Install the <code>Red Hat OpenShift GitOps</code> operator by following the official product documentation at <a href="https://access.redhat.com/documentation/en-us/red_hat_openshift_gitops/1.11/html-single/installing_gitops/index#installing-gitops-operator-in-web-console_installing-openshift-gitops" class="bare">https://access.redhat.com/documentation/en-us/red_hat_openshift_gitops/1.11/html-single/installing_gitops/index#installing-gitops-operator-in-web-console_installing-openshift-gitops</a>. Use default values outlined in the installation guide. You must have an ArgoCD instance running in the <code>openshift-gitops</code> namespace before continuing with the next steps.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_steps"><a class="anchor" href="#_steps"></a>Steps</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Log in to the OpenShift cluster as the cluster administrator using the <code>oc</code> CLI.</p>
+</li>
+<li>
+<p>Download and inspect the sample ArgoCD application at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/gitops/argo-app.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/gitops/argo-app.yaml</a>. You can use your own custom application if you wish. Just ensure that the annotation&#8217;s in your catalog YAML file match the application name.</p>
+</li>
+<li>
+<p>Create the application in the <code>openshift-gitops</code> namespace.</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ oc apply -f argo-app.yaml -n openshift-gitops</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Get the auto-generated password for the ArgoCD instance created by the OpenShift GitOps operator:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Edit the <code>rhdh-secrets</code> Secret resource in the <code>devhub</code> namespace and add key/value for accessing the  ArgoCD instance:</p>
+<div class="literalblock">
+<div class="content">
+<pre>ARGOCD_ADMIN_USER=admin
+ARGCOD_ADMIN_PASSWORD=&lt;password from the previous step&gt;</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Edit the <code>app-config-rhdh</code> ConfigMap and configure the ArgoCD plugin:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">argocd:
+      waitCycles: 25
+      appLocatorMethods:
+        - type: 'config'
+          instances:
+            - name: argocd1 <i class="conum" data-value="1"></i><b>(1)</b>
+              url: https://openshift-gitops-server-openshift-gitops.apps.cluster-6tkk4.dynamic.redhatworkshops.io <i class="conum" data-value="2"></i><b>(2)</b>
+              username: ${ARGOCD_ADMIN_USER} <i class="conum" data-value="3"></i><b>(3)</b>
+              password: ${ARGCOD_ADMIN_PASSWORD} <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
 <table>
 <tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-This section is under development&#8230;&#8203;
-</td>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A unique name for this ArgoCD instance. You can define multiple ArgoCD instances under the <code>instances:</code> key</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The URL of the ArgoCD instance (Run <code>oc get route openshift-gitops-server -n openshift-gitops</code> to the full route URL)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Username for this ArgoCD instance. Default is <code>admin</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Password for this ArgoCD instance.</td>
 </tr>
 </table>
+</div>
+</li>
+<li>
+<p>Upgrade the RHDH helm chart in YAML mode and enable the ArgoCD plugins:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  - disabled: false
+    package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd
+  - disabled: false
+    package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd-backend-dynamic</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Click <code>Upgrade</code> to re-deploy the chart and for the new configuration to take effect. Wait until the RHDH container is fully up and running.</p>
+</li>
+<li>
+<p>Finally, inspect the catalog YAML descriptor file for this component at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/gitops/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/gitops/catalog-info.yaml</a>. Adjust the values for your environment. Note the <code>argocd/app-name</code> annotation to match the name of the <code>Application</code> resource (<code>spring-petclinic</code>).</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: spring-petclinic-gitops
+  title: An app deployed by OpenShift GitOps
+  description: |
+    This is a simple spring app deployed by OCP GitOps
+  annotations:
+    backstage.io/kubernetes-id: 'spring-petclinic'
+    backstage.io/kubernetes-namespace: myapps
+    backstage.io/kubernetes-label-selector: 'app=spring-petclinic'
+    argocd/app-name: 'spring-petclinic'
+spec:
+...</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Import the component into the RHDH catalog from the <code>Create &gt; REGISTER EXISTING COMPONENT</code> page, and provide the full path to the <code>catalog-info.yml</code> file from the previous step. After the component is imported, verify that the component is listed in the <code>Catalog</code> page and click on <code>An app deployed by OpenShift GitOps</code> to view the component details.</p>
+</li>
+<li>
+<p>Verify that you can see a new <code>ArgoCD overview</code> section in the <code>OVERVIEW</code> tab that shows the sync status and health status for this application.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/argocd-overview.png" alt="argocd overview">
+</div>
+<div class="title">Figure 1. ArgoCD Status Overview</div>
+</div>
+</li>
+<li>
+<p>You should see a new tab named <code>CD</code> in this page. Click on it to view the historical information for the application.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/argocd-history.png" alt="argocd history">
+</div>
+<div class="title">Figure 2. ArgoCD History</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references"><a class="anchor" href="#_references"></a>References</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://access.redhat.com/documentation/en-us/red_hat_plug-ins_for_backstage/2.0/html-single/argocd_plugin_for_backstage/index">ArgoCD plugin for Backstage</a></p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="pipelines.html">Tekton Plugin</a></span>
