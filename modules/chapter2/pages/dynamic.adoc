@@ -47,6 +47,10 @@ global:
 
 WARNING: Simply enabling a dynamic plugin in the helm chart may not provide the required functionality. You may need to edit your *app-config.yaml* files to add plugin-specific configuration (for example, set different environment variables) to make the plugin work correctly. Consult the corresponding plugin documentation for the required configuration.
 
+If you wish to include a dynamic plugin that is not included in RHDH, or if you wish to develop your own custom plugins, consult the Janus IDP plugins repository at https://github.com/janus-idp/backstage-plugins. 
+
+A nice demonstration on how to create a custom plugin for RHDH is shown https://www.youtube.com/watch?v=yVzjTU3JamE[here]. You can host custom plugins in your own NPM registry and include them by following the steps at https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html-single/administration_guide_for_red_hat_developer_hub/index#examples
+
 == References
 
 * https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html-single/release_notes_for_red_hat_developer_hub_1.0/index#plugins-available-in-red-hat-developer-hub[Plugins available in RHDH 1.0]
