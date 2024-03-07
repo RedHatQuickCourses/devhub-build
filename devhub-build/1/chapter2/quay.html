@@ -127,17 +127,209 @@
 </aside>
 <article class="doc">
 <h1 class="page">Quay Plugin</h1>
-<div class="admonitionblock note">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Quay plugin displays information about your container images (in a Quay registry) in the RHDH portal.</p>
+</div>
+<div class="paragraph">
+<p>The process to enable and configure the Quay plugin consists of two major steps:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Configure a proxy endpoint in <code>app-config.yaml</code></p>
+</li>
+<li>
+<p>Enable the Quay dynamic plugin in your helm chart YAML values file</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configure_a_proxy_endpoint_for_quay"><a class="anchor" href="#_configure_a_proxy_endpoint_for_quay"></a>Configure a Proxy Endpoint for Quay</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>RHDH comes with a generic <code>proxy</code> component that acts as a lightweight reverse proxy to make calls to external APIs and pass on the output to frontend plugins for visualization in the RHDH web UI. The Quay plugin supports both the public Quay.io container image registry, as well as self-hosted on-premise Quay enterprise versions.</p>
+</div>
+<div class="paragraph">
+<p>In your <code>app-config.yaml</code> add a proxy endpoint for Quay:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">proxy:
+      '/quay/api': <i class="conum" data-value="1"></i><b>(1)</b>
+        target: 'https://quay.io' <i class="conum" data-value="2"></i><b>(2)</b>
+        headers:
+          X-Requested-With: 'XMLHttpRequest'
+          Authorization: 'Bearer mytoken' <i class="conum" data-value="3"></i><b>(3)</b>
+        changeOrigin: true
+        secure: true # false for self-signed certs in self-hosted versions of Quay
+    quay:
+      uiUrl: 'https://quay.io' <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
 <table>
 <tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-This section is under development&#8230;&#8203;
-</td>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Proxy endpoint for the Quay front-end plugin</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Target - value should be <code><a href="https://quay.io" class="bare">https://quay.io</a></code> for the public registry, or the full URL to your self-hosted Quay registry</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Authentication Token. Not needed for publicly available registries. Mandatory for private registries. You can generate tokens in the Quay.io <code>Account Settings &gt; Generate Encrypted Password &gt; `Encrypted Password</code> page.</td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_enable_the_quay_dynamic_plugin"><a class="anchor" href="#_enable_the_quay_dynamic_plugin"></a>Enable the Quay Dynamic Plugin</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Enable the Quay dynamic plugin in the RHDH helm chart Upgrade page (YAML view):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- disabled: false
+  package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-quay</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lab_enabling_and_configuring_the_quay_plugin"><a class="anchor" href="#_lab_enabling_and_configuring_the_quay_plugin"></a>Lab: Enabling and Configuring the Quay Plugin</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_pre_requisites"><a class="anchor" href="#_pre_requisites"></a>Pre-requisites</h3>
+<div class="paragraph">
+<p>This hands-on lab uses a publicly available container registry that is freely accessible and hosted in the <a href="https://quay.io" class="bare">https://quay.io</a> container registry.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If you want to use a private container registry then you need to generate authentication tokens for your account on the <a href="https://quay.io" class="bare">https://quay.io</a> website</p>
+</li>
+<li>
+<p>Consult the product documentation for Quay enterprise registry to install and set up account authentication.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_steps"><a class="anchor" href="#_steps"></a>Steps</h3>
+<div class="paragraph">
+<p>In this lab, you will configure the Quay plugin to access the publicly accessible container registry for the <code>OpenShift OKD</code> project at <a href="https://quay.io/repository/openshift/okd" class="bare">https://quay.io/repository/openshift/okd</a>.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Edit the <code>app-config-rhdh</code> ConfigMap and add a proxy endpoint for Quay.io</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">proxy:
+      '/quay/api':
+        target: 'https://quay.io'
+        headers:
+          X-Requested-With: 'XMLHttpRequest'
+          #Authorization: 'Bearer mytoken' # for private registries only
+        changeOrigin: true
+        secure: true
+    quay:
+      uiUrl: 'https://quay.io'</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Enable the Quay dynamic plugin in the upgrade helm chart YAML view:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- disabled: false
+  package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-quay</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Click <code>Upgrade</code> to re-deploy the helm chart. Wait until the RHDH container is fully restarted.</p>
+</div>
+</li>
+<li>
+<p>Inspect the catalog YAML descriptor files at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/quay/quay-registry.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/quay/quay-registry.yaml</a> for an RHDH component that tracks the OpenShift OKD container registry. You need to add an annotation for the Quay plugin to fetch container image information from the appropriate registry.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata: <i class="conum" data-value="1"></i><b>(1)</b>
+  name: myquay
+  title: Example Quay Registry
+  description: |
+    This is a simple Quay.io personal image registry example website
+  links:
+    - title: My Quay
+      url: https://quay.io
+  annotations:
+    quay.io/repository-slug: openshift/okd <i class="conum" data-value="2"></i><b>(2)</b>
+spec:
+...</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Metadata for this component - name, description and links to the public quay.io registry</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Annotation to identify the registry from which container image metadata needs to be fetched. In this case the <code>OKD</code> project registry. If you have a private registry with your own organization, then change this slug to reflect the path to your registry. The same path information applies to privately hosted Quay enterprise registries.</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Import this component into RHDH using the <code>Create &gt; REGISTER EXISTING COMPONENT</code> page. Once imported, click the <code>Example Quay Registry</code> item on the RHDH Catalog page</p>
+</li>
+<li>
+<p>Observe that a new tab named <code>IMAGE REGISTRY</code> is visible. Click on this tab to view the information for container images contained in the <code>openshift/okd</code> registry</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/okd-images.png" alt="okd images">
+</div>
+<div class="title">Figure 1. Container images in Quay.io OKD registry</div>
+</div>
+</li>
+<li>
+<p>Click on any of the links in the <code>SECURITY SCAN</code> columns to view vulnerability information for the image. You can search and filter results in this view.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/okd-vuln.png" alt="okd vuln">
+</div>
+<div class="title">Figure 2. Vulnerability info for images</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references"><a class="anchor" href="#_references"></a>References</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://access.redhat.com/documentation/en-us/red_hat_plug-ins_for_backstage/2.0/html-single/quay_plugin_for_backstage/index">Quay Plugin for Backstage</a></p>
+</li>
+<li>
+<p><a href="https://github.com/janus-idp/backstage-plugins/tree/main/plugins/quay">Configure Quay Plugin</a></p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="topology.html">Kubernetes and Topology Plugin</a></span>
