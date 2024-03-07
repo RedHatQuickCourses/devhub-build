@@ -127,6 +127,28 @@
 </aside>
 <article class="doc">
 <h1 class="page">Dynamic Plugins</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>This section briefly explains the rationale for dynamic plugins and how to enable or disable plugins in RHDH.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_dynamic_plugins_in_rhdh"><a class="anchor" href="#_dynamic_plugins_in_rhdh"></a>Dynamic Plugins in RHDH</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As you already learnt in the first introductory course in the learning path, RHDH, as a platform consists of a small modular core and an extensive set of plugins that provide most of the functionality. In the upstream <strong>Backstage.io</strong> platform, enabling a plugin means modifying the platform&#8217;s source code to load a bunch of TypeScript/JavaScript, and other static files (HTML, CSS, images etc.). You then have to stop and restart the runtime to enable the plugin.</p>
+</div>
+<div class="paragraph">
+<p>This approach of changing source code and restarting for enabling plugins will not work for RHDH, because you need to recompile the source code, build a new container image and then re-deploy the new container image.</p>
+</div>
+<div class="paragraph">
+<p>RedHat has introduced the concept of a <strong>dynamic plugin</strong> to overcome this hurdle. A set of curated plugins are pre-baked into the container image, but not enabled by default. The dynamic plugin framework is based on the Node.js Scalprum library (<a href="https://github.com/scalprum/scaffolding" class="bare">https://github.com/scalprum/scaffolding</a>). To enable or disable a plugin, you edit the <strong>app-config.yaml</strong> or the RHDH Helm chart YAML values and turn plugins on or off. In this manner, RHDH allows you to control plugin lifecycle and configuration without recompiling or rebuilding container images.</p>
+</div>
+<div class="paragraph">
+<p>RHDH is pre-loaded with a selection of dynamic plugins. Most of these dynamic plugins are disabled by default due to the need for mandatory configuration. For a complete list of dynamic plugins that are included, see the <a href="https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html-single/administration_guide_for_red_hat_developer_hub/index#dynamic-plugins-matrix">dynamic plugins matrix</a> section in the <code>Administration guide for Red Hat Developer Hub</code>.</p>
+</div>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -134,10 +156,98 @@
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-This section is under development&#8230;&#8203;
+Red Hat fully supports certain plugins (Topology, Tekton, Quay), while others are community-supported projects.
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_enablingdisabling_dynamic_plugins_in_rhdh"><a class="anchor" href="#_enablingdisabling_dynamic_plugins_in_rhdh"></a>Enabling/Disabling Dynamic Plugins in RHDH</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The dynamic plugin support is based on the <a href="https://github.com/backstage/backstage/tree/master/packages/backend-dynamic-feature-service">backend plugin manager</a> package, which is a service that scans a configured root directory (<code>dynamicPlugins.rootDirectory</code> in the <strong>app-config.yaml</strong>) for dynamic plugin packages, and loads them dynamically.</p>
+</div>
+<div class="paragraph">
+<p>You can include a dynamic plugin in RHDH by appending an entry to the <code>global.dynamic.plugins</code> list in your Helm Chart.</p>
+</div>
+<div class="paragraph">
+<p>In your Helm Chart <code>Form View</code>, you can add or remove plugins. Expand <code>Root Schema &gt; global &gt; Dynamic plugins configuration &gt; List of dynamic plugins that should be installed&#8230;&#8203;</code>, and then add the plugin path to the <code>Package specification of the dynamic plugin to install</code> field.</p>
+</div>
+<div class="paragraph">
+<p>Consult the dynamic plugin matrix table in the administration guide for the path to the dynamic module and add the path to the list. You can enable or disable plugins from this view. For example, to enable the <code>GitHub Organization</code> plugin:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/enable-plugins-form-view.png" alt="enable plugins form view">
+</div>
+<div class="title">Figure 1. Enabling Plugins using Helm Chart Form View</div>
+</div>
+<div class="paragraph">
+<p>If you prefer to edit the helm chart&#8217;s YAML directly, do the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">global:
+  dynamic:
+    includes:
+      - dynamic-plugins.default.yaml
+    plugins:
+      - disabled: false <i class="conum" data-value="1"></i><b>(1)</b>
+        package: &gt;- <i class="conum" data-value="2"></i><b>(2)</b>
+          ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-org-dynamic
+      - disabled: false <i class="conum" data-value="1"></i><b>(1)</b>
+        package: &gt;- <i class="conum" data-value="2"></i><b>(2)</b>
+          ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-dynamic</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Enable or Disable the plugin. Set to <code>true</code> to disable the plugin</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The path to the dynamic plugin. Consult the <code>Administration Guide</code> (dynamic plugins matrix) for the full path</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Simply enabling a dynamic plugin in the helm chart may not provide the required functionality. You may need to edit your <strong>app-config.yaml</strong> files to add plugin-specific configuration (for example, set different environment variables) to make the plugin work correctly. Consult the corresponding plugin documentation for the required configuration.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If you wish to include a dynamic plugin that is not included in RHDH, or if you wish to develop your own custom plugins, consult the Janus IDP plugins repository at <a href="https://github.com/janus-idp/backstage-plugins" class="bare">https://github.com/janus-idp/backstage-plugins</a>.</p>
+</div>
+<div class="paragraph">
+<p>A nice demonstration on how to create a custom plugin for RHDH is shown <a href="https://www.youtube.com/watch?v=yVzjTU3JamE">here</a>. You can host custom plugins in your own NPM registry and include them by following the steps at <a href="https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html-single/administration_guide_for_red_hat_developer_hub/index#examples" class="bare">https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html-single/administration_guide_for_red_hat_developer_hub/index#examples</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references"><a class="anchor" href="#_references"></a>References</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html-single/release_notes_for_red_hat_developer_hub_1.0/index#plugins-available-in-red-hat-developer-hub">Plugins available in RHDH 1.0</a></p>
+</li>
+<li>
+<p><a href="https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html-single/administration_guide_for_red_hat_developer_hub/index#rhdh-installing-dynamic-plugins">Enabling Dynamic Plugins in RHDH</a></p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 <nav class="pagination">
   <span class="prev"><a href="index.html">RHDH Plugins</a></span>
