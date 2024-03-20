@@ -27,7 +27,7 @@ Steps::
 Steps describe the detailed actions that RHDH should perform when instantiating the template to create applications. Each step is rendered as separate HTML forms in the RHDH web UI. This usually involves fetching all the template files and overriding the placeholder variables, and then publishing the generated code to Git, followed by generation and registration of the application in the Catalog.
 
 Built-in Actions::
-Steps rely on a number of built-in actions that perform some of the common tasks when instantiating the template. A complete list of actions is available at the https://RHDH_URL/create/actions. This page displays all the available actions that you can reuse in your template, along with a detailed description of the inputs to the actions.
+Steps rely on a number of built-in actions that perform some of the common tasks when instantiating the template. A complete list of actions is available at the https://RHDH_URL/create/actions. Replace *RHDH_URL* with the actual URL of your RHDH instance. This page displays all the available actions that you can reuse in your template, along with a detailed description of the inputs to the actions.
 
 Output::
 This section of the template is to provide the result of your template instantiation to the web UI. You typically display a message about the template actions and then print the URL of the Git repository and the link to the generated entities catalog details page.
