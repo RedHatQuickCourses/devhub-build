@@ -75,7 +75,7 @@ See https://github.com/janus-idp/backstage-showcase/blob/main/app-config.yaml#L1
 
 === Manual Registration of Components
 
-You can manually add components to the Catalog by navigating to the `Catalog` page in RHDH and then navigating to the `CREATE > REGISTER EXISTING COMPONENT`. Alternatively, you can click `Create...` in the RHDH left navigation sidebar and then click `REGISTER EXISTING COMPONENT`.
+You can manually add components to the Catalog by navigating to the `Catalog` page in RHDH, and then clicking `Create`. Alternatively, you can click `Create...` in the RHDH left navigation sidebar and then click `Register Existing Component`.
 
 You will then be prompted to enter a remote URL which locates the YAML file declaring the details of the new component. RHDH will then fetch the YAML file, parse it and populate the Catalog if the YAML file has valid syntax.
 
@@ -89,7 +89,7 @@ Instantiating a Template will automatically populate the Catalog with the instan
 
 RHDH provides a GitHub auto-discovery plugin for importing entities into the Catalog automatically (based on a configurable interval). You need to set up GitHub integration in your `app-config-rhdh` ConfigMap for this to work correctly. You can configure auto-discovery rules so that RHDH can scan your GitHub organization for catalog YAML files based on regular expression patterns, along with custom file and directory structure layouts. By default, the auto-discovery plugin looks for files named `catalog-info.yaml`.
 
-The GitHub auto-discovery dynamic plugin needs to be enabled by editing the helm chart, and then you need to add the configuration for the discovery process under the `catalog.providers.github` key in your `app-config-rhdh` ConfigMap as follows:
+The GitHub auto-discovery dynamic plugin needs to be enabled by editing the `dynamic-plugins-rhdh-local` ConfigMap, and then you need to add the configuration for the discovery process under the `catalog.providers.github` key in your `app-config-rhdh` ConfigMap as follows:
 
 [subs=+quotes,yaml]
 ----
@@ -185,6 +185,7 @@ catalog:
 
 * A running RHDH instance with valid authentication set up correctly for GitHub authentication.
 * You will use catalog YAML files from the https://github.com/RedHatQuickCourses/devhub-qc-apps GitHub repository. You can either use this repository directly, or fork a copy under your own organization that you created for RHDH integration in the previous course. Note that for GitHub auto-discovery to work correctly, you need to set up integration with GitHub using OAuth2 Apps correctly as outlined in the previous course (`Developer Hub Administration`).
+* It is recommended to *DISABLE* RBAC for this course while you explore the various features and functionality of RHDH plugins. Do not enable RBAC unless you know exactly what you are doing, and if you have configured RBAC policies to allow all the features of RHDH.
 
 === Lab 1: Populating the Catalog Manually
 
@@ -262,29 +263,31 @@ spec:
 + 
 Many of these annotations and dependencies and details mentioned in the `spec` section are used by RHDH to create UI visualizations for you in the portal.
 
-. Navigate to the RHDH home page and then click `Create... > REGISTER EXISTING COMPONENT`. Provide the link to the top level `Location` entity, that is `https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/catalog-info.yaml` as the value in the `Select URL` field. 
+. Navigate to the RHDH home page and then click `Create... > Register Existing Component`. Provide the link to the top level `Location` entity, that is `https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/catalog-info.yaml` as the value in the `Select URL` field. 
 
-. Click `ANALYZE`. If the YAML is valid, you will be shown the results of the analysis. Otherwise, you will a descriptive error message. Fix the error in the YAML files, and proceed with the import.
+. Click `Analyze`. If the YAML is valid, you will be shown the results of the analysis. Otherwise, you will a descriptive error message. Fix the error in the YAML files, and proceed with the import.
 +
 image::post-analysis.png[title=Result of YAML Analysis,width=600]
-
-. Review the results of the analysis, and then Click `IMPORT`.
 +
-image::import-myapp-success.png[title=Analysis Results, width=600]
+WARNING: If you see an error like `{"error":{"name":"NotAllowedError"...}` after clicking `Analyze`, it means RBAC is enabled, and you have not configured the policies for this user to create components. Disable the RBAC dynamic plugin and remove the `permission` block from your `app-config-rhdh` ConfigMap, and then try this step again. Refer to the previous course (`Developer Hub Administration`) for details on how to enable and disable RBAC in RHDH.
 
-. Click on `VIEW COMPONENT` to view the imported details.
+. Review the results of the analysis, and then Click `Import`.
++
+image::import-myapp-success.png[title=Component Imported, width=600]
+
+. Click on `View Component` to view the imported component details.
 +
 image::view-component-imported.png[title=myapp Details Imported Successfully,width=600]
 +
 NOTE: If you see any warnings or errors about missing entity references, then correct your YAML files and re-import the entities. Every reference to an entity must be in the Catalog (either pre-existing, or created along with the entity you are populating into the Catalog).
 
-. Click on the `DEPENDENCIES` tab in the component details page. Notice how RHDH has created a nice visualization of your application's dependencies, systems, and owners.
+. Click on the `Dependencies` tab in the component details page. Notice how RHDH has created a nice visualization of your application's dependencies, systems, and owners.
 +
 image::comp-deps.png[title=Component Dependencies,width=600]
 
 . Switch back to the `Catalog` page and note you now have many more options in the `Kind` drop-down. Filter the catalog by selecting different options for `Kind` and `Type`. You can 'star' the component and have it appear on your RHDH home page for convenient access.
 
-. Clean up. Delete the entities you imported. From the component details page, expand the menu in the top right corner (three vertical dots) and select `Unregister entity`. You will be prompted to review the details of the component and a warning will be provided that this component and all its dependencies will be deleted from the catalog. Click `UNREGISTER LOCATION` to remove the component.
+. Clean up. Delete the entities you imported. From the component details page, expand the menu in the top right corner (three vertical dots) and select `Unregister entity`. You will be prompted to review the details of the component, and a warning will be provided that this component and all its dependencies will be deleted from the catalog. Click `Unregister Location` to remove the component.
 +
 image::unregister-entity.png[title=Unregister Entity]
 +
@@ -317,42 +320,47 @@ metadata:
 
 . Configure the GitHub auto-discovery plugin in the `app-config-rhdh` ConfigMap. Notice that you do not mention the repositories where the catalog YAML files live, but only provide a regular expression path where you expect the YAML files to leave for each of the components you want to import into RHDH. 
 +
-This configuration needs a disciplined approach to creating and maintaining the catalog YAML files, where every component you want to import into RHDH needs to follow the folder structure, naming convention of the YAML file, branch naming scheme described in the configuration.
+This configuration needs a disciplined approach to creating and maintaining the catalog YAML files, where every component you want to import into RHDH needs to follow the folder structure, naming convention of the YAML file, branch naming scheme described in the configuration. Add a `catalogPath` attribute along with a `filters` attribute. Finally, add a `rules` block to allow the import of different component types into RHDH.
 +
-```yaml
-catalog:
-  rules:
-    - allow: [Component, System, API, Template, Location, Resource, User, Group, Domain]
-  providers:
-    githubOrg:
-      default:
-        id: development
-        orgUrl: ${GITHUB_ORG_URL}
-    github:
-      providerId:
-        organization: RedHatQuickCourses
-        catalogPath: '/rhdh-discovery/catalog-info.yaml'
-        filters:
-          branch: 'main'
-          repository: '.*'
-        schedule:
-          frequency: { minutes: 5 }
-          timeout: { minutes: 3 }
-```
+[subs=+quotes]
+----
+data:
+  app-config-rhdh.yaml: |
+    app:
+...
+    signInPage: github
+    catalog:
+      providers:
+        github:
+          providerId:
+            organization: "${GITHUB_ORGANIZATION}"
+            *catalogPath: '/rhdh-discovery/catalog-info.yaml'
+            filters:
+              branch: 'main'
+              repository: '.*'*
+            schedule:
+              frequency:
+              ...
+      *rules:
+        - allow: [Component, System, API, Template, Location, Resource, User, Group, Domain]*
+----
 +
 WARNING: In production systems, ensure that you set the schedule at a higher value (for example, 60 minutes or even more) to avoid frequent scans of your Git repository. You may be throttled or denied access if the scanning is too frequent.
 
-. To make RHDH auto-discover this entity, enable the GitHub auto-discovery plugin in the RHDH Helm chart. Navigate to the `rhdh` helm chart and click `Upgrade`. Switch to the form view, adn then navigate to `global -> Dynamic plugins configuration -> List of dynamic plugins that should be installed in the backstage application -> Package specification of the dynamic plugin to install`, add the following value:
+. To make RHDH auto-discover this entity, enable the GitHub auto-discovery plugin in the `dynamic-plugins-rhdh-local` ConfigMap:
 +
-```text
-./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-dynamic
+```yaml
+- package: './dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-dynamic'
+  disabled: false
 ```
 
-. Click `Upgrade` and wait for the RHDH pods to be recreated. RHDH will auto-discover your catalog YAML descriptor files under your GitHub Organization based on the `schedule` configuration. Inspect the RHDH container logs if you see any errors and fix the configuration in `app-config-rhdh` and redeploy. A successful scan by the plugin should result in logs like the following:
-
+. Restart rollout of the RHDH pod and wait for the RHDH pods to be recreated. RHDH will auto-discover your catalog YAML descriptor files under your GitHub Organization based on the `schedule` configuration. Inspect the RHDH container logs if you see any errors and fix the configuration in `app-config-rhdh` and redeploy. A successful scan by the plugin should result in logs like the following:
++
 ```
-... catalog info Read 16 GitHub repositories (14 matching the pattern) type=plugin target=github-provider:providerId class=GithubEntityProvider...
+... Read 34 GitHub repositories (32 matching the pattern)...
 ```
++
+NOTE: If the components are not auto-discovered and you see no errors in the pod logs, try and adjust the schedule frequency to a lower number of minutes and check again.
 
 . Log in to RHDH as an authenticated user and click on `APIs`. Notice that RHDH has populated the Catalog based on your YAML descriptor file.
 +
@@ -362,7 +370,7 @@ image::petstore-api.png[title=API auto-discovered by RHDH]
 +
 image::petstore-api-details.png[title=Petstore API Details]
 
-. Click in the `DEFINITION` tab and notice how RHDH has detected the OpenAPI definition for this API and renders a nice swagger page for the API end points.
+. Click in the `Definition` tab and notice how RHDH has detected the OpenAPI definition for this API and renders a nice swagger page for the API end points.
 +
 image::petstore-swagger.png[title=OpenAPI documentation,width=600]
 
