@@ -138,7 +138,7 @@
 <h2 id="_writing_techdocs_using_markdown"><a class="anchor" href="#_writing_techdocs_using_markdown"></a>Writing TechDocs Using Markdown</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>TechDocs uses the popular MkDocs library to generate documentation for your applications. You write markdown files (.md file extension) alongside your application&#8217;s source code, and store either in the same repository where you maintain the application, or an external repository which can then be referenced in your catalog YAML files.</p>
+<p>TechDocs uses the popular MkDocs library to generate documentation for your applications. You write markdown files (<strong>.md</strong> file extension) alongside your application&#8217;s source code, and store either in the same repository where you maintain the application, or an external repository which can then be referenced in your catalog YAML files.</p>
 </div>
 <div class="paragraph">
 <p>Your raw plain text source markdown files are then converted to HTML, and then displayed as HTML in the RHDH web UI. There are several ways to configure how RHDH fetches, generates and publishes documents.</p>
@@ -197,7 +197,7 @@
 </ol>
 </div>
 <div class="paragraph">
-<p>The "all local" approach is recommended only for small sized installations of RHDH with a few components. This approach will not scale to medium sized and large installations with hundreds or thousands of components. Since RHDH is running as containers, this approach results is duplicating the HTML files and other processes across all the RHDH pods.</p>
+<p>The "all local" approach is recommended only for small sized installations of RHDH with a few components. This approach will not scale to medium sized and large installations with hundreds or thousands of components. Recall that RHDH is running as a container, so this approach results is duplicating the HTML files and other processes across all the RHDH pods.</p>
 </div>
 <div class="paragraph">
 <p>The following diagram illustrates the production recommended external publication and builder configuration of TechDocs:</p>
@@ -228,7 +228,7 @@
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-The source document conversion and publication process happens completely detached (asynchronously) the in CI/CD workflow (in github actions, gitlab pipeline runners, etc.), irrespective of user requests for documentation.
+The source document conversion and publication process happens completely detached (asynchronously) in the CI/CD workflow (in github actions, gitlab pipeline runners, etc.), irrespective of user requests for documentation.
 </td>
 </tr>
 </table>
@@ -350,7 +350,7 @@ nav: <i class="conum" data-value="2"></i><b>(2)</b>
 </div>
 </li>
 <li>
-<p>Edit the <code>app-config-rhdh</code> ConfigMap and make the following changes:</p>
+<p>RHDH has already enabled the <strong>techdocs</strong> plugin by default for an "all local" configuration. The default plugin YAML file inside the container has the following configured:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">...
@@ -372,7 +372,7 @@ techdocs: <i class="conum" data-value="1"></i><b>(1)</b>
 </div>
 </li>
 <li>
-<p>As a final step, you need to enable the TechDocs dynamic plugin (It is disabled by default). In the OpenShift web console, navigate to <code>Helm &gt; Upgrade option for the rhdh release</code> and select the <code>Form view</code>. Expand <code>Root Schema &gt; global &gt; Dynamic plugins configuration &gt; List of dynamic plugins that should be installed in the backstage application</code>. Scroll to the bottom of the list and click <code>Add List of dynamic plugins that should be installed</code>, and add the following two plugins to the list. Ensure you do not remove the already existing plugins from the list. You must ensure that <code>Disabled</code> option must not be selected for each of these plugins:</p>
+<p>The TechDocs dynamic plugin is enabled by default. In case it is not enabled, ensure the following entries are added to the <code>dynamic-plugins-rhdh-local</code> ConfigMap:</p>
 <div class="literalblock">
 <div class="content">
 <pre>./dynamic-plugins/dist/backstage-plugin-techdocs
@@ -381,13 +381,13 @@ techdocs: <i class="conum" data-value="1"></i><b>(1)</b>
 </div>
 </li>
 <li>
-<p>Click <code>Upgrade</code> to redeploy the RHDH helm chart.</p>
+<p>If you made any changes to the RHDH YAML configuration files, restart the RHDH pod from the <code>Topology</code> view.</p>
 </li>
 <li>
 <p>If you have not already done so, import the template file at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml</a> which contains the TechDocs skeleton code for a simple React front end application.</p>
 </li>
 <li>
-<p>Create a new application from the template and navigate to the component details page. The <code>VIEW TECHDOCS</code> tab should now be enabled and opening it renders the documentation for this component based on your <code>mkdocs.yaml</code> configuration.</p>
+<p>Create a new application from the template and navigate to the component details page. The <code>View Techdocs</code> tab should now be enabled and opening it renders the documentation for this component based on your <code>mkdocs.yaml</code> configuration.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/techdocs-render.png" alt="techdocs render">
