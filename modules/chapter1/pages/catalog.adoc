@@ -299,6 +299,8 @@ WARNING: There are several nuances to deleting entities from the catalog. For ex
 
 In this lab, you will configure RHDH to auto-discover catalog YAML descriptor files for an `API` entity from repositories in your GitHub organization. YAML files matching certain patterns are automatically imported into the Catalog.
 
+It is recommended to fork the `https://github.com/RedHatQuickCourses/devhub-qc-apps` repository under your own GitHub organization for this lab. You must set up GitHub integration as covered in the second course in the learning path (_Developer Hub Administration_).
+
 ==== Steps
 
 . Inspect the `https://github.com/RedHatQuickCourses/devhub-qc-apps/tree/main/rhdh-discovery/catalog-info.yaml` file, which references the `petstore-api.yaml` file. The `petstore-api.yaml' file declares an `API` entity for the `Petstore` sample application. Note the `Kind` declaration of `API`, and the `spec` declaration for the `type` and `definition` pointing to the OpenAPI YAML file describing the API end points for the Petstore backend service.
