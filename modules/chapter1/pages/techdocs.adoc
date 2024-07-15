@@ -4,7 +4,7 @@ You learnt about the `TechDocs` feature of RHDH in the first introductory course
 
 == Writing TechDocs Using Markdown
 
-TechDocs uses the popular MkDocs library to generate documentation for your applications. You write markdown files (.md file extension) alongside your application's source code, and store either in the same repository where you maintain the application, or an external repository which can then be referenced in your catalog YAML files.
+TechDocs uses the popular MkDocs library to generate documentation for your applications. You write markdown files (*.md* file extension) alongside your application's source code, and store either in the same repository where you maintain the application, or an external repository which can then be referenced in your catalog YAML files.
 
 Your raw plain text source markdown files are then converted to HTML, and then displayed as HTML in the RHDH web UI. There are several ways to configure how RHDH fetches, generates and publishes documents.
 
@@ -34,7 +34,7 @@ image::techdocs-arch-local.png[title=TechDocs Architecture for Local Storage and
 . The RHDH backend converts the raw markdown to HTML and publishes it to the local file system inside the container.
 . The client is then sent the generated HTML files from local file system storage. RHDH intelligently caches the generated HTML files so that subsequent requests to documentation are faster.
 
-The "all local" approach is recommended only for small sized installations of RHDH with a few components. This approach will not scale to medium sized and large installations with hundreds or thousands of components. Since RHDH is running as containers, this approach results is duplicating the HTML files and other processes across all the RHDH pods.
+The "all local" approach is recommended only for small sized installations of RHDH with a few components. This approach will not scale to medium sized and large installations with hundreds or thousands of components. Recall that RHDH is running as a container, so this approach results is duplicating the HTML files and other processes across all the RHDH pods.
 
 The following diagram illustrates the production recommended external publication and builder configuration of TechDocs:
 
@@ -44,7 +44,7 @@ image::techdocs-arch-external.png[title=TechDocs Architecture for External Stora
 . The backend registers the location of the HTML files for all the components where TechDocs is enabled.
 . When a client requests documentation for a component, the backend fetches the HTML and other static files from external storage and sends it to the client.
 
-NOTE: The source document conversion and publication process happens completely detached (asynchronously) the in CI/CD workflow (in github actions, gitlab pipeline runners, etc.), irrespective of user requests for documentation.
+NOTE: The source document conversion and publication process happens completely detached (asynchronously) in the CI/CD workflow (in github actions, gitlab pipeline runners, etc.), irrespective of user requests for documentation.
 
 This is the recommended set up for production. CI/CD workflows convert the markdown to HTML asynchronously based on webhook triggers on the documentation repository and publish the generated HTML to external cloud storage. RHDH acts as a pure stateless engine and fetches the HTML for a component based on client request. This approach can scale to large installations with hundreds or thousands of components.
 
@@ -117,7 +117,7 @@ repo_root/
   mkdocs.yml
 ```
 
-. Edit the `app-config-rhdh` ConfigMap and make the following changes:
+. RHDH has already enabled the *techdocs* plugin by default for an "all local" configuration. The default plugin YAML file inside the container has the following configured:
 +
 ```yaml
 ...
@@ -131,16 +131,16 @@ techdocs: <1>
 +
 <1> Configure TechDocs for "all local" mode
 
-. As a final step, you need to enable the TechDocs dynamic plugin (It is disabled by default). In the OpenShift web console, navigate to `Helm > Upgrade option for the rhdh release` and select the `Form view`. Expand `Root Schema > global > Dynamic plugins configuration > List of dynamic plugins that should be installed in the backstage application`. Scroll to the bottom of the list and click `Add List of dynamic plugins that should be installed`, and add the following two plugins to the list. Ensure you do not remove the already existing plugins from the list. You must ensure that `Disabled` option must not be selected for each of these plugins:
+. The TechDocs dynamic plugin is enabled by default. In case it is not enabled, ensure the following entries are added to the `dynamic-plugins-rhdh-local` ConfigMap:
 
   ./dynamic-plugins/dist/backstage-plugin-techdocs
   ./dynamic-plugins/dist/backstage-plugin-techdocs-backend-dynamic
 
-. Click `Upgrade` to redeploy the RHDH helm chart.
+. If you made any changes to the RHDH YAML configuration files, restart the RHDH pod from the `Topology` view.
 
 . If you have not already done so, import the template file at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml which contains the TechDocs skeleton code for a simple React front end application.
 
-. Create a new application from the template and navigate to the component details page. The `VIEW TECHDOCS` tab should now be enabled and opening it renders the documentation for this component based on your `mkdocs.yaml` configuration.
+. Create a new application from the template and navigate to the component details page. The `View Techdocs` tab should now be enabled and opening it renders the documentation for this component based on your `mkdocs.yaml` configuration.
 +
 image::techdocs-render.png[title=Rendered Documentation]
 
