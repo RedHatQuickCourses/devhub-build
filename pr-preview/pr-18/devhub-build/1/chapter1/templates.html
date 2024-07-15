@@ -144,13 +144,13 @@
 <p>A Template is just another type of entity that can be imported into the Catalog. All aspects of creating, importing, auto-discovering, updating, and deleting templates are similar to the concepts and workflow outlined in the previous section on importing entities into the Catalog.</p>
 </div>
 <div class="paragraph">
-<p>An RHDH Template is similar to templates that you in programming languages, for example like Ruby on Rails <code>rails new app</code>, Java&#8217;s <code>Maven archetypes</code>, or Python&#8217;s <code>cookiecutter</code> to scaffold the general structure of a project or application. To create an RHDH Template, you need to supply a YAML file describing the template (usually called`template.yaml`), and a <code>skeleton</code> folder structure that contains the layout of a project or application with template variables (declared using Nunjucks template syntax <code>${{a_variable}})</code>.</p>
+<p>An RHDH Template is similar to templates that you use in programming languages, for example like Ruby on Rails <code>rails new app</code>, Java&#8217;s <code>Maven archetypes</code>, or Python&#8217;s <code>cookiecutter</code> to scaffold the general structure of a project or application. To create an RHDH Template, you need to supply a YAML file describing the template (usually called`template.yaml`), and a <code>skeleton</code> folder structure that contains the layout of a project or application with template variables (declared using Nunjucks template syntax <code>${{a_variable}})</code>.</p>
 </div>
 <div class="paragraph">
 <p>You can have any number of files and folders in the skeleton folder with any number of templated variables. The variables are then replaced with values provided by users in the RHDH front end. Once the skeleton is ready, it is published to a Git repository and then the catalog info YAML file is generated for the application instance and registered with RHDH.</p>
 </div>
 <div class="paragraph">
-<p>The following are some of the most concepts and terminology related to RHDH templates.</p>
+<p>The following are some of the most important concepts and terminology related to RHDH templates.</p>
 </div>
 <div class="dlist">
 <dl>
@@ -160,7 +160,7 @@
 </dd>
 <dt class="hdlist1">Parameters</dt>
 <dd>
-<p>Inputs to your templates are declared in the parameters section. You need to describe the type (String, Numbers, Hidden, Boolean etc) of the parameter, if they are mandatory, and provide default values, if any. These are rendered as HTML forms in RHDH when you instantiate the template. Values provided by the users are then replaced in the template (in the ${{var}} variable placeholders).</p>
+<p>Inputs to your templates are declared in the parameters section. You need to describe the type (String, Numbers, Hidden, Boolean etc) of the parameter, if they are mandatory, and provide default values, if any. These are rendered as HTML forms in RHDH when you instantiate the template. Values provided by the users are then replaced in the template (in the <code>${{var}}</code> variable placeholders).</p>
 </dd>
 <dt class="hdlist1">Properties</dt>
 <dd>
@@ -339,19 +339,31 @@ metadata: <i class="conum" data-value="2"></i><b>(2)</b>
 <p>Inspect the template definition at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml</a>. Inspect the <code>parameters</code>, <code>steps</code>, and <code>output</code> sections in particular to understand the features provided by the template.</p>
 </li>
 <li>
-<p>Navigate to the RHDH home page and then click <code>Create&#8230;&#8203; &gt; REGISTER EXISTING COMPONENT</code>. Provide <code><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml</a></code> as the value in the <code>Select URL</code> field.</p>
+<p>Navigate to the RHDH home page and then click <code>Create&#8230;&#8203; &gt; Register Existing Component</code>. Provide <code><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml</a></code> as the value in the <code>Select URL</code> field.</p>
 </li>
 <li>
-<p>Click <code>ANALYZE</code>. If the YAML is valid, you will be shown the results of the analysis. Otherwise, you will a descriptive error message. Fix the error in the YAML files, and proceed with the import.</p>
+<p>Click <code>Analyze</code>. If the YAML is valid, you will be shown the results of the analysis. Otherwise, you will a descriptive error message. Fix the error in the YAML files, and proceed with the import.</p>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+If you still have RBAC enabled without the proper policies to allow the current user to create new components, you will see an error in this step. Disable RBAC temporarily while you learn and explore the features of RHDH. You will need to restart the RHDH pod for the change to take effect.
+</td>
+</tr>
+</table>
+</div>
 </li>
 <li>
-<p>Review the results of the analysis, and then click <code>IMPORT</code>.</p>
+<p>Review the results of the analysis, and then click <code>Import</code>.</p>
 </li>
 <li>
-<p>Click on <code>VIEW COMPONENT</code> to view the template details. Navigate to the <code>Catalog</code> page in RHDH and select <code>Template</code> in the <code>Kind</code> drop-down to see your newly imported template displayed.</p>
+<p>Navigate to the <code>Catalog</code> page in RHDH and select <code>Template</code> in the <code>Kind</code> drop-down to see your newly imported template displayed.</p>
 </li>
 <li>
-<p>To instantiate the template and create a new application, click <code>Create</code> in the RHDH left sidebar navigation menu, and then click <code>CHOOSE</code> in the <code>React/Next.js SSR Template</code> card</p>
+<p>To instantiate the template and create a new application, click <code>Create</code> in the RHDH left sidebar navigation menu, and then click <code>Choose</code> in the <code>React/Next.js SSR Template</code> card</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/select-template.png" alt="select template">
@@ -360,7 +372,7 @@ metadata: <i class="conum" data-value="2"></i><b>(2)</b>
 </div>
 </li>
 <li>
-<p>Based in your parameter definition, you will be shown an HTML form asking for inputs. Enter <code>test-react-ssr-app</code> in the <code>Name</code> field and enter a descriptive comment in the <code>Description</code> field. Select <code>frontend-team</code> from the <code>Owner</code> drop-down field. Click <code>NEXT STEP</code> when done.</p>
+<p>Based in your parameter definition, you will be shown an HTML form asking for inputs. Enter <code>test-react-ssr-app</code> in the <code>Name</code> field and enter a descriptive comment in the <code>Description</code> field. Select <code>frontend-team</code> from the <code>Owner</code> drop-down field. Click <code>Next</code> when done.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/template-input-step1.png" alt="template input step1">
@@ -369,7 +381,7 @@ metadata: <i class="conum" data-value="2"></i><b>(2)</b>
 </div>
 </li>
 <li>
-<p>For the <code>Choose a location</code> step, the <code>Host</code> field is disabled and the default value from the template is filled in. Enter the name of your GitHub Organization in the <code>Owner</code> field, and <code>test-react-ssr-app</code> in the <code>Repository</code> field (this value identifies the name of the GitHub repository). Click <code>NEXT STEP</code>.</p>
+<p>For the <code>Choose a location</code> step, the <code>Host</code> field is disabled and the default value from the template is filled in. Enter the name of your GitHub Organization in the <code>Owner</code> field, and <code>test-react-ssr-app</code> in the <code>Repository</code> field (this value identifies the name of the GitHub repository). Click <code>Review</code> when done.</p>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -384,7 +396,7 @@ Do NOT enter any RHDH group name of any other string in the Owner field in this 
 </div>
 </li>
 <li>
-<p>Review the information you entered, and then click <code>CREATE</code>. RHDH will process the inputs and generate the scaffolded source code, and then publish it to GitHub, Finally, the <code>test-react-ssr-app</code> will be registered as a <code>Component</code> in the Catalog.</p>
+<p>Review the information you entered, and then click <code>Create</code>. RHDH will process the inputs and generate the scaffolded source code, and then publish it to GitHub, Finally, the <code>test-react-ssr-app</code> will be registered as a <code>Component</code> in the Catalog.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/template-inst-success.png" alt="template inst success">
@@ -393,7 +405,7 @@ Do NOT enter any RHDH group name of any other string in the Owner field in this 
 </div>
 </li>
 <li>
-<p>Click on the <code>Repository</code> link in the output card in the left sidebar and verify that a new GitHub repository is created. Note how the placeholder variables in the skeleton folder of the template have been replaced with the input values from the RHDH frontend forms.</p>
+<p>Click on the <code>Repository</code> link, and verify that a new GitHub repository is created. Note how the placeholder variables in the skeleton folder of the template have been replaced with the input values from the RHDH frontend forms.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/new-react-app-repo.png" alt="new react app repo">
