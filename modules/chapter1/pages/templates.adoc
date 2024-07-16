@@ -8,17 +8,17 @@ This section briefly discusses the concepts and terminology about templates, and
 
 A Template is just another type of entity that can be imported into the Catalog. All aspects of creating, importing, auto-discovering, updating, and deleting templates are similar to the concepts and workflow outlined in the previous section on importing entities into the Catalog.
 
-An RHDH Template is similar to templates that you in programming languages, for example like Ruby on Rails `rails new app`, Java's `Maven archetypes`, or Python's `cookiecutter` to scaffold the general structure of a project or application. To create an RHDH Template, you need to supply a YAML file describing the template (usually called`template.yaml`), and a `skeleton` folder structure that contains the layout of a project or application with template variables (declared using Nunjucks template syntax `${{a_variable}})`.
+An RHDH Template is similar to templates that you use in programming languages, for example like Ruby on Rails `rails new app`, Java's `Maven archetypes`, or Python's `cookiecutter` to scaffold the general structure of a project or application. To create an RHDH Template, you need to supply a YAML file describing the template (usually called`template.yaml`), and a `skeleton` folder structure that contains the layout of a project or application with template variables (declared using Nunjucks template syntax `${{a_variable}})`.
 
 You can have any number of files and folders in the skeleton folder with any number of templated variables. The variables are then replaced with values provided by users in the RHDH front end. Once the skeleton is ready, it is published to a Git repository and then the catalog info YAML file is generated for the application instance and registered with RHDH.
 
-The following are some of the most concepts and terminology related to RHDH templates.
+The following are some of the most important concepts and terminology related to RHDH templates.
 
 Template metadata or Headers::
 Basic metadata and information about the template. You need to provide a unique name for the template, along with a title and description for the template that will be displayed in the front end web UI.
 
 Parameters::
-Inputs to your templates are declared in the parameters section. You need to describe the type (String, Numbers, Hidden, Boolean etc) of the parameter, if they are mandatory, and provide default values, if any. These are rendered as HTML forms in RHDH when you instantiate the template. Values provided by the users are then replaced in the template (in the ${{var}} variable placeholders).
+Inputs to your templates are declared in the parameters section. You need to describe the type (String, Numbers, Hidden, Boolean etc) of the parameter, if they are mandatory, and provide default values, if any. These are rendered as HTML forms in RHDH when you instantiate the template. Values provided by the users are then replaced in the template (in the `${{var}}` variable placeholders).
 
 Properties::
 Properties are the detailed specification for Parameters, along with other UI hints for RHDH. You can make RHDH look up entity details from the Catalog (as a drop-down, for example) instead of the user manually typing in the values in the form.
@@ -139,31 +139,39 @@ In this lab, you will generate a small template to deploy a React frontend appli
 
 . Inspect the template definition at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml. Inspect the `parameters`, `steps`, and `output` sections in particular to understand the features provided by the template.
 
-. Navigate to the RHDH home page and then click `Create... > REGISTER EXISTING COMPONENT`. Provide `https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml` as the value in the `Select URL` field. 
+. Navigate to the RHDH home page and then click `Create... > Register Existing Component`. Provide `https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml` as the value in the `Select URL` field. 
 
-. Click `ANALYZE`. If the YAML is valid, you will be shown the results of the analysis. Otherwise, you will a descriptive error message. Fix the error in the YAML files, and proceed with the import.
+. Click `Analyze`. If the YAML is valid, you will be shown the results of the analysis. Otherwise, you will a descriptive error message. Fix the error in the YAML files, and proceed with the import.
++
+WARNING: If you still have RBAC enabled without the proper policies to allow the current user to create new components, you will see an error in this step. Disable RBAC temporarily while you learn and explore the features of RHDH. You will need to restart the RHDH pod for the change to take effect.
 
-. Review the results of the analysis, and then click `IMPORT`.
+. Review the results of the analysis, and then click `Import`.
 
-. Click on `VIEW COMPONENT` to view the template details. Navigate to the `Catalog` page in RHDH and select `Template` in the `Kind` drop-down to see your newly imported template displayed.
+. Navigate to the `Catalog` page in RHDH and select `Template` in the `Kind` drop-down to see your newly imported template displayed.
 
-. To instantiate the template and create a new application, click `Create` in the RHDH left sidebar navigation menu, and then click `CHOOSE` in the `React/Next.js SSR Template` card
+. To instantiate the template and create a new application, click `Create` in the RHDH left sidebar navigation menu, and then click `Choose` in the `React/Next.js SSR Template` card
 +
 image::select-template.png[title=Select a template]
 
-. Based in your parameter definition, you will be shown an HTML form asking for inputs. Enter `test-react-ssr-app` in the `Name` field and enter a descriptive comment in the `Description` field. Select `frontend-team` from the `Owner` drop-down field. Click `NEXT STEP` when done. 
+. Based in your parameter definition, you will be shown an HTML form asking for inputs. Enter `test-react-ssr-app` in the `Name` field and enter a descriptive comment in the `Description` field. Select `frontend-team` from the `Owner` drop-down field. Click `Next` when done.
 +
 image::template-input-step1.png[title=Template Input - Simple Information]
 
-. For the `Choose a location` step, the `Host` field is disabled and the default value from the template is filled in. Enter the name of your GitHub Organization in the `Owner` field, and `test-react-ssr-app` in the `Repository` field (this value identifies the name of the GitHub repository). Click `NEXT STEP`.
+. For the `Choose a location` step, the `Host` field is disabled and the default value from the template is filled in. Enter the name of your GitHub Organization in the `Owner` field, and `test-react-ssr-app` in the `Repository` field (this value identifies the name of the GitHub repository). Click `Review` when done.
 +
 WARNING: Do NOT enter any RHDH group name of any other string in the Owner field in this step. Owner here corresponds to the GitHub Organization where the application instance source tree will be published. You must enter the same GitHub Organization name here that you used to create the GitHub OAuth App credentials in the Developer Hub Administration course.
 
-. Review the information you entered, and then click `CREATE`. RHDH will process the inputs and generate the scaffolded source code, and then publish it to GitHub, Finally, the `test-react-ssr-app` will be registered as a `Component` in the Catalog.
+. Review the information you entered, and then click `Create`. RHDH will process the inputs and generate the scaffolded source code, and then publish it to GitHub, Finally, the `test-react-ssr-app` will be registered as a `Component` in the Catalog.
 +
 image::template-inst-success.png[title=Template Processing Complete]
++
+IMPORTANT: If you have not created your GitHub App with proper permissions, it is possible you may see some errors related to insufficient permissions and the template processing will fail. Ensure that you provide the appropriate read and write access to the Organization and Repositories to prevent these types of errors. For example, a sample permission list looks like:
++
+image::github-app-perms.png[title=GitHub Application Permissions]
++
+image::github-repo-level-perms.png[title=GitHub Repository Level Permissions Detail]
 
-. Click on the `Repository` link in the output card in the left sidebar and verify that a new GitHub repository is created. Note how the placeholder variables in the skeleton folder of the template have been replaced with the input values from the RHDH frontend forms.
+. Click on the `Repository` link, and verify that a new GitHub repository is created. Note how the placeholder variables in the skeleton folder of the template have been replaced with the input values from the RHDH frontend forms.
 +
 image::new-react-app-repo.png[title=New Application GitHub Repository]
 
