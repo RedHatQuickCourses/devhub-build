@@ -10,13 +10,15 @@ This approach of changing source code and restarting for enabling plugins will n
 
 RedHat has introduced the concept of a *dynamic plugin* to overcome this hurdle. A set of curated plugins are pre-baked into the container image, but not enabled by default. The dynamic plugin framework is based on the Node.js Scalprum library (https://github.com/scalprum/scaffolding). To enable or disable a plugin, you edit the *app-config.yaml* or the RHDH Helm chart YAML values and turn plugins on or off. In this manner, RHDH allows you to control plugin lifecycle and configuration without recompiling or rebuilding container images.
 
-RHDH is pre-loaded with a selection of dynamic plugins. Most of these dynamic plugins are disabled by default due to the need for mandatory configuration. For a complete list of dynamic plugins that are included, see the https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html-single/administration_guide_for_red_hat_developer_hub/index#dynamic-plugins-matrix[dynamic plugins matrix] section in the `Administration guide for Red Hat Developer Hub`. 
+RHDH is pre-loaded with a selection of dynamic plugins. Most of these dynamic plugins are disabled by default due to the need for mandatory configuration. For a complete list of dynamic plugins that are included, see the https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index#rhdh-supported-plugins[dynamic plugins matrix] section in the `Administration guide for Red Hat Developer Hub`. 
 
 NOTE: Red Hat fully supports certain plugins (Topology, Tekton, Quay), while others are community-supported projects.
 
 == Enabling/Disabling Dynamic Plugins in RHDH
 
 The dynamic plugin support is based on the https://github.com/backstage/backstage/tree/master/packages/backend-dynamic-feature-service[backend plugin manager] package, which is a service that scans a configured root directory (`dynamicPlugins.rootDirectory` in the *app-config.yaml*) for dynamic plugin packages, and loads them dynamically.
+
+=== Helm Charts
 
 You can include a dynamic plugin in RHDH by appending an entry to the `global.dynamic.plugins` list in your Helm Chart. 
 
@@ -47,11 +49,15 @@ global:
 
 WARNING: Simply enabling a dynamic plugin in the helm chart may not provide the required functionality. You may need to edit your *app-config.yaml* files to add plugin-specific configuration (for example, set different environment variables) to make the plugin work correctly. Consult the corresponding plugin documentation for the required configuration.
 
+=== RHDH Operator
+
+If you installed RHDH using the operator, enable or disable dynamic plugins in the `dynamic-plugins-rhdh-local` ConfigMap and restarting the RHDH pod. The YAML snippet shown for the helm chart based installation is also valid for the operator based installs. The plugin configuration in the *app-config-rhdh* ConfigMap remains the same.
+
 If you wish to include a dynamic plugin that is not included in RHDH, or if you wish to develop your own custom plugins, consult the Janus IDP plugins repository at https://github.com/janus-idp/backstage-plugins. 
 
-A nice demonstration on how to create a custom plugin for RHDH is shown https://www.youtube.com/watch?v=yVzjTU3JamE[here]. You can host custom plugins in your own NPM registry and include them by following the steps at https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html-single/administration_guide_for_red_hat_developer_hub/index#examples
+A nice demonstration on how to create a custom plugin for RHDH is shown https://www.youtube.com/watch?v=yVzjTU3JamE[here^]. You can also host custom plugins in your own NPM registry and include them by following the steps at https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index#ref-example-dynamic-plugin-helm-installations[here^]
 
 == References
 
-* https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html-single/release_notes_for_red_hat_developer_hub_1.0/index#plugins-available-in-red-hat-developer-hub[Plugins available in RHDH 1.0]
-* https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html-single/administration_guide_for_red_hat_developer_hub/index#rhdh-installing-dynamic-plugins[Enabling Dynamic Plugins in RHDH]
+* https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index#rhdh-supported-plugins[Plugins available in RHDH 1.2^]
+* https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index[Configuring Dynamic Plugins in RHDH^]
