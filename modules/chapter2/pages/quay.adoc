@@ -5,7 +5,7 @@ The Quay plugin displays information about your container images (in a Quay regi
 The process to enable and configure the Quay plugin consists of two major steps:
 
 . Configure a proxy endpoint in `app-config.yaml`
-. Enable the Quay dynamic plugin in your helm chart YAML values file
+. Enable the Quay dynamic plugin for your instance
 
 == Configure a Proxy Endpoint for Quay
 
@@ -31,11 +31,11 @@ proxy:
 
 == Enable the Quay Dynamic Plugin
 
-Enable the Quay dynamic plugin in the RHDH helm chart Upgrade page (YAML view):
+Enable the Quay dynamic plugin in the dynamic plugins YAML configuration:
 
 ```yaml
-- disabled: false
-  package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-quay
+  - package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-quay
+    disabled: false
 ```
 
 == Lab: Enabling and Configuring the Quay Plugin
@@ -51,7 +51,7 @@ This hands-on lab uses a publicly available container registry that is freely ac
 
 In this lab, you will configure the Quay plugin to access the publicly accessible container registry for the `OpenShift OKD` project at https://quay.io/repository/openshift/okd.
 
-. Edit the `app-config-rhdh` ConfigMap and add a proxy endpoint for Quay.io
+. Edit the `app-config-rhdh` ConfigMap and add a `proxy` endpoint for Quay.io at the same indentation level as the `app` and `kubernetes` attributes:
 +
 ```yaml
 proxy:
@@ -66,14 +66,14 @@ proxy:
       uiUrl: 'https://quay.io'
 ```
 
-. Enable the Quay dynamic plugin in the upgrade helm chart YAML view:
+. Enable the Quay dynamic plugin in the `dynamic-plugins-rhdh-local` ConfigMap:
 +
 ```yaml
-- disabled: false
-  package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-quay
+- package: './dynamic-plugins/dist/janus-idp-backstage-plugin-quay'
+  disabled: false
 ```
 +
-Click `Upgrade` to re-deploy the helm chart. Wait until the RHDH container is fully restarted.
+Restart the RHDH pod from the `Topology` view. Wait until the RHDH pod is fully restarted.
 
 . Inspect the catalog YAML descriptor files at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/quay/quay-registry.yaml for an RHDH component that tracks the OpenShift OKD container registry. You need to add an annotation for the Quay plugin to fetch container image information from the appropriate registry.
 +
@@ -97,13 +97,13 @@ spec:
 <1> Metadata for this component - name, description and links to the public quay.io registry
 <2> Annotation to identify the registry from which container image metadata needs to be fetched. In this case the `OKD` project registry. If you have a private registry with your own organization, then change this slug to reflect the path to your registry. The same path information applies to privately hosted Quay enterprise registries.
 
-. Import this component into RHDH using the `Create > REGISTER EXISTING COMPONENT` page. Once imported, click the `Example Quay Registry` item on the RHDH Catalog page
+. Import this component into RHDH using the `Create > Register Existing Component` page. Once imported, click the `Example Quay Registry` item on the RHDH Catalog page
 
-. Observe that a new tab named `IMAGE REGISTRY` is visible. Click on this tab to view the information for container images contained in the `openshift/okd` registry
+. Observe that a new tab named `Image Registry` is visible. Click on this tab to view the information for container images contained in the `openshift/okd` registry
 +
 image::okd-images.png[title=Container images in Quay.io OKD registry]
 
-. Click on any of the links in the `SECURITY SCAN` columns to view vulnerability information for the image. You can search and filter results in this view.
+. Click on any of the links in the `Security Scan` columns to view vulnerability information for the image. You can search and filter results in this view.
 +
 image::okd-vuln.png[title=Vulnerability info for images]
 
