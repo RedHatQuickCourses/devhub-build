@@ -144,7 +144,7 @@
 <div class="ulist">
 <ul>
 <li>
-<p>Install the <code>Red Hat OpenShift GitOps</code> operator by following the official product documentation at <a href="https://access.redhat.com/documentation/en-us/red_hat_openshift_gitops/1.11/html-single/installing_gitops/index#installing-gitops-operator-in-web-console_installing-openshift-gitops" class="bare">https://access.redhat.com/documentation/en-us/red_hat_openshift_gitops/1.11/html-single/installing_gitops/index#installing-gitops-operator-in-web-console_installing-openshift-gitops</a>. Use default values outlined in the installation guide. You must have an ArgoCD instance running in the <code>openshift-gitops</code> namespace before continuing with the next steps.</p>
+<p>Install the <code>Red Hat OpenShift GitOps</code> operator by following the official product documentation at <a href="https://docs.redhat.com/en/documentation/red_hat_openshift_gitops/1.13/html-single/installing_gitops/index#installing-openshift-gitops" class="bare">https://docs.redhat.com/en/documentation/red_hat_openshift_gitops/1.13/html-single/installing_gitops/index#installing-openshift-gitops</a>. Use default values outlined in the installation guide. You must have an ArgoCD instance running in the <code>openshift-gitops</code> namespace before continuing with the next steps.</p>
 </li>
 </ul>
 </div>
@@ -157,13 +157,24 @@
 <p>Log in to the OpenShift cluster as the cluster administrator using the <code>oc</code> CLI.</p>
 </li>
 <li>
-<p>Download and inspect the sample ArgoCD application at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/gitops/argo-app.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/gitops/argo-app.yaml</a>. You can use your own custom application if you wish. Just ensure that the annotation&#8217;s in your catalog YAML file match the application name.</p>
+<p>Download and inspect the sample ArgoCD application at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/gitops/argo-app.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/gitops/argo-app.yaml</a>. You can use your own custom application if you wish. Just ensure that the annotation&#8217;s in your catalog YAML file match the application name. Note the labels for this ArgoCD app. You will need to match the labels on this resource with the RHDH ArgoCD plugin, so that it can identify this ArgoCD app and fetch details about its state.</p>
 </li>
 <li>
-<p>Create the application in the <code>openshift-gitops</code> namespace.</p>
-<div class="literalblock">
+<p>You will deploy a sample application in the <code>myapps</code> namespace. To allow OpenShift GitOps to manage resources in this namespace, add a label as follows:</p>
+<div class="listingblock">
 <div class="content">
-<pre>$ oc apply -f argo-app.yaml -n openshift-gitops</pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ oc label namespace myapps \
+  argocd.argoproj.io/managed-by=openshift-gitops
+namespace/myapps labeled</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create the ArgoCD application in the <code>openshift-gitops</code> namespace.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ oc apply -f argo-app.yaml -n openshift-gitops
+application.argoproj.io/spring-petclinic created</code></pre>
 </div>
 </div>
 </li>
@@ -185,7 +196,7 @@ ARGCOD_ADMIN_PASSWORD=&lt;password from the previous step&gt;</pre>
 </div>
 </li>
 <li>
-<p>Edit the <code>app-config-rhdh</code> ConfigMap and configure the ArgoCD plugin:</p>
+<p>Edit the <code>app-config-rhdh</code> ConfigMap and configure the ArgoCD plugin at the same indentation level as the <code>app</code> and <code>kubernetes</code> attributes:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">argocd:
@@ -194,7 +205,7 @@ ARGCOD_ADMIN_PASSWORD=&lt;password from the previous step&gt;</pre>
         - type: 'config'
           instances:
             - name: argocd1 <i class="conum" data-value="1"></i><b>(1)</b>
-              url: https://openshift-gitops-server-openshift-gitops.apps.cluster-6tkk4.dynamic.redhatworkshops.io <i class="conum" data-value="2"></i><b>(2)</b>
+              url: https://openshift-gitops-server-openshift-gitops.apps.cluster-&lt;guid&gt;.dynamic.redhatworkshops.io <i class="conum" data-value="2"></i><b>(2)</b>
               username: ${ARGOCD_ADMIN_USER} <i class="conum" data-value="3"></i><b>(3)</b>
               password: ${ARGCOD_ADMIN_PASSWORD} <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
 </div>
@@ -221,21 +232,23 @@ ARGCOD_ADMIN_PASSWORD=&lt;password from the previous step&gt;</pre>
 </div>
 </li>
 <li>
-<p>Upgrade the RHDH helm chart in YAML mode and enable the ArgoCD plugins:</p>
+<p>Enable the following three ArgoCD plugins in the dynamic plugin YAML configuration:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  - disabled: false
-    package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd
-  - disabled: false
-    package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd-backend-dynamic</code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  - package: './dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd'
+    disabled: false
+  - package: './dynamic-plugins/dist/janus-idp-backstage-plugin-argocd'
+    disabled: false
+  - package: './dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd-backend-dynamic'
+    disabled: false</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>Click <code>Upgrade</code> to re-deploy the chart and for the new configuration to take effect. Wait until the RHDH container is fully up and running.</p>
+<p>Restart the RHDH pod from the <code>Topology</code> view. Wait until the RHDH container is fully up and running.</p>
 </li>
 <li>
-<p>Finally, inspect the catalog YAML descriptor file for this component at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/gitops/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/gitops/catalog-info.yaml</a>. Adjust the values for your environment. Note the <code>argocd/app-name</code> annotation to match the name of the <code>Application</code> resource (<code>spring-petclinic</code>).</p>
+<p>Finally, inspect the catalog YAML descriptor file for this component at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/gitops/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/gitops/catalog-info.yaml</a>. Adjust the values for your environment. Note the <code>argocd/app-selector</code> annotation to match the labels on the ArgoCD <code>Application</code> resource (<code>app=spring-petclinic</code>).</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
@@ -249,17 +262,17 @@ metadata:
     backstage.io/kubernetes-id: 'spring-petclinic'
     backstage.io/kubernetes-namespace: myapps
     backstage.io/kubernetes-label-selector: 'app=spring-petclinic'
-    argocd/app-name: 'spring-petclinic'
+    argocd/app-selector: 'app=spring-petclinic'
 spec:
 ...</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>Import the component into the RHDH catalog from the <code>Create &gt; REGISTER EXISTING COMPONENT</code> page, and provide the full path to the <code>catalog-info.yml</code> file from the previous step. After the component is imported, verify that the component is listed in the <code>Catalog</code> page and click on <code>An app deployed by OpenShift GitOps</code> to view the component details.</p>
+<p>Import the component into the RHDH catalog from the <code>Create &gt; Register Existing Component</code> page, and provide the full path to the <code>catalog-info.yml</code> file from the previous step. After the component is imported, verify that the component is listed in the <code>Catalog</code> page and click on <code>An app deployed by OpenShift GitOps</code> to view the component details.</p>
 </li>
 <li>
-<p>Verify that you can see a new <code>ArgoCD overview</code> section in the <code>OVERVIEW</code> tab that shows the sync status and health status for this application.</p>
+<p>Verify that you can see a new <code>ArgoCD overview</code> and <code>Deployment Summary</code> sections in the <code>Overview</code> tab that shows the sync status and health status for this application.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/argocd-overview.png" alt="argocd overview">
@@ -268,12 +281,21 @@ spec:
 </div>
 </li>
 <li>
-<p>You should see a new tab named <code>CD</code> in this page. Click on it to view the historical information for the application.</p>
+<p>You should see a new tab named <code>CD</code> in this page. Click on it to view the details for the ArgoCD application.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/argocd-history.png" alt="argocd history">
 </div>
 <div class="title">Figure 2. ArgoCD History</div>
+</div>
+</li>
+<li>
+<p>You can click the link next to <code>spring-petclinic</code> to view the details in the ArgoCD dashboard.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/argocd-dash.png" alt="argocd dash">
+</div>
+<div class="title">Figure 3. ArgoCD Dashboard</div>
 </div>
 </li>
 </ol>

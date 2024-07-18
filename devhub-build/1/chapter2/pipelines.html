@@ -171,35 +171,46 @@
 </li>
 <li>
 <p>Create the pipeline in the <code>myapps</code> namespace.</p>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>$ oc apply -f pipeline.yaml -n myapps</pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ oc apply -f pipeline.yaml -n myapps
+task.tekton.dev/repo-clone created
+task.tekton.dev/compile-code created
+task.tekton.dev/run-tests created
+task.tekton.dev/deploy-app created
+pipeline.tekton.dev/mypipeline created</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>Typically, pipelines are triggered by a Git repository commit, but for the purposes of this lab, we can launch the pipeline using the <code>oc</code> CLI and YAML files describing <code>PipelineRun</code> resources. Inspect the <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml</a> and <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml</a> file. These simulate a successful and failed pipeline run respectively.</p>
+<p>Typically, pipelines are triggered by a Git repository commit, but for the purposes of this lab, we can launch the pipeline using the <code>oc</code> CLI and YAML files describing <code>PipelineRun</code> resources. Inspect the <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml</a> and <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-fail.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-fail.yaml</a> file. These simulate a successful and failed pipeline run respectively.</p>
 </li>
 <li>
 <p>Start the pipeline runs</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ oc apply -f run-ok.yaml
-$ oc apply -f run-fail.yaml</pre>
-</div>
-</div>
 </li>
-<li>
-<p>Upgrade the RHDH helm chart in YAML mode and enable the Tekton plugins:</p>
+</ol>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  - disabled: false
-    package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-tekton</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ oc apply -f run-ok.yaml -n myapps
+pipelinerun.tekton.dev/run-ok created
+$ oc apply -f run-fail.yaml -n myapps
+pipelinerun.tekton.dev/run-fail created</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Enable the Tekton plugin in the dynamic plugin YAML configuration file:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  - package: './dynamic-plugins/dist/janus-idp-backstage-plugin-tekton'
+    disabled: false</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>Click <code>Upgrade</code> to re-deploy the chart and for the new configuration to take effect. Wait until the RHDH container is fully up and running.</p>
+<p>Restart the RHDH pod from the <code>Topology</code> view. Wait until the RHDH container is fully up and running.</p>
 </li>
 <li>
 <p>Finally, inspect the catalog YAML descriptor file for this component at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/catalog-info.yaml</a>. Adjust the values for your environment. Note the <code>janus-idp.io/tekton</code> annotation to match the name of the pipeline resource (<code>mypipeline</code>), plus the label selector for the pipeline.</p>
@@ -224,7 +235,7 @@ spec:
 </div>
 </li>
 <li>
-<p>Import the component into the RHDH catalog from the <code>Create &gt; REGISTER EXISTING COMPONENT</code> page, and provide the full path to the <code>catalog-info.yml</code> file from the previous step. After the component is imported, verify that the component is listed in the <code>Catalog</code> page and click on <code>A Simple Tekton Pipeline</code> to view the component details.</p>
+<p>Import the component into the RHDH catalog from the <code>Create &gt; Register Existing Component</code> page, and provide the full path to the <code>catalog-info.yml</code> file from the previous step. After the component is imported, verify that the component is listed in the <code>Catalog</code> page and click on <code>A Simple Tekton Pipeline</code> to view the component details.</p>
 </li>
 <li>
 <p>Verify that you can see a new tab named <code>CI</code> on the component details page. Click on it to open the details page. You should see the result of the two pipeline runs.</p>

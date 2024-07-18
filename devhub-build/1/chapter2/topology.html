@@ -131,7 +131,7 @@
 <h2 id="_kubernetes_plugin"><a class="anchor" href="#_kubernetes_plugin"></a>Kubernetes Plugin</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Kubernetes plugin provides a <strong>read-only</strong> high-level overview of your applications and services deployed on Kubernetes or OpenShift platform. Developers can easily check the status of their workloads across many different clusters (that is, a cluster where RHDH is deployed, or one or more external clusters hosting your applications and services).</p>
+<p>The Kubernetes plugin provides a <strong>read-only</strong> high-level overview of your applications and services deployed on Kubernetes, or the OpenShift Container Platform. Developers can easily check the status of their workloads across many different clusters (that is, a cluster where RHDH is deployed, or one or more external clusters hosting your applications and services).</p>
 </div>
 <div class="paragraph">
 <p>It will display errors, if any, and provide a high-level glance at the deployments, pods, and other Kubernetes resources for a catalog item.</p>
@@ -142,7 +142,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p>The Kubernetes plugin is made up of two separate smaller plugins, one back-end plugin that communicates with Kubernetes clusters, and a front-end plugin that visualizes the data in the RHDH component details page. To configure the Kubernetes plugin, you need to enable these two plugins in your helm chart YAML configuration:</p>
+<p>The Kubernetes plugin is made up of two separate smaller plugins, one back-end plugin that communicates with Kubernetes clusters, and a front-end plugin that visualizes the data in the RHDH component details page. To configure the Kubernetes plugin, you need to enable these two plugins in your dynamic plugin YAML configuration:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -165,7 +165,7 @@
 <p>The Topology plugin enables you to visualize Kubernetes resources such as <code>Deployment</code>, <code>Job</code>, <code>Daemonset</code>, <code>Statefulset</code>, <code>CronJob</code>, and <code>Pods</code> for any service deployed on the Kubernetes cluster. It requires the Kubernetes plugin to be enabled and configured for it to fetch data from clusters.</p>
 </div>
 <div class="paragraph">
-<p>To configure the Topology plugin, you need to enable the plugin in your helm chart YAML configuration:</p>
+<p>To configure the Topology plugin, you need to enable the plugin in your dynamic plugin YAML configuration:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -317,7 +317,7 @@ rules:
 <p>You may have to wait for a minute while a secret token is generated. To get the token value, run:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl -n devhub \
+<pre>$ oc -n devhub \
   get secret rhdh-sa-token \
   -o go-template='{{.data.token | base64decode}}'</pre>
 </div>
@@ -330,10 +330,30 @@ rules:
 <p>Edit the <code>rhdh-secrets</code> Secret resource in the <code>devhub</code> namespace (You should have created this secret in previous labs) and add a new key named <code>K8S_SA_TOKEN</code> and set it&#8217;s value to the token you generated in the previous step. You will refer to this secret as an environment variable in the <code>app-config.yaml</code> file.</p>
 </li>
 <li>
+<p>You also need to add one more environment variable to the <code>rhdh-secrets</code> to prevent errors related to self-signed TLS certificates. Add this variable if and only if your cluster uses self-signed certificates. Add a new key called <strong>NODE_TLS_REJECT_UNAUTHORIZED</strong> and set its value to <strong>0</strong>.</p>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+If you fail to set this variable when using self-signed TLS certificates, you will get an error:
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Error communicating with Kubernetes: FETCH_ERROR, message: request to https://api.cluster.... failed, reason: self-signed certificate in certificate chain</code></pre>
+</div>
+</div>
+</li>
+<li>
 <p>Edit the <code>app-config-rhdh</code> ConfigMap in the <code>devhub</code> namespace. Add the following section to configure the Kubernetes plugin (Add the <code>kubernetes:</code> key at the same level as the <code>app:</code> key):</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">    techdocs:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">    app:
 ...
     kubernetes:
       serviceLocatorMethod:
@@ -341,10 +361,10 @@ rules:
       clusterLocatorMethods:
         - type: 'config'
           clusters:
-            - url: https://api.cluster-6tkk4.dynamic.redhatworkshops.io:6443 <i class="conum" data-value="1"></i><b>(1)</b>
-              name: ocp-cluster-6tkk4 <i class="conum" data-value="2"></i><b>(2)</b>
+            - url: https://api.cluster-&lt;guid&gt;.dynamic.redhatworkshops.io:6443 <i class="conum" data-value="1"></i><b>(1)</b>
+              name: ocp-cluster-&lt;guid&gt; <i class="conum" data-value="2"></i><b>(2)</b>
               authProvider: 'serviceAccount' <i class="conum" data-value="3"></i><b>(3)</b>
-              skipTLSVerify: true # should be set to 'true' for self-signed certs
+              skipTLSVerify: true <i class="conum" data-value="6"></i><b>(6)</b>
               serviceAccountToken: ${K8S_SA_TOKEN} <i class="conum" data-value="4"></i><b>(4)</b>
               customResources: <i class="conum" data-value="5"></i><b>(5)</b>
                 - group: 'route.openshift.io'
@@ -362,11 +382,11 @@ rules:
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Kubernetes Cluster API Server endpoint (Get this from your RHDP Service Details page)</td>
+<td>Kubernetes Cluster API Server endpoint (Get this from your RHDP Service Details page). Replace <code>guid</code> with your unique GUID</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>A unique name for this Kubernetes cluster. You can add multiple Kubernetes clusters under the <code>clusters:</code> key, each with its own unique name and configuration.</td>
+<td>A unique name for this Kubernetes cluster. You can add multiple Kubernetes clusters under the <code>clusters:</code> key, each with its own unique name and configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
@@ -378,24 +398,28 @@ rules:
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Kubernetes custom resources that should be visible in RHDH. The base Kubernetes plugin only understands the vanilla Kubernetes API resources. Routes, pipelines and tasks are additions on top of the base Kubernetes API added by layered products like OpenShift Pipelines and the OpenShift platform router.</td>
+<td>Kubernetes custom resources that should be visible in RHDH. The base Kubernetes plugin only understands the vanilla Kubernetes API resources. Routes, pipelines and tasks are additions on top of the base Kubernetes API added by layered products like OpenShift Pipelines and the OpenShift platform router</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>For self-signed certificates, set this flag to <code>true</code></td>
 </tr>
 </table>
 </div>
 </li>
 <li>
-<p>Upgrade the RHDH helm chart in YAML mode and enable the Kubernetes backend and frontend plugins:</p>
+<p>Edit the <code>dynamic-plugins-rhdh-local</code> ConfigMap and enable the Kubernetes backend and frontend plugins:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  - disabled: false
-    package: ./dynamic-plugins/dist/backstage-plugin-kubernetes
-  - disabled: false
-    package: ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic</code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  - package: './dynamic-plugins/dist/backstage-plugin-kubernetes'
+    disabled: false
+  - package: './dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic'
+    disabled: false</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>Click <code>Upgrade</code> to re-deploy the chart and for the new configuration to take effect. Wait until the RHDH container is fully up and running.</p>
+<p>Restart the RHDH pod for the new configuration to take effect. Wait until the RHDH container is fully up and running.</p>
 </li>
 <li>
 <p>You are now ready to deploy a simple nginx based web application. Inspect the deployment YAML resource at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/5-nginx-deploy.yml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/5-nginx-deploy.yml</a>. Adjust the values for your environment.</p>
@@ -437,7 +461,7 @@ kind: Route
 <p>Deploy the application in the <code>myapps</code> namespace (Create this namespace/project if it does not exist)</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ oc apply -f 5-nginx-deploy.yml</pre>
+<pre>$ oc apply -f 5-nginx-deploy.yml -n myapps</pre>
 </div>
 </div>
 </li>
@@ -473,10 +497,10 @@ spec:
 </div>
 </li>
 <li>
-<p>Import the component into the RHDH catalog from the <code>Create &gt; REGISTER EXISTING COMPONENT</code> page, and provide the full path to the <code>6-catalog-info.yml</code> file from the previous step. After the component is imported, verify that the component is listed in the <code>Catalog</code> page and click on <code>Nginx example service</code> to view the component details.</p>
+<p>Import the component into the RHDH catalog from the <code>Create &gt; Register Existing Component</code> page, and provide the full path to the <code>6-catalog-info.yml</code> file from the previous step. After the component is imported, verify that the component is listed in the <code>Catalog</code> page and click on <code>Nginx example service</code> to view the component details. You can safely ignore ay warning messages about relations to other entities.</p>
 </li>
 <li>
-<p>Verify that a new <code>KUBERNETES</code> tab is seen. Click on the <code>KUBERNETES</code> tab to view the details provided by the Kubernetes plugin</p>
+<p>Verify that a new <code>Kubernetes</code> tab is seen. Click on the <code>Kubernetes</code> tab to view the details provided by the Kubernetes plugin. You can ignore warning messages about fetching kubernetes resources (This application does not have any tekton pipelines or tasks. You will create pipeline and task resources in subsequent labs for the RHDH Tekton plugin).</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/kube-plugin-view.png" alt="kube plugin view">
@@ -528,19 +552,19 @@ spec:
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Upgrade the RHDH helm chart in YAML mode and enable the Topology plugin:</p>
+<p>Enable the Topology plugin in the <code>dynamic-plugins-rhdh-local</code> ConfigMap:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  - disabled: false
-    package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-topology</code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  - package: './dynamic-plugins/dist/janus-idp-backstage-plugin-topology'
+    disabled: false</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>Click <code>Upgrade</code> to re-deploy the RHDH helm chart. Wait until the RHDH container is redeployed with the new configuration.</p>
+<p>Switch to the <code>Topology</code> view and restart the RHDH pod. Wait until the RHDH container is redeployed with the new configuration.</p>
 </li>
 <li>
-<p>Open the component details page for the <code>Nginx example service</code> component and observe that a new <code>TOPOLOGY</code> tab has been enabled for this component. Click <code>TOPOLOGY</code> to view the details.</p>
+<p>Open the component details page for the <code>Nginx example service</code> component and observe that a new <code>Topology</code> tab has been enabled for this component. Click <code>Topology</code> to view the details.</p>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -548,7 +572,7 @@ spec:
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Due to the browser caching static assets like HTML and Javascript files, you may have to refresh the page, or open the component details page in the browser incognito/private mode for the <code>TOPOLOGY</code> tab to be seen.
+Due to the browser caching static assets like HTML and Javascript files, you may have to refresh the page, or open the component details page in the browser incognito/private mode for the <code>Topology</code> tab to be seen.
 </td>
 </tr>
 </table>
@@ -592,7 +616,7 @@ Due to the browser caching static assets like HTML and Javascript files, you may
 <p><a href="https://backstage.io/docs/features/kubernetes/configuration">Backstage Kubernetes Plugin Configuration</a></p>
 </li>
 <li>
-<p><a href="https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html-single/administration_guide_for_red_hat_developer_hub/index#rhdh-supported-plugins">Dynamic Plugin Matrix for RHDH</a></p>
+<p><a href="https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index#rhdh-supported-plugins" target="_blank" rel="noopener">Plugins available in RHDH 1.2</a></p>
 </li>
 <li>
 <p><a href="https://github.com/janus-idp/backstage-plugins/tree/main/plugins/topology">Topology Plugin for Backstage</a></p>

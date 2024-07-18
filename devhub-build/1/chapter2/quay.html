@@ -141,7 +141,7 @@
 <p>Configure a proxy endpoint in <code>app-config.yaml</code></p>
 </li>
 <li>
-<p>Enable the Quay dynamic plugin in your helm chart YAML values file</p>
+<p>Enable the Quay dynamic plugin for your instance</p>
 </li>
 </ol>
 </div>
@@ -192,12 +192,12 @@
 <h2 id="_enable_the_quay_dynamic_plugin"><a class="anchor" href="#_enable_the_quay_dynamic_plugin"></a>Enable the Quay Dynamic Plugin</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Enable the Quay dynamic plugin in the RHDH helm chart Upgrade page (YAML view):</p>
+<p>Enable the Quay dynamic plugin in the dynamic plugins YAML configuration:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- disabled: false
-  package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-quay</code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  - package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-quay
+    disabled: false</code></pre>
 </div>
 </div>
 </div>
@@ -229,7 +229,7 @@
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Edit the <code>app-config-rhdh</code> ConfigMap and add a proxy endpoint for Quay.io</p>
+<p>Edit the <code>app-config-rhdh</code> ConfigMap and add a <code>proxy</code> endpoint for Quay.io at the same indentation level as the <code>app</code> and <code>kubernetes</code> attributes:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">proxy:
@@ -246,15 +246,15 @@
 </div>
 </li>
 <li>
-<p>Enable the Quay dynamic plugin in the upgrade helm chart YAML view:</p>
+<p>Enable the Quay dynamic plugin in the <code>dynamic-plugins-rhdh-local</code> ConfigMap:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- disabled: false
-  package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-quay</code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- package: './dynamic-plugins/dist/janus-idp-backstage-plugin-quay'
+  disabled: false</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Click <code>Upgrade</code> to re-deploy the helm chart. Wait until the RHDH container is fully restarted.</p>
+<p>Restart the RHDH pod from the <code>Topology</code> view. Wait until the RHDH pod is fully restarted.</p>
 </div>
 </li>
 <li>
@@ -291,10 +291,10 @@ spec:
 </div>
 </li>
 <li>
-<p>Import this component into RHDH using the <code>Create &gt; REGISTER EXISTING COMPONENT</code> page. Once imported, click the <code>Example Quay Registry</code> item on the RHDH Catalog page</p>
+<p>Import this component into RHDH using the <code>Create &gt; Register Existing Component</code> page. Once imported, click the <code>Example Quay Registry</code> item on the RHDH Catalog page</p>
 </li>
 <li>
-<p>Observe that a new tab named <code>IMAGE REGISTRY</code> is visible. Click on this tab to view the information for container images contained in the <code>openshift/okd</code> registry</p>
+<p>Observe that a new tab named <code>Image Registry</code> is visible. Click on this tab to view the information for container images contained in the <code>openshift/okd</code> registry</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/okd-images.png" alt="okd images">
@@ -303,7 +303,7 @@ spec:
 </div>
 </li>
 <li>
-<p>Click on any of the links in the <code>SECURITY SCAN</code> columns to view vulnerability information for the image. You can search and filter results in this view.</p>
+<p>Click on any of the links in the <code>Security Scan</code> columns to view vulnerability information for the image. You can search and filter results in this view.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/okd-vuln.png" alt="okd vuln">
