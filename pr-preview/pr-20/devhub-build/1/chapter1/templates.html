@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Software Templates :: Building Developer Portals with Red Hat Developer Hub</title>
+    <link rel="prev" href="catalog.html">
+    <link rel="next" href="techdocs.html">
+    <meta name="generator" content="Antora 3.1.3">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://www.redhat.com" target="_blank"><img src="../../../_/img/redhat-logo.png" height="40px" alt="Red Hat"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="../../..">Building Developer Portals with Red Hat Developer Hub</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://github.com/RedHatQuickCourses/devhub-build/issues" target="_blank">Report Issues</a>
+      </div>
+    </div>
+  </nav>
+</header><div class="body">
+<div class="nav-container" data-component="devhub-build" data-version="1">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">Building Developer Portals with Red Hat Developer Hub</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Home</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">Software Templates</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="catalog.html">Software Catalog Deep Dive</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="templates.html">Software Templates</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="techdocs.html">TechDocs and Search</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../chapter2/index.html">RHDH Plugins</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../chapter2/dynamic.html">Dynamic Plugins</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../chapter2/topology.html">Kubernetes and Topology Plugin</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../chapter2/quay.html">Quay Plugin</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../chapter2/pipelines.html">Tekton Plugin</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../chapter2/gitops.html">ArgoCD Plugin</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Building Developer Portals with Red Hat Developer Hub</span>
+    <span class="version">1</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">Building Developer Portals with Red Hat Developer Hub</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">1</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Building Developer Portals with Red Hat Developer Hub</a></li>
+    <li><a href="index.html">Software Templates</a></li>
+    <li><a href="templates.html">Software Templates</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Software Templates</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The first course in the learning path for RHDH introduced you to the general concept of a <code>Software Template</code>, also called <code>Golden Path Template</code>, or just <code>Template</code>.</p>
+</div>
+<div class="paragraph">
+<p>This section briefly discusses the concepts and terminology about templates, and then walks you through a hands-on experience of creating software templates. You will also learn how to create applications from the template and auto-populate the generated application in the Catalog.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_concepts_and_terminology"><a class="anchor" href="#_concepts_and_terminology"></a>Concepts and Terminology</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A Template is just another type of entity that can be imported into the Catalog. All aspects of creating, importing, auto-discovering, updating, and deleting templates are similar to the concepts and workflow outlined in the previous section on importing entities into the Catalog.</p>
+</div>
+<div class="paragraph">
+<p>An RHDH Template is similar to templates that you use in programming languages, for example like Ruby on Rails <code>rails new app</code>, Java&#8217;s <code>Maven archetypes</code>, or Python&#8217;s <code>cookiecutter</code> to scaffold the general structure of a project or application. To create an RHDH Template, you need to supply a YAML file describing the template (usually called`template.yaml`), and a <code>skeleton</code> folder structure that contains the layout of a project or application with template variables (declared using Nunjucks template syntax <code>${{a_variable}})</code>.</p>
+</div>
+<div class="paragraph">
+<p>You can have any number of files and folders in the skeleton folder with any number of templated variables. The variables are then replaced with values provided by users in the RHDH front end. Once the skeleton is ready, it is published to a Git repository and then the catalog info YAML file is generated for the application instance and registered with RHDH.</p>
+</div>
+<div class="paragraph">
+<p>The following are some of the most important concepts and terminology related to RHDH templates.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Template metadata or Headers</dt>
+<dd>
+<p>Basic metadata and information about the template. You need to provide a unique name for the template, along with a title and description for the template that will be displayed in the front end web UI.</p>
+</dd>
+<dt class="hdlist1">Parameters</dt>
+<dd>
+<p>Inputs to your templates are declared in the parameters section. You need to describe the type (String, Numbers, Hidden, Boolean etc) of the parameter, if they are mandatory, and provide default values, if any. These are rendered as HTML forms in RHDH when you instantiate the template. Values provided by the users are then replaced in the template (in the <code>${{var}}</code> variable placeholders).</p>
+</dd>
+<dt class="hdlist1">Properties</dt>
+<dd>
+<p>Properties are the detailed specification for Parameters, along with other UI hints for RHDH. You can make RHDH look up entity details from the Catalog (as a drop-down, for example) instead of the user manually typing in the values in the form.</p>
+</dd>
+<dt class="hdlist1">Steps</dt>
+<dd>
+<p>Steps describe the detailed actions that RHDH should perform when instantiating the template to create applications. Each step is rendered as separate HTML forms in the RHDH web UI. This usually involves fetching all the template files and overriding the placeholder variables, and then publishing the generated code to Git, followed by generation and registration of the application in the Catalog.</p>
+</dd>
+<dt class="hdlist1">Built-in Actions</dt>
+<dd>
+<p>Steps rely on a number of built-in actions that perform some of the common tasks when instantiating the template. A complete list of actions is available at the <a href="https://RHDH_URL/create/actions" class="bare">https://RHDH_URL/create/actions</a>. Replace <strong>RHDH_URL</strong> with the actual URL of your RHDH instance. This page displays all the available actions that you can reuse in your template, along with a detailed description of the inputs to the actions.</p>
+</dd>
+<dt class="hdlist1">Output</dt>
+<dd>
+<p>This section of the template is to provide the result of your template instantiation to the web UI. You typically display a message about the template actions and then print the URL of the Git repository and the link to the generated entities catalog details page.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>A template is defined using YAML files and has the following general structure:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template <i class="conum" data-value="1"></i><b>(1)</b>
+# some metadata about the template itself
+metadata: <i class="conum" data-value="2"></i><b>(2)</b>
+  name: mytemplate
+  title: An example Template
+  description: An example template
+  ...
+
+  # these are the steps which are rendered in the frontend with form input
+  parameters: <i class="conum" data-value="3"></i><b>(3)</b>
+    - title: Input title
+      required:
+        - name
+      properties: <i class="conum" data-value="4"></i><b>(4)</b>
+        name:
+          title: Name
+          type: string
+          description: Unique name of the component
+          ui:autofocus: true
+          ui:options:
+            rows: 5
+        owner:
+          title: Owner
+          type: string
+          description: Owner of the component
+          ui:field: OwnerPicker
+          ui:options:
+            catalogFilter:
+              kind: Group
+    - title: Choose a location
+      required:
+        - repoUrl
+      properties: <i class="conum" data-value="4"></i><b>(4)</b>
+      ...
+
+  # fetch templates, override placeholder variables, publish to Git repo.
+  # finally generate the catalog info YAML files
+  steps: <i class="conum" data-value="5"></i><b>(5)</b>
+    - id: fetch-template
+      name: Fetch Template
+      action: fetch:template <i class="conum" data-value="6"></i><b>(6)</b>
+      input:
+        url: ./skeleton #folder containing default folder structure
+        values:
+          name: ${{ parameters.name }}
+          owner: ${{ parameters.owner }}
+
+    - id: publish
+      name: Publish
+      action: publish:github <i class="conum" data-value="6"></i><b>(6)</b>
+      input:
+        allowedHosts: ['github.com']
+        description: This is ${{ parameters.name }}
+        repoUrl: ${{ parameters.repoUrl }}
+        repoVisibility: public # default is private
+
+    - id: register
+      name: Register
+      action: catalog:register <i class="conum" data-value="6"></i><b>(6)</b>
+      input:
+        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
+
+  # some outputs which are saved along with the job for use in the frontend
+  output: <i class="conum" data-value="7"></i><b>(7)</b>
+    links:
+      - title: Repository
+        url: ${{ steps['publish'].output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps['register'].output.entityRef }}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This YAML file describes a <code>Template</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Template metadata - name, title, description, owner etc</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Template parameter list - Inputs to the template</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Properties of parameter - UI hints, types and validation rules</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>A list of steps to be performed when processing the template</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Built-in template actions - In this scenario, fetch template, publish repo and register catalog entity. Default visibility of created Git repository is private. You need to set <code>repoVisibility</code> to public for the scaffolder to create public repository</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Output of template processing. A link to the generated entity catalog detail and the published Git repository URL</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lab_creating_a_simple_software_template"><a class="anchor" href="#_lab_creating_a_simple_software_template"></a>Lab: Creating a Simple Software Template</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this lab, you will generate a small template to deploy a React frontend application that uses a skeleton generated by the Next.js framework, for creating a React based application that uses Server Side Rendering (SSR).</p>
+</div>
+<div class="sect2">
+<h3 id="_pre_requisites"><a class="anchor" href="#_pre_requisites"></a>Pre-requisites</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>A running RHDH instance with valid authentication set up correctly for GitHub authentication.</p>
+</li>
+<li>
+<p>You will use catalog YAML files from the <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps</a> GitHub repository. You can either use this repository directly, or fork a copy under your own organization that you created for RHDH integration in the previous course. Note that for GitHub auto-discovery to work correctly, you need to set up integration with GitHub using OAuth2 Apps correctly as outlined in the previous course (<code>Developer Hub Administration</code>).</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_steps"><a class="anchor" href="#_steps"></a>Steps</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Inspect the top level template YAML file at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml</a>. The <code>skeleton</code> folder contains the template file and folder structure generated by Next.js with variable placeholders.</p>
+</li>
+<li>
+<p>Inspect the following files and observe the variable placeholder definitions:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/skeleton/package.json" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/skeleton/package.json</a></p>
+</li>
+<li>
+<p><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/skeleton/README.md" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/skeleton/README.md</a></p>
+</li>
+<li>
+<p><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/skeleton/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/skeleton/catalog-info.yaml</a> (The catalog definition for this application)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Inspect the template definition at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml</a>. Inspect the <code>parameters</code>, <code>steps</code>, and <code>output</code> sections in particular to understand the features provided by the template.</p>
+</li>
+<li>
+<p>Navigate to the RHDH home page and then click <code>Create&#8230;&#8203; &gt; Register Existing Component</code>. Provide <code><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml</a></code> as the value in the <code>Select URL</code> field.</p>
+</li>
+<li>
+<p>Click <code>Analyze</code>. If the YAML is valid, you will be shown the results of the analysis. Otherwise, you will get a descriptive error message. Fix the error in the YAML files, and proceed with the import.</p>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+If you still have RBAC enabled without the proper policies to allow the current user to create new components, you will see an error in this step. Disable RBAC temporarily while you learn and explore the features of RHDH. You will need to restart the RHDH pod for the change to take effect.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Review the results of the analysis, and then click <code>Import</code>.</p>
+</li>
+<li>
+<p>Navigate to the <code>Catalog</code> page in RHDH and select <code>Template</code> in the <code>Kind</code> drop-down to see your newly imported template displayed.</p>
+</li>
+<li>
+<p>To instantiate the template and create a new application, click <code>Create</code> in the RHDH left sidebar navigation menu, and then click <code>Choose</code> in the <code>React/Next.js SSR Template</code> card.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/select-template.png" alt="select template">
+</div>
+<div class="title">Figure 1. Select a template</div>
+</div>
+</li>
+<li>
+<p>Based on your parameter definition, you will be shown an HTML form asking for inputs. Enter <code>test-react-ssr-app</code> in the <code>Name</code> field and enter a descriptive comment in the <code>Description</code> field. Select <code>frontend-team</code> from the <code>Owner</code> drop-down field. Click <code>Next</code> when done.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/template-input-step1.png" alt="template input step1">
+</div>
+<div class="title">Figure 2. Template Input - Simple Information</div>
+</div>
+</li>
+<li>
+<p>For the <code>Choose a location</code> step, the <code>Host</code> field is disabled and the default value from the template is filled in. Enter the name of your GitHub Organization in the <code>Owner</code> field, and <code>test-react-ssr-app</code> in the <code>Repository</code> field (this value identifies the name of the GitHub repository). Click <code>Review</code> when done.</p>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Do NOT enter any RHDH group name of any other string in the Owner field in this step. Owner here corresponds to the GitHub Organization where the application instance source tree will be published. You must enter the same GitHub Organization name here that you used to create the GitHub OAuth App credentials in the Developer Hub Administration course.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Review the information you entered, and then click <code>Create</code>. RHDH will process the inputs and generate the scaffolded source code, and then publish it to GitHub. Finally, the <code>test-react-ssr-app</code> will be registered as a <code>Component</code> in the Catalog.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/template-inst-success.png" alt="template inst success">
+</div>
+<div class="title">Figure 3. Template Processing Complete</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+If you have not created your GitHub App with proper permissions, it is possible that you may see some errors related to insufficient permissions and the template processing will fail. Ensure that you provide the appropriate read and write access to the Organization and Repositories to prevent these types of errors. For example, a sample permission list looks like this:
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/github-app-perms.png" alt="github app perms">
+</div>
+<div class="title">Figure 4. GitHub Application Permissions</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/github-repo-level-perms.png" alt="github repo level perms">
+</div>
+<div class="title">Figure 5. GitHub Repository Level Permissions Detail</div>
+</div>
+</li>
+<li>
+<p>Click on the <code>Repository</code> link, and verify that a new GitHub repository is created. Note how the placeholder variables in the skeleton folder of the template have been replaced with the input values from the RHDH frontend forms.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/new-react-app-repo.png" alt="new react app repo">
+</div>
+<div class="title">Figure 6. New Application GitHub Repository</div>
+</div>
+</li>
+<li>
+<p>Click the <code>Catalog</code> link on the output card in the left sidebar to view the details of the imported component entity. You can also view the new catalog item by clicking on <code>Catalog</code> in the RHDH left sidebar navigation menu.</p>
+</li>
+<li>
+<p>Optional clean up: Do the following in sequence:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Delete the <code>test-react-ssr-app</code> GitHub repository</p>
+</li>
+<li>
+<p>Delete the <code>test-react-ssr-app</code> of type <code>Component</code> in the Catalog</p>
+</li>
+<li>
+<p>Finally, delete the <code>react-ssr-template</code> template</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references"><a class="anchor" href="#_references"></a>References</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://backstage.io/docs/features/software-templates/adding-templates" target="_blank" rel="noopener">Creating Software Templates</a></p>
+</li>
+<li>
+<p><a href="https://backstage.io/docs/features/software-templates/writing-templates" target="_blank" rel="noopener">Template YAML structure</a></p>
+</li>
+<li>
+<p><a href="https://backstage.io/docs/features/software-templates/builtin-actions" target="_blank" rel="noopener">Built in Actions</a></p>
+</li>
+<li>
+<p><a href="https://backstage.io/docs/features/software-templates/input-examples" target="_blank" rel="noopener">Example Parameter Inputs</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="catalog.html">Software Catalog Deep Dive</a></span>
+  <span class="next"><a href="techdocs.html">TechDocs and Search</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <img src="../../../_/img/rhl-logo-red.png" height="40px" alt="Red Hat"  href="https://redhat.com" >
+</footer><script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
