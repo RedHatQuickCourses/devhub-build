@@ -78,7 +78,7 @@ spec:
 +
 image::pipeline-runs.png[title=Pipeline Runs]
 
-. Mouse over the `TASK STATUS` column and you should see a high-level summary of the tasks (how many passed, failed, or skipped).
+. Hover over the `TASK STATUS` column and you should see a high-level summary of the tasks (how many passed, failed, or skipped).
 +
 image::task-status.png[title=Task Status]
 

@@ -4,7 +4,7 @@ This section briefly explains the rationale for dynamic plugins and how to enabl
 
 == Dynamic Plugins in RHDH
 
-As you already learnt in the first introductory course in the learning path, RHDH, as a platform consists of a small modular core and an extensive set of plugins that provide most of the functionality. In the upstream *Backstage.io* platform, enabling a plugin means modifying the platform's source code to load a bunch of TypeScript/JavaScript, and other static files (HTML, CSS, images etc.). You then have to stop and restart the runtime to enable the plugin.
+As you already learnt in the first introductory course in the learning path, RHDH as a platform consists of a small modular core and an extensive set of plugins that provide most of the functionality. In the upstream *Backstage.io* platform, enabling a plugin means modifying the platform's source code to load a bunch of TypeScript/JavaScript, and other static files (HTML, CSS, images etc.). You then have to stop and restart the runtime to enable the plugin.
 
 This approach of changing source code and restarting for enabling plugins will not work for RHDH, because you need to recompile the source code, build a new container image and then re-deploy the new container image. 
 
@@ -44,8 +44,8 @@ global:
           ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-dynamic
 ```
 
-<1> Enable or Disable the plugin. Set to `true` to disable the plugin
-<2> The path to the dynamic plugin. Consult the `Administration Guide` (dynamic plugins matrix) for the full path
+<1> Enable or Disable the plugin. Set to `true` to disable the plugin.
+<2> The path to the dynamic plugin. Consult the `Administration Guide` (dynamic plugins matrix) for the full path.
 
 WARNING: Simply enabling a dynamic plugin in the helm chart may not provide the required functionality. You may need to edit your *app-config.yaml* files to add plugin-specific configuration (for example, set different environment variables) to make the plugin work correctly. Consult the corresponding plugin documentation for the required configuration.
 
@@ -55,7 +55,7 @@ If you installed RHDH using the operator, enable or disable dynamic plugins in t
 
 If you wish to include a dynamic plugin that is not included in RHDH, or if you wish to develop your own custom plugins, consult the Janus IDP plugins repository at https://github.com/janus-idp/backstage-plugins. 
 
-A nice demonstration on how to create a custom plugin for RHDH is shown https://www.youtube.com/watch?v=yVzjTU3JamE[here^]. You can also host custom plugins in your own NPM registry and include them by following the steps at https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index#ref-example-dynamic-plugin-helm-installations[here^]
+A nice demonstration on how to create a custom plugin for RHDH is shown https://www.youtube.com/watch?v=yVzjTU3JamE[here^]. You can also host custom plugins in your own NPM registry and include them by following the steps at https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index#ref-example-dynamic-plugin-helm-installations[here^].
 
 == References
 

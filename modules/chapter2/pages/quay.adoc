@@ -94,12 +94,12 @@ spec:
 ...
 ```
 +
-<1> Metadata for this component - name, description and links to the public quay.io registry
+<1> Metadata for this component - name, description and links to the public quay.io registry.
 <2> Annotation to identify the registry from which container image metadata needs to be fetched. In this case the `OKD` project registry. If you have a private registry with your own organization, then change this slug to reflect the path to your registry. The same path information applies to privately hosted Quay enterprise registries.
 
-. Import this component into RHDH using the `Create > Register Existing Component` page. Once imported, click the `Example Quay Registry` item on the RHDH Catalog page
+. Import this component into RHDH using the `Create > Register Existing Component` page. Once imported, click the `Example Quay Registry` item on the RHDH Catalog page.
 
-. Observe that a new tab named `Image Registry` is visible. Click on this tab to view the information for container images contained in the `openshift/okd` registry
+. Observe that a new tab named `Image Registry` is visible. Click on this tab to view the information for container images contained in the `openshift/okd` registry.
 +
 image::okd-images.png[title=Container images in Quay.io OKD registry]
 
