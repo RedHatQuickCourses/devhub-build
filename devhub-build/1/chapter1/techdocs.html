@@ -138,7 +138,7 @@
 <h2 id="_writing_techdocs_using_markdown"><a class="anchor" href="#_writing_techdocs_using_markdown"></a>Writing TechDocs Using Markdown</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>TechDocs uses the popular MkDocs library to generate documentation for your applications. You write markdown files (<strong>.md</strong> file extension) alongside your application&#8217;s source code, and store either in the same repository where you maintain the application, or an external repository which can then be referenced in your catalog YAML files.</p>
+<p>TechDocs uses the popular MkDocs library to generate documentation for your applications. You write markdown files (<strong>.md</strong> file extension) alongside your application&#8217;s source code, and store them either in the same repository where you maintain the application, or an external repository, which can then be referenced in your catalog YAML files.</p>
 </div>
 <div class="paragraph">
 <p>Your raw plain text source markdown files are then converted to HTML, and then displayed as HTML in the RHDH web UI. There are several ways to configure how RHDH fetches, generates and publishes documents.</p>
@@ -324,11 +324,11 @@ nav: <i class="conum" data-value="2"></i><b>(2)</b>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Enable the <code>techdocs-core</code> plugin</td>
+<td>Enable the <code>techdocs-core</code> plugin.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Navigation structure of the documentation tree. The text before the ":" indicates the title of the navigation node and the text after it indicates the path to the file for a section. You can nest the section into sub-sections based on your layout needs</td>
+<td>Navigation structure of the documentation tree. The text before the ":" indicates the title of the navigation node and the text after it indicates the path to the file for a section. You can nest the section into sub-sections based on your layout needs.</td>
 </tr>
 </table>
 </div>
@@ -366,7 +366,7 @@ techdocs: <i class="conum" data-value="1"></i><b>(1)</b>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Configure TechDocs for "all local" mode</td>
+<td>Configure TechDocs for "all local" mode.</td>
 </tr>
 </table>
 </div>
@@ -410,7 +410,7 @@ techdocs: <i class="conum" data-value="1"></i><b>(1)</b>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_optional_challenge_lab_advanced_techdocs_using_external_generators_and_publishers"><a class="anchor" href="#_optional_challenge_lab_advanced_techdocs_using_external_generators_and_publishers"></a>Optional Challenge Lab: Advanced TechDocs using External Generators and Publishers</h2>
+<h2 id="_optional_challenge_lab_advanced_techdocs_using_external_generators_and_publishers"><a class="anchor" href="#_optional_challenge_lab_advanced_techdocs_using_external_generators_and_publishers"></a>Optional Challenge Lab: Advanced TechDocs Using External Generators and Publishers</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The blog post at <a href="https://janus-idp.io/blog/2023/06/03/production-ready-techdocs" class="bare">https://janus-idp.io/blog/2023/06/03/production-ready-techdocs</a> provides detailed instructions on how to configure TechDocs to use an external builder and publisher, along with CI/CD workflow automation to rebuild the markdown source based on Git webhook triggers. Make changes to your configuration to get the TechDocs plugin working with this set up.</p>

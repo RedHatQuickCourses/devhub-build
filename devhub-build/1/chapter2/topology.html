@@ -228,7 +228,7 @@ metadata:
 </div>
 </div>
 <div class="paragraph">
-<p>The label selector annotation makes use of the fact that adding labels to resources like <code>Deployment</code> types, applies the labels to all resources (Pods, Services, Routes etc.) that are a result of a successful deployment. This annotation and label selector mechanism also works for custom resources like Tekton&#8217;s <code>Pipeline</code> resource, where resources generated from a pipeline run like <code>Pipelinerun</code> and <code>Taskrun</code> resources, all inherit labels applied on the parent <code>Pipeline</code> resource.</p>
+<p>The label selector annotation makes use of the fact that adding labels to resources like <code>Deployment</code> types, applies the labels to all resources (Pods, Services, Routes etc.) that are a result of a successful deployment. This annotation and label selector mechanism also works for custom resources like Tekton&#8217;s <code>Pipeline</code> resource, where labels applied to the parent Pipeline resource are inherited by resources generated from a pipeline run, such as Pipelinerun and Taskrun resources.</p>
 </div>
 <div class="paragraph">
 <p>The following hands-on labs describe the detailed steps to enable and configure the Kubernetes and Topology plugins for a simple nginx web application.</p>
@@ -497,10 +497,10 @@ spec:
 </div>
 </li>
 <li>
-<p>Import the component into the RHDH catalog from the <code>Create &gt; Register Existing Component</code> page, and provide the full path to the <code>6-catalog-info.yml</code> file from the previous step. After the component is imported, verify that the component is listed in the <code>Catalog</code> page and click on <code>Nginx example service</code> to view the component details. You can safely ignore ay warning messages about relations to other entities.</p>
+<p>Import the component into the RHDH catalog from the <code>Create &gt; Register Existing Component</code> page, and provide the full path to the <code>6-catalog-info.yml</code> file from the previous step. After the component is imported, verify that the component is listed in the <code>Catalog</code> page and click on <code>Nginx example service</code> to view the component details. You can safely ignore any warning messages about relations to other entities.</p>
 </li>
 <li>
-<p>Verify that a new <code>Kubernetes</code> tab is seen. Click on the <code>Kubernetes</code> tab to view the details provided by the Kubernetes plugin. You can ignore warning messages about fetching kubernetes resources (This application does not have any tekton pipelines or tasks. You will create pipeline and task resources in subsequent labs for the RHDH Tekton plugin).</p>
+<p>Verify that a new <code>Kubernetes</code> tab is seen. Click on the <code>Kubernetes</code> tab to view the details provided by the Kubernetes plugin. You can ignore the warning messages about fetching kubernetes resources (This application does not have any tekton pipelines or tasks. You will create pipeline and task resources in subsequent labs for the RHDH Tekton plugin).</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/kube-plugin-view.png" alt="kube plugin view">
