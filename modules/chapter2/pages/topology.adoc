@@ -69,7 +69,7 @@ metadata:
     backstage.io/kubernetes-label-selector: 'app=hello'
 ```
 
-The label selector annotation makes use of the fact that adding labels to resources like `Deployment` types, applies the labels to all resources (Pods, Services, Routes etc.) that are a result of a successful deployment. This annotation and label selector mechanism also works for custom resources like Tekton's `Pipeline` resource, where resources generated from a pipeline run like `Pipelinerun` and `Taskrun` resources, all inherit labels applied on the parent `Pipeline` resource.
+The label selector annotation makes use of the fact that adding labels to resources like `Deployment` types, applies the labels to all resources (Pods, Services, Routes etc.) that are a result of a successful deployment. This annotation and label selector mechanism also works for custom resources like Tekton's `Pipeline` resource, where labels applied to the parent Pipeline resource are inherited by resources generated from a pipeline run, such as Pipelinerun and Taskrun resources.
 
 The following hands-on labs describe the detailed steps to enable and configure the Kubernetes and Topology plugins for a simple nginx web application.
 
@@ -236,9 +236,9 @@ spec:
 <1> Annotation for this component
 <2> Label selector for this component using Kubernetes labels. The corresponding labels must exist on the Kubernetes resources.
 
-. Import the component into the RHDH catalog from the `Create > Register Existing Component` page, and provide the full path to the `6-catalog-info.yml` file from the previous step. After the component is imported, verify that the component is listed in the `Catalog` page and click on `Nginx example service` to view the component details. You can safely ignore ay warning messages about relations to other entities.
+. Import the component into the RHDH catalog from the `Create > Register Existing Component` page, and provide the full path to the `6-catalog-info.yml` file from the previous step. After the component is imported, verify that the component is listed in the `Catalog` page and click on `Nginx example service` to view the component details. You can safely ignore any warning messages about relations to other entities.
 
-. Verify that a new `Kubernetes` tab is seen. Click on the `Kubernetes` tab to view the details provided by the Kubernetes plugin. You can ignore warning messages about fetching kubernetes resources (This application does not have any tekton pipelines or tasks. You will create pipeline and task resources in subsequent labs for the RHDH Tekton plugin).
+. Verify that a new `Kubernetes` tab is seen. Click on the `Kubernetes` tab to view the details provided by the Kubernetes plugin. You can ignore the warning messages about fetching kubernetes resources (This application does not have any tekton pipelines or tasks. You will create pipeline and task resources in subsequent labs for the RHDH Tekton plugin).
 +
 image::kube-plugin-view.png[title=Kubernetes Plugin View]
 +

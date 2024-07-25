@@ -3,14 +3,14 @@
 
 == Introduction
 
-Welcome to this quick course on the _Building Developer Portals with Red Hat Developer Hub_.
-This course is the `third` in a series of `three` courses about Red Hat Developer Hub:
+Welcome to this quick course on _Building Developer Portals with Red Hat Developer Hub_.
+This course is the `third` in a series of `three` courses about Red Hat Developer Hub (RHDH), which are:
 
 1. https://redhatquickcourses.github.io/devhub-intro[Introduction to Red Hat Developer Hub^]
 2. https://redhatquickcourses.github.io/devhub-admin[Red Hat Developer Hub Administration^]
 3. Building Developer Portals with Red Hat Developer Hub (_This course_)
 
-This course covers how to populate the `Catalog` in RHDH, as well as how to create and use `Software Templates` to provide rapid, self-service deployment capabilities to your organization's developers. We also dive deeper into several of the Red Hat developed plugins in RHDH.
+This course covers how to populate the `Catalog` in RHDH, as well as how to create and use `Software Templates` to provide rapid, self-service deployment capabilities to your organization's developers. We also dive deeper into several of the Red Hat-developed plugins in RHDH.
 
 == Contributors
 
@@ -23,9 +23,9 @@ The PTL team acknowledges the valuable contributions of the following Red Hat as
 
 == Classroom Environment
 
-If you have completed the previous two courses in the learning path, and have an RHDH installation with authentication set up, then continue using the same classroom you provisioned in the second course `Red Hat Developer Hub Administration`.
+If you have completed the previous two courses in the learning path and have an RHDH installation with authentication set up, continue using the same classroom you provisioned in the second course, `Red Hat Developer Hub Administration`.
 
-If you have not provisioned an RHDH instance consult the `Classroom Environment` section in the `Red Hat Developer Hub Administration` course. You are expected to complete the `Red Hat Developer Hub Administration course`, where you install and configure a basic RHDH instance, and then continue with this course.
+If you have not provisioned an RHDH instance, consult the `Classroom Environment` section in the `Red Hat Developer Hub Administration` course. You are expected to complete the `Red Hat Developer Hub Administration course`, where you install and configure a basic RHDH instance, and then continue with this course.
 
 NOTE: The hands-on labs for this course have been tested on *RHDH v1.2*. The labs should mostly work in minor update releases of RHDH. If you encounter any issues, please open a GitHub issue in the course repository.
 
@@ -34,7 +34,7 @@ NOTE: The hands-on labs for this course have been tested on *RHDH v1.2*. The lab
 * You must have completed the first two courses in the Red Hat Developer Hub learning path, and have an installed RHDH instance to work on:
 ** https://redhatquickcourses.github.io/devhub-intro[Introduction to Red Hat Developer Hub^]
 ** https://redhatquickcourses.github.io/devhub-admin[Red Hat Developer Hub Administration^]
-* You must have a valid set up for RHDH authentication using one of the several supported authentication providers
+* You must have a valid set up for RHDH authentication using one of the several supported authentication providers.
 
 == Objectives
 
@@ -46,5 +46,5 @@ The overall objectives of this course include:
 * Configure the Topology plugin to display information about the OpenShift and Kubernetes applications deployed in the cluster
 * Configure the Quay plugin to display information about container images stored in an enterprise container registry
 * Create Software Templates in Red Hat Developer Hub and create applications from the template
-* Create, publish and maintain technical documentation
+* Create, publish, and maintain technical documentation
 * Improve information accessibility with the search plugin

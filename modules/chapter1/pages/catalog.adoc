@@ -1,11 +1,11 @@
 = A Deeper Dive into the RHDH Software Catalog
 :navtitle: Software Catalog Deep Dive
 
-Before you learn about Software Templates in RHDH, you need to understand the concepts and terminology behind the Software Catalog. This section takes a closer look at the Catalog.
+Before learning about Software Templates in RHDH, you need to understand the concepts and terminology behind the Software Catalog. This section takes a closer look at the Catalog.
 
-The first course in the learning path for RHDH introduced you to the general concept of the `Software Catalog` or just `Catalog`. The aptly named Catalog is a collection of `Components`, also called `Entities`. Entities can be of different types corresponding to things like APIs, internal and external applications (SaaS), templates, locations where other entities can be found, and many more.
+The first course in the learning path for RHDH introduced you to the general concept of the `Software Catalog` or simply the `Catalog`. The aptly named Catalog is a collection of `Components`, also called `Entities`. Entities can be of different types, corresponding to things like APIs, internal and external applications (SaaS), templates, locations where other entities can be found, and many more.
 
-This section walks you though a hands-on experience of populating the Catalog with different types of entities, using many different approaches.
+This section walks you through a hands-on experience of populating the Catalog with different types of entities, using many different approaches.
 
 == Concepts and Terminology
 
@@ -16,49 +16,49 @@ image::catalog-concepts.png[title=Catalog Import Process]
 To populate an entity in the Catalog typically involves three phases corresponding to three logical software components in RHDH:
 
 . *Entity Providers* are responsible for communicating with different types of entities and import raw data into RHDH.
-. *Processors* validate, analyze, enrich, and transform the raw entity data into its final form
+. *Processors* validate, analyze, enrich, and transform the raw entity data into its final form.
 . *Stitchers*  gather data emitted by various processors and populate the Catalog API.
 
-The outcome of the last phase is the `Catalog API` along with search metadata stored locally in RHDH for fast querying. Various plugins and other components in RHDH use the Catalog API to perform different types of actions and display some information to the user, or pass on the processed data to other parts in RHDH. You can consider the Catalog as the main *static* data around which various *dynamic* actions are composed.
+The outcome of the last phase is the `Catalog API`, along with search metadata stored locally in RHDH for fast querying. Various plugins and other components in RHDH use the Catalog API to perform different types of actions and display some information to the user, or pass on the processed data to other parts in RHDH. You can consider the Catalog as the main *static* data around which various *dynamic* actions are composed.
 
 For more details on each of the phases, consult the references section at the bottom of this section.
 
 The following are some of the most commonly used types of entities in the Catalog:
 
 Components::
-A `Component` is a generic piece of software (web app, mobile app, a back end service, a front end app, CLI tools, and many more) that can be tracked in a version control system like Git. A component can implement `APIs` that other components consume, or consume APIs implemented by other components.
+A `Component` is a generic piece of software (web app, mobile app, a back-end service, a front-end app, CLI tools, and more) that can be tracked in a version control system like Git. A component can implement `APIs` that other components consume, or consume APIs implemented by other components.
 
 API::
-`APIs` are implemented by components and provide formal interfaces between components. APIs are described using many different standards (REST, gRPC, GraphQL, and more) that are ideally machine readable. RHDH has support for documenting, importing, indexing and searching APIs of many different types and exposes them in the Catalog for discovery and exploration by developers across your organization.
+`APIs` are implemented by components and provide formal interfaces between them. APIs are described using different standards (REST, gRPC, GraphQL, and more) that are ideally machine-readable. RHDH has support for documenting, importing, indexing and searching APIs of many different types and exposes them in the Catalog for discovery and exploration by developers across your organization.
 
 Resource::
-Resources are infrastructure dependencies that a component needs to operate at runtime (Databases, Message Queues, Storage systems, Servers, VMs, and more).
+Resources are infrastructure dependencies that a component needs to operate at runtime (such as Databases, Message Queues, Storage systems, Servers, VMs, and more).
 
 User::
-A user describes a person, such as an employee, or external users like contractors and anyone whom you want to track in RHDH that are part of your software ecosystem.
+A user represents a person, such as an employee, or external users like contractors or anyone whom you want to track in RHDH that are part of your software ecosystem.
 
 Group::
-A group describes a set of `Users` logically grouped into a parent entity (development teams, business units, and more).
+A group represents a set of `Users` logically grouped into a parent entity (development teams, business units, and more).
 
 Location::
-A location acts as proxy that references other locations to look for catalog data (YAML files).
+A location acts as a proxy that references other locations to locate catalog data (YAML files).
 
 Template::
-A `Template` is an RHDH entity that describes a set of source files and structure, from which you can instantiate instances of applications,services, CI/CD pipelines, Infrastructure as Code (IaC) playbooks, operating system and virtual machine provisioning scripts, and more. These instances are then automatically populated and tracked in the RHDH Software Catalog. A Template can contain a mix of source code, configuration files, build system configuration, and all the dependencies that are required for an application or a service. The Template is parsed by RHDH, and it then provides a visual interface to create application instances from it. Dynamic parts that meed user input are modeled as `Parameters` in the template. Input forms corresponding to the parameters are automatically created by RHDH in the front end portal.
+A `Template` is an RHDH entity that describes a set of source files and structure, from which you can create instances of applications,services, CI/CD pipelines, Infrastructure as Code (IaC) playbooks, operating system and virtual machine provisioning scripts and more. These instances are then automatically populated and tracked in the RHDH Software Catalog. A Template can contain a mix of source code, configuration files, build system configuration, and all the dependencies that are required for an application or a service. The Template is parsed by RHDH, which then provides a visual interface to create application instances from it. Dynamic parts that meed user input are modeled as `Parameters` in the template. Input forms corresponding to the parameters are automatically created by RHDH in the front-end portal.
 
 System::
 A `System` is a logical grouping of `Resources` and `Components` that provides one or more `APIs`. A System abstracts away the resources and private APIs between the components for any consumers. This means that as the owner, you can evolve the implementation, in terms of components and resources, without your consumers being affected. 
 
 Domain::
-While `Systems` are the basic level of encapsulation for related entities, it is often useful to group a collection of systems that share terminology, domain models, metrics, KPIs, business purpose, or documentation into a higher level abstraction called a `Domain`.
+While `Systems` are the basic level of encapsulation for related entities, it is often useful to group a collection of systems that share terminology, domain models, metrics, KPIs, business purposes, or documentation into a higher-level abstraction called a `Domain`.
 
 == Adding Components to the Catalog
 
-Components to be populated in the Catalog are described using YAML files, mostly inspired by Kubernetes configuration files. These YAML files are typically stored in a Git repository alongside the component they describe, and served remotely over HTTP/HTTPS to RHDH for bulk import. There are several different ways of populating the Catalog.
+Components to be populated in the Catalog are described using YAML files, mostly inspired by Kubernetes configuration files. These YAML files are typically stored in a Git repository alongside the component they describe, and are served remotely over HTTP/HTTPS to RHDH for bulk import. There are several different ways of populating the Catalog.
 
 === Static Configuration of Catalog
 
-You can directly embed the location if your catalog YAML files in the `app-config-rhdh` YAML files:
+You can directly embed the location of your catalog YAML files in the `app-config-rhdh` YAML files:
 
 ```yaml
 catalog:
@@ -67,17 +67,17 @@ catalog:
       target: <location of your YAML>
 ```
 
-Adding a lot of small catalog YAML files in this manner is not recommended as you need to redeploy the RHDH container for the changes to take effect.
+Adding a lot of small catalog YAML files in this manner is not recommended, as you need to redeploy the RHDH container for the changes to take effect.
 
-Instead, you can provide the URL of a top-level YAML file that includes other YAML files. This way, you can change the included YAML files without requiring updates to the `app-config` YAML files.
+Instead, you can provide the URL of a top-level YAML file that includes other YAML files. This way, you can change the included YAML files without needing to update the `app-config` YAML files.
 
 See https://github.com/janus-idp/backstage-showcase/blob/main/app-config.yaml#L154 for an example of this technique. 
 
 === Manual Registration of Components
 
-You can manually add components to the Catalog by navigating to the `Catalog` page in RHDH, and then clicking `Create`. Alternatively, you can click `Create...` in the RHDH left navigation sidebar and then click `Register Existing Component`.
+You can manually add components to the Catalog by navigating to the `Catalog` page in RHDH and clicking `Create`. Alternatively, you can click `Create` in the RHDH left navigation sidebar and then click `Register Existing Component`.
 
-You will then be prompted to enter a remote URL which locates the YAML file declaring the details of the new component. RHDH will then fetch the YAML file, parse it and populate the Catalog if the YAML file has valid syntax.
+You will then be prompted to enter a remote URL that locates the YAML file declaring the details of the new component. RHDH will then fetch the YAML file, parse it, and populate the Catalog if the YAML file has valid syntax.
 
 This approach is useful for already existing components and APIs that you want to import into RHDH. You store the catalog YAML file in the same Git repository as the source code of the component.
 
@@ -113,23 +113,23 @@ catalog:
           timeout: { minutes: 3 }
 ----
 
-<1> Allow entities of different types to be populated in the Catalog. By default, only `Component`, `API`, and `Location` is allowed.
-<2> The `github` provider (having a github integration under `app.integrations` is required)
-<3> The GitHub Organization under which RHDH should scan for catalog YAML descriptor files
-<4> Path to the catalog YAML files (can use wildcards here)
-<5> Tells RHDH to look for YAML files in the mentioned GitHub branch (Optional)
-<6> Regular expression matching the repository names(s) - in this case all repositories in the GitHub Org (Optional)
+<1> Allow entities of different types to be populated in the Catalog. By default, only `Component`, `API`, and `Location` are allowed.
+<2> The `GitHub` provider (having a github integration under `app.integrations` is required)
+<3> The GitHub Organization under which RHDH should scan for catalog YAML descriptor files.
+<4> Path to the catalog YAML files (can use wildcards here).
+<5> Tells RHDH to look for YAML files in the mentioned GitHub branch. (Optional)
+<6> Regular expression matching the repository names(s) - in this case all repositories in the GitHub Org. (Optional)
 <7> Scheduled interval at which RHDH should fetch and update catalog information. (Optional)
 
 See https://backstage.io/docs/integrations/github/discovery/ for full details about the different ways you can configure `catalogPath`, `branch`, and `repository` settings.
 
 == Updating and Deleting Components
 
-To update component details, teams owning the corresponding Git repository where the catalog YAML files live, update it using normal Git workflow policies. RHDH then automatically fetches the updated information based on a configurable schedule (minutes, hours or days) and then re-indexes and updates the Catalog.
+To update component details, teams owning the corresponding Git repository where the catalog YAML files reside, should update it using normal Git workflow policies. RHDH then automatically fetches the updated information based on a configurable schedule (minutes, hours or days) and then re-indexes and updates the Catalog.
 
 To remove entities from the Catalog, you can delete them from the RHDH component details page. This action will delete the entity and all dependent entities related to it.
 
-WARNING: Deleting or moving the catalog YAML files from your Git repositories will not automatically delete the entities in the RHDH web UI. You must remove them manually. Consult the backstage reference documentation for orphan deletion strategy to understand the nuances of the deletion workflow.
+WARNING: Deleting or moving the catalog YAML files from your Git repositories will not automatically delete the entities in the RHDH web UI. You must remove them manually. Consult the Backstage reference documentation for orphan deletion strategy to understand the nuances of the deletion workflow.
 
 NOTE: Deleting entities from the RHDH web UI for auto-discovered entities is not recommended and will not delete the entities. The next scheduled fetch using auto-discovery will re-populate the entities in the Catalog. Delete the original source YAML files in the remote Git repository and then clean up the catalog.
 
@@ -146,13 +146,13 @@ catalog:
 
 == Querying the Catalog
 
-The information contained in the catalog YAML files are presented in the `Catalog` page of RHDH. You can then filter and search for component information, and have various built-in and custom plugins work on processing the items in the Catalog.
+The information contained in the catalog YAML files are presented in the `Catalog` page of RHDH. You can filter and search for component information, and use various built-in and custom plugins work on processing the items in the Catalog.
 
-Most of the plugins (core, community provided, and Red Hat provided) act on information indexed by RHDH, and by integrating with the RHDH Catalog API which provides a uniform interface to the information in the catalog.
+Most plugins (core, community provided, and Red Hat provided) act on information indexed by RHDH, and integrate with the RHDH Catalog API, which provides a uniform interface to the information in the catalog.
 
 == Catalog Rules
 
-By default, the catalog will only allow the ingestion of entities with the kind `Component`, `API`, and `Location`. In order to allow entities of other kinds to be added, you need to add *rules* to the catalog. Rules are added either in a separate `catalog.rules` key or added to statically configured locations.
+By default, the catalog only allows the ingestion of entities with the kind `Component`, `API`, and `Location`. In order to allow entities of other kinds to be added, you need to add *rules* to the catalog. Rules are added either in a separate `catalog.rules` key or added to statically configured locations.
 
 For example, given the following configuration:
 
@@ -168,9 +168,9 @@ catalog:
         - allow: [Group]
 ```
 
-We are able to add entities of kind `Component`, `API`, `Location`, `User` and `Template` from any location, and `Group` entities from the `org-data.yaml` file, which will also be read as a statically configured location.
+You can add entities of the kind `Component`, `API`, `Location`, `User` and `Template` from any location, and `Group` entities from the `org-data.yaml` file, which will also be read as a statically configured location.
 
-Note that if the `catalog.rules` key is present, it will override the default value, so you need to add rules for the default kinds if you want them to be allowed.
+Note that if the `catalog.rules` key is present, it will override the default value. Therefore, you need to add rules for the default kinds if you want them to be allowed.
 
 The following configuration will reject any kind of entities from being added to the catalog:
 
@@ -210,9 +210,9 @@ spec:
     - ./myapp.yaml
 ----
 +
-<1> Indicates that this is a `Location` kind
-<2> A unique name that identifies this location entity
-<3> A list of entities that are provided by this Location. In this case, a `Group`, a `System`, a database `Resource` and a `Component` respectively
+<1> Indicates that this is a `Location` kind.
+<2> A unique name that identifies this location entity.
+<3> A list of entities that are provided by this Location. In this case, a `Group`, a `System`, a database `Resource` and a `Component` respectively.
 
 . Inspect the `group.yaml`, `system.yaml`, and `myapp-db.yaml` catalog descriptor files in the same repository. Note the different uses of the `Kind` and the `spec` section defining attributes for this type of entity (who owns it, what it depends on, and more). You can also reference entities from the catalog that were populated automatically - for example, teams and users information from GitHub Organizations.
 
@@ -265,7 +265,7 @@ Many of these annotations and dependencies and details mentioned in the `spec` s
 
 . Navigate to the RHDH home page and then click `Create... > Register Existing Component`. Provide the link to the top level `Location` entity, that is `https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/catalog-info.yaml` as the value in the `Select URL` field. 
 
-. Click `Analyze`. If the YAML is valid, you will be shown the results of the analysis. Otherwise, you will a descriptive error message. Fix the error in the YAML files, and proceed with the import.
+. Click `Analyze`. If the YAML is valid, you will be shown the results of the analysis. Otherwise, you will get a descriptive error message. Fix the error in the YAML files, and proceed with the import.
 +
 image::post-analysis.png[title=Result of YAML Analysis,width=600]
 +

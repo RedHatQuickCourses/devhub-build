@@ -1,11 +1,11 @@
 = Software Templates
 :navtitle: Software Templates
 
-In this chapter, you will take a deeper look at the RHDH `Software Catalog`, and how to create and use `Software Templates` to populate the Catalog.
+In this chapter you will take a deeper look at the RHDH `Software Catalog`, and how to create and use `Software Templates` to populate the Catalog.
 
 == Objectives
 
-* Create types of entities in the Software Catalog
-* Different ways to populate the Software Catalog
+* Create different types of entities in the Software Catalog
+* Explore different ways to populate the Software Catalog
 * Create Software Templates in Red Hat Developer Hub
 * Create and deploy applications from the Software Template
