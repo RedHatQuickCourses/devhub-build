@@ -1,6 +1,6 @@
 = Software Templates
 
-The first course in the learning path for RHDH introduced you to the general concept of a `Software Template`, also called `Golden Path Template`, or just `Template`. 
+The first course in the learning path for RHDH introduced you to the general concept of a `Software Template`, also called `Golden Path Template`, or just `Template`.
 
 This section briefly discusses the concepts and terminology about templates, and then walks you through a hands-on experience of creating software templates. You will also learn how to create applications from the template and auto-populate the generated application in the Catalog.
 
@@ -35,7 +35,8 @@ This section of the template is to provide the result of your template instantia
 
 A template is defined using YAML files and has the following general structure:
 
-[subs=+quotes,yaml]
+====
+[source,subs="verbatim,quotes"]
 ----
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template <1>
@@ -110,6 +111,7 @@ metadata: <2>
         icon: catalog
         entityRef: ${{ steps['register'].output.entityRef }}
 ----
+====
 
 <1> This YAML file describes a `Template`
 <2> Template metadata - name, title, description, owner etc
@@ -140,25 +142,41 @@ In this lab, you will generate a small template to deploy a React frontend appli
 
 . Inspect the template definition at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml. Inspect the `parameters`, `steps`, and `output` sections in particular to understand the features provided by the template.
 
-. Navigate to the RHDH home page and then click `Create... > Register Existing Component`. Provide `https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml` as the value in the `Select URL` field. 
-
-. Click `Analyze`. If the YAML is valid, you will be shown the results of the analysis. Otherwise, you will get a descriptive error message. Fix the error in the YAML files, and proceed with the import.
+. Navigate to the RHDH home page and then click `Create... > Register Existing Component`.
 +
-WARNING: If you still have RBAC enabled without the proper policies to allow the current user to create new components, you will see an error in this step. Disable RBAC temporarily while you learn and explore the features of RHDH. You will need to restart the RHDH pod for the change to take effect.
+image::register.png[title=Register Component]
+
+. Provide `https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml` as the value in the `Select URL` field.
++
+image::url2.png[title=Select URL]
+
+. Click `Analyze`. If the YAML is valid, you will be shown the results of the analysis.
++
+image::url2review.png[title=Analyse results]
++
+Otherwise, you will get a descriptive error message. Fix the error in the YAML files, and proceed with the import.
 
 . Review the results of the analysis, and then click `Import`.
 
 . Navigate to the `Catalog` page in RHDH and select `Template` in the `Kind` drop-down to see your newly imported template displayed.
++
+image::template.png[title=Imported Template]
 
 . To instantiate the template and create a new application, click `Create` in the RHDH left sidebar navigation menu, and then click `Choose` in the `React/Next.js SSR Template` card.
 +
 image::select-template.png[title=Select a template]
++
+NOTE: If you see don't see the "Choose" button then make sure your RBAC role contains the plugin `scaffold` with permission `scaffolder.task.create`.
 
 . Based on your parameter definition, you will be shown an HTML form asking for inputs. Enter `test-react-ssr-app` in the `Name` field and enter a descriptive comment in the `Description` field. Select `frontend-team` from the `Owner` drop-down field. Click `Next` when done.
 +
-image::template-input-step1.png[title=Template Input - Simple Information]
+image::fields.png[title=Template Input - Simple Information]
++
+NOTE: If you see don't see the fields like *Name*, *Description* etc then make sure your RBAC role contains the plugin `scaffold` with permission `scaffolder.template`.
 
-. For the `Choose a location` step, the `Host` field is disabled and the default value from the template is filled in. Enter the name of your GitHub Organization in the `Owner` field, and `test-react-ssr-app` in the `Repository` field (this value identifies the name of the GitHub repository). Click `Review` when done.
+. For the `Choose a location` step, the `Host` field is disabled and the default value from the template is filled in. Enter the name of your GitHub Organization in the `Owner` field, and `test-react-app` in the `Repository` field (this value identifies the name of the GitHub repository). Click `Review` when done.
++
+image::review.png[title=Repository Details]
 +
 WARNING: Do NOT enter any RHDH group name of any other string in the Owner field in this step. Owner here corresponds to the GitHub Organization where the application instance source tree will be published. You must enter the same GitHub Organization name here that you used to create the GitHub OAuth App credentials in the Developer Hub Administration course.
 

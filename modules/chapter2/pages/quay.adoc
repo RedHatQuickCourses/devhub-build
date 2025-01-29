@@ -13,7 +13,9 @@ RHDH comes with a generic `proxy` component that acts as a lightweight reverse p
 
 In your `app-config.yaml` add a proxy endpoint for Quay:
 
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
 proxy:
       '/quay/api': <1>
         target: 'https://quay.io' <2>
@@ -24,7 +26,9 @@ proxy:
         secure: true # false for self-signed certs in self-hosted versions of Quay
     quay:
       uiUrl: 'https://quay.io' <2>
-```
+----
+====
+
 <1> Proxy endpoint for the Quay front-end plugin
 <2> Target - value should be `https://quay.io` for the public registry, or the full URL to your self-hosted Quay registry
 <3> Authentication Token. Not needed for publicly available registries. Mandatory for private registries. You can generate tokens in the Quay.io `Account Settings > Generate Encrypted Password > `Encrypted Password` page.
@@ -33,10 +37,13 @@ proxy:
 
 Enable the Quay dynamic plugin in the dynamic plugins YAML configuration:
 
-```yaml
-  - package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-quay
+====
+[source,subs="verbatim,quotes"]
+----
+  - package: './dynamic-plugins/dist/backstage-community-plugin-quay'
     disabled: false
-```
+----
+====
 
 == Lab: Enabling and Configuring the Quay Plugin
 
@@ -53,7 +60,9 @@ In this lab, you will configure the Quay plugin to access the publicly accessibl
 
 . Edit the `app-config-rhdh` ConfigMap and add a `proxy` endpoint for Quay.io at the same indentation level as the `app` and `kubernetes` attributes:
 +
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
 proxy:
       '/quay/api':
         target: 'https://quay.io'
@@ -62,22 +71,34 @@ proxy:
           #Authorization: 'Bearer mytoken' # for private registries only
         changeOrigin: true
         secure: true
-    quay:
+quay:
       uiUrl: 'https://quay.io'
-```
+----
+====
++
+Example:
++
+image:proxy.png[title=Quay Settings]
 
 . Enable the Quay dynamic plugin in the `dynamic-plugins-rhdh-local` ConfigMap:
 +
-```yaml
-- package: './dynamic-plugins/dist/janus-idp-backstage-plugin-quay'
+====
+[source,subs="verbatim,quotes"]
+----
+- package: './dynamic-plugins/dist/backstage-community-plugin-quay'
   disabled: false
-```
+----
+====
 +
 Restart the RHDH pod from the `Topology` view. Wait until the RHDH pod is fully restarted.
++
+image:restart.png[title=Restart Pod]
 
 . Inspect the catalog YAML descriptor files at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/quay/quay-registry.yaml for an RHDH component that tracks the OpenShift OKD container registry. You need to add an annotation for the Quay plugin to fetch container image information from the appropriate registry.
 +
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata: <1>
@@ -92,14 +113,27 @@ metadata: <1>
     quay.io/repository-slug: openshift/okd <2>
 spec:
 ...
-```
+----
+====
 +
 <1> Metadata for this component - name, description and links to the public quay.io registry.
 <2> Annotation to identify the registry from which container image metadata needs to be fetched. In this case the `OKD` project registry. If you have a private registry with your own organization, then change this slug to reflect the path to your registry. The same path information applies to privately hosted Quay enterprise registries.
 
-. Import this component into RHDH using the `Create > Register Existing Component` page. Once imported, click the `Example Quay Registry` item on the RHDH Catalog page.
+. Import this component into RHDH.
 
-. Observe that a new tab named `Image Registry` is visible. Click on this tab to view the information for container images contained in the `openshift/okd` registry.
+.. Click the *Create* in Red Hat Developer Hub and select *Register Existing Component* page.
++
+image:template.png[title=Register Component]
+
+.. Add the url https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/quay/quay-registry.yaml and click *Analyse*:
++
+image:report.png[title=Register Component]
+
+.. Click **Import** and once imported, confim you can see the item present in RHDH Catalog page.
++
+image:catlog.png[title=RHDH Catalog]
+
+. Click the `Example Quay Registry` item and observe that a new tab named `Image Registry` is visible. Click on this tab to view the information for container images contained in the `openshift/okd` registry.
 +
 image::okd-images.png[title=Container images in Quay.io OKD registry]
 

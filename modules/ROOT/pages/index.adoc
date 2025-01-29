@@ -17,6 +17,7 @@ This course covers how to populate the `Catalog` in RHDH, as well as how to crea
 The PTL team acknowledges the valuable contributions of the following Red Hat associates:
 
 * Ravi Srinivasan
+* Yogita Soni
 * Jason Froehlich
 * Hans-Peter Grahsl
 * Tyrell Reddy and the entire Demo Platform (RHDP) Team

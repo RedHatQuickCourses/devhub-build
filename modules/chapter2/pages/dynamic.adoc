@@ -30,7 +30,9 @@ image::enable-plugins-form-view.png[title=Enabling Plugins using Helm Chart Form
 
 If you prefer to edit the helm chart's YAML directly, do the following:
 
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
 global:
   dynamic:
     includes:
@@ -42,7 +44,8 @@ global:
       - disabled: false <1>
         package: >- <2>
           ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-dynamic
-```
+----
+====
 
 <1> Enable or Disable the plugin. Set to `true` to disable the plugin.
 <2> The path to the dynamic plugin. Consult the `Administration Guide` (dynamic plugins matrix) for the full path.
@@ -59,5 +62,5 @@ A nice demonstration on how to create a custom plugin for RHDH is shown https://
 
 == References
 
-* https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index#rhdh-supported-plugins[Plugins available in RHDH 1.2^]
+* https://developers.redhat.com/rhdh/plugins#redhatnotpreinstalled[Plugins available in RHDH 1.4^]
 * https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index[Configuring Dynamic Plugins in RHDH^]

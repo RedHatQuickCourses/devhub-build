@@ -31,7 +31,9 @@ You may not want to visualize all workloads and resources in your Kubernetes clu
 
 In your *catalog-info.yaml* files, you need to add `backstage.io/kubernetes-id` annotation under your components `metadata` field:
 
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
@@ -40,11 +42,14 @@ metadata:
   ...
   annotations:
     backstage.io/kubernetes-id: 'hello'
-```
+----
+====
 
 Correspondingly on the Kubernetes resource side, you need to add a `backstage.io/kubernetes-id` label to the resources you want to track in RHDH:
 
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -52,13 +57,16 @@ metadata:
   labels:
     app: hello
     backstage.io/kubernetes-id: 'hello'
-```
+----
+====
 
 Adding this label to every resource on the Kubernetes side quickly becomes repetitive and difficult to manage, especially when you have a large number of workloads deployed, and each workload has numerous resources deployed in the cluster.
 
 To simplify resource discovery, you can use label selectors to query the Kubernetes API server and return a list of resources matching your label. For example, to fetch all resources matching the label `app=hello`, add a `backstage.io/kubernetes-label-selector` annotation to your component catalog descriptor:
 
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
@@ -67,7 +75,8 @@ metadata:
   ...
   annotations:
     backstage.io/kubernetes-label-selector: 'app=hello'
-```
+----
+====
 
 The label selector annotation makes use of the fact that adding labels to resources like `Deployment` types, applies the labels to all resources (Pods, Services, Routes etc.) that are a result of a successful deployment. This annotation and label selector mechanism also works for custom resources like Tekton's `Pipeline` resource, where labels applied to the parent Pipeline resource are inherited by resources generated from a pipeline run, such as Pipelinerun and Taskrun resources.
 
@@ -81,7 +90,9 @@ The following hands-on labs describe the detailed steps to enable and configure 
 
 . Download and inspect the YAML file at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/1-cr.yaml. This file creates a `ClusterRole` that provides cluster-wide  *read-only* access to a service account. Adjust the values as per your environment.
 +
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
 ...
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -104,7 +115,8 @@ rules:
       - list
   - apiGroups:
 ...
-```
+----
+====
 +
 <1> Lists of Kubernetes resources for which you want the plugin to fetch data from the Kubernetes API
 <2> Permissions allowed for this role. In this case, read-only permissions to list, get and watch these resources
@@ -112,38 +124,75 @@ rules:
 This file lists a number of custom resources that the plugin uses to fetch data. Add other resources to this YAML based on your workload.
 
 . Create the cluster role:
-
-  $ oc apply -f 1-cr.yaml
++
+====
+[source,subs="verbatim,quotes"]
+----
+*oc apply -f 1-cr.yaml*
+----
+====
 
 . Download and inspect the `ClusterRoleBinding` resource YAML file at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/2-crb.yaml. This file binds the previously created `ClusterRole` with the `default` service account in the `devhub` namespace. Adjust the values for your environment, and run it using the `oc` CLI:
-
-  $ oc apply -f 2-crb.yaml
++
+====
+[source,subs="verbatim,quotes"]
+----
+*oc apply -f 2-crb.yaml*
+----
+====
 
 . You need a service account token for the `default` service account to authenticate against the Kubernetes API server. Download and inspect the YAML file at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/3-sa-token.yaml. Change it for your environment and apply it:
-
-  $ oc apply -f 3-sa-token.yaml
++
+====
+[source,subs="verbatim,quotes"]
+----
+*oc apply -f 3-sa-token.yaml*
+secret/rhdh-sa-token created
+----
+====
 
 . You may have to wait for a minute while a secret token is generated. To get the token value, run:
-
-  $ oc -n devhub \
++
+====
+[source,subs="verbatim,quotes"]
+----
+*oc -n devhub \
     get secret rhdh-sa-token \
-    -o go-template='{{.data.token | base64decode}}'
+    -o go-template='{{.data.token | base64decode}}'*
+eyJhbGciOiJSUzI1NiIsImtpXXXXXXXXXXXXXX
+----
+====
 +
 Copy the generated token to the clipboard for use in the next steps.
 
-. Edit the `rhdh-secrets` Secret resource in the `devhub` namespace (You should have created this secret in previous labs) and add a new key named `K8S_SA_TOKEN` and set it's value to the token you generated in the previous step. You will refer to this secret as an environment variable in the `app-config.yaml` file.
+. Edit the `rhdh-secrets` Secret resource in the `devhub` namespace (You should have created this secret in previous labs)
+
+.. Select "Secret" in Red Hat OpenShift Console:
++
+image::secret.png[title=Select Secret]
+
+.. Select *rhdh-secrets*, select *YAML* tab and add a new key named `K8S_SA_TOKEN` and set it's value to the token you generated in the previous step.
++
+image::yaml_secret.png[title=Set K8S_SA_TOKEN secret]
++
+You will refer to this secret as an environment variable in the `app-config.yaml` file.
 
 . You also need to add one more environment variable to the `rhdh-secrets` to prevent errors related to self-signed TLS certificates. Add this variable if and only if your cluster uses self-signed certificates. Add a new key called *NODE_TLS_REJECT_UNAUTHORIZED* and set its value to *0*.
 +
 WARNING: If you fail to set this variable when using self-signed TLS certificates, you will get an error:
 +
-```bash
+====
+[source,subs="verbatim,quotes"]
+----
 Error communicating with Kubernetes: FETCH_ERROR, message: request to https://api.cluster.... failed, reason: self-signed certificate in certificate chain
-```
+----
+====
 
 . Edit the `app-config-rhdh` ConfigMap in the `devhub` namespace. Add the following section to configure the Kubernetes plugin (Add the `kubernetes:` key at the same level as the `app:` key):
 +
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
     app:
 ...
     kubernetes:
@@ -167,7 +216,8 @@ Error communicating with Kubernetes: FETCH_ERROR, message: request to https://ap
                 - group: 'tekton.dev'
                   apiVersion: 'v1'
                   plural: 'taskruns'
-```
+----
+====
 +
 <1> Kubernetes Cluster API Server endpoint (Get this from your RHDP Service Details page). Replace `guid` with your unique GUID
 <2> A unique name for this Kubernetes cluster. You can add multiple Kubernetes clusters under the `clusters:` key, each with its own unique name and configuration
@@ -175,21 +225,34 @@ Error communicating with Kubernetes: FETCH_ERROR, message: request to https://ap
 <4> Token for the service account that connects to the Kubernetes API server
 <5> Kubernetes custom resources that should be visible in RHDH. The base Kubernetes plugin only understands the vanilla Kubernetes API resources. Routes, pipelines and tasks are additions on top of the base Kubernetes API added by layered products like OpenShift Pipelines and the OpenShift platform router
 <6> For self-signed certificates, set this flag to `true`
++
+Example:
++
+image::kuber.png[title=Kubernetes Settings]
 
 . Edit the `dynamic-plugins-rhdh-local` ConfigMap and enable the Kubernetes backend and frontend plugins:
 +
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
   - package: './dynamic-plugins/dist/backstage-plugin-kubernetes'
     disabled: false
   - package: './dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic'
     disabled: false
-```
+----
+====
++
+Example:
++
+image::plugin_kuber.png[title=Enable Kubernetes Plugin]
 
 . Restart the RHDH pod for the new configuration to take effect. Wait until the RHDH container is fully up and running.
 
 . You are now ready to deploy a simple nginx based web application. Inspect the deployment YAML resource at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/5-nginx-deploy.yml. Adjust the values for your environment.
 +
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -207,18 +270,28 @@ kind: Service
 apiVersion: route.openshift.io/v1
 kind: Route
 ...
-```
+----
+====
 +
 <1> Labels to be applied on this Deployment resource
 <2> Label that identifies this component uniquely for the RHDH catalog
 
 . Deploy the application in the `myapps` namespace (Create this namespace/project if it does not exist)
++
+====
+[source,subs="verbatim,quotes"]
+----
+oc create namespace myapps
+oc apply -f 5-nginx-deploy.yml -n myapps
+----
+====
 
-  $ oc apply -f 5-nginx-deploy.yml -n myapps
 
 . Finally, inspect the catalog YAML descriptor file for this component at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/6-catalog-info.yml. Adjust the values for your environment.
 +
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
@@ -231,12 +304,29 @@ metadata:
     backstage.io/kubernetes-label-selector: 'app=nginx' <2>
 spec:
 ...
-```
+----
+====
 +
 <1> Annotation for this component
 <2> Label selector for this component using Kubernetes labels. The corresponding labels must exist on the Kubernetes resources.
 
-. Import the component into the RHDH catalog from the `Create > Register Existing Component` page, and provide the full path to the `6-catalog-info.yml` file from the previous step. After the component is imported, verify that the component is listed in the `Catalog` page and click on `Nginx example service` to view the component details. You can safely ignore any warning messages about relations to other entities.
+. Import the component into the RHDH catalog.
+
+.. Select the `Create > Register Existing Component` page from Red Hat Developer Hub.
++
+image::template.png[title=Import Component]
+
+.. Provide the full path to the https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/6-catalog-info.yml[6-catalog-info.yml] file from the previous step and click *Analyse*:
++
+image::analyse.png[title=Analyse URL]
+
+.. Click *Import*:
++
+image::import.png[title=Import Component]
+
+.. After the component is imported, verify that the component is listed in the `Catalog` page and click on `Nginx example service` to view the component details. You can safely ignore any warning messages about relations to other entities.
++
+image::view.png[title=View Component]
 
 . Verify that a new `Kubernetes` tab is seen. Click on the `Kubernetes` tab to view the details provided by the Kubernetes plugin. You can ignore the warning messages about fetching kubernetes resources (This application does not have any tekton pipelines or tasks. You will create pipeline and task resources in subsequent labs for the RHDH Tekton plugin).
 +
@@ -262,10 +352,13 @@ image::kubernetes-resources-view.png[title=Kubernetes Pod View]
 
 . Enable the Topology plugin in the `dynamic-plugins-rhdh-local` ConfigMap:
 +
-```yaml
-  - package: './dynamic-plugins/dist/janus-idp-backstage-plugin-topology'
+====
+[source,subs="verbatim,quotes"]
+----
+  - package: './dynamic-plugins/dist/backstage-community-plugin-topology'
     disabled: false
-```
+----
+====
 
 . Switch to the `Topology` view and restart the RHDH pod. Wait until the RHDH container is redeployed with the new configuration.
 
@@ -292,5 +385,4 @@ image:pod-logs.png[title=Container Logs]
 == References
 
 * https://backstage.io/docs/features/kubernetes/configuration[Backstage Kubernetes Plugin Configuration]
-* https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index#rhdh-supported-plugins[Plugins available in RHDH 1.2^]
-* https://github.com/janus-idp/backstage-plugins/tree/main/plugins/topology[Topology Plugin for Backstage]
+* https://developers.redhat.com/rhdh/plugins#redhatnotpreinstalled[Plugins available in RHDH 1.4^]

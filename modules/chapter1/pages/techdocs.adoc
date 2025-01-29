@@ -66,7 +66,9 @@ Enabling TechDocs in "all local" mode involves three major tasks:
 
 . Explore the template file at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/skeleton/catalog-info.yaml. Note the `backstage.io/techdocs-ref` annotation that points to the root of the document sources relative to the `catalog-info.yaml` file
 +
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
@@ -78,14 +80,17 @@ metadata:
 spec:
   type: website
   ...
-```
+----
+====
 +
 <1> Location of document source. For MkDocs, a default folder called `docs` in the root of the repository contains the markdown source.
 <2> If documentation is maintained in a separate repository, you can refer to the URL of the repository using "url:" prefix.
 
 . Inspect the https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/skeleton/mkdocs.yml file. It contains the MkDocs configuration for the component.
 +
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
 site_name: ...
 site_description: ...
 
@@ -98,14 +103,17 @@ nav: <2>
       - Sub Section 1.1: section1/ss11.md
       - Sub Section 1.2: section1/ss12.md
       - Sub Section 1.3: section1/ss13.md
-```
+----
+====
 +
 <1> Enable the `techdocs-core` plugin.
 <2> Navigation structure of the documentation tree. The text before the ":" indicates the title of the navigation node and the text after it indicates the path to the file for a section. You can nest the section into sub-sections based on your layout needs.
 
 . The corresponding directory layout of the markdown source looks like the following:
 +
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
 repo_root/
   docs/
     section1/
@@ -115,11 +123,14 @@ repo_root/
     index.md
   catalog-info.yaml
   mkdocs.yml
-```
+----
+====
 
 . RHDH has already enabled the *techdocs* plugin by default for an "all local" configuration. The default plugin YAML file inside the container has the following configured:
 +
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
 ...
 techdocs: <1>
   generator:
@@ -127,11 +138,16 @@ techdocs: <1>
   builder: local
   publisher:
     type: local
-```
+----
+====
 +
 <1> Configure TechDocs for "all local" mode.
 
-. The TechDocs dynamic plugin is enabled by default. In case it is not enabled, ensure the following entries are added to the `dynamic-plugins-rhdh-local` ConfigMap:
+. The TechDocs dynamic plugin is enabled by default.
++
+image::plugin.png[title=TechDocs Plugin]
++
+In case it is not enabled, ensure the following entries are added to the `dynamic-plugins-rhdh-local` ConfigMap:
 
   ./dynamic-plugins/dist/backstage-plugin-techdocs
   ./dynamic-plugins/dist/backstage-plugin-techdocs-backend-dynamic
