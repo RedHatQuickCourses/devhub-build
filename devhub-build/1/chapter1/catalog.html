@@ -230,12 +230,16 @@
 <div class="paragraph">
 <p>You can directly embed the location of your catalog YAML files in the <code>app-config-rhdh</code> YAML files:</p>
 </div>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">catalog:
+<pre class="highlightjs highlight"><code class="language-none hljs">catalog:
   locations:
     - type: url
       target: &lt;location of your YAML&gt;</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="paragraph">
@@ -274,9 +278,11 @@
 <div class="paragraph">
 <p>The GitHub auto-discovery dynamic plugin needs to be enabled by editing the <code>dynamic-plugins-rhdh-local</code> ConfigMap, and then you need to add the configuration for the discovery process under the <code>catalog.providers.github</code> key in your <code>app-config-rhdh</code> ConfigMap as follows:</p>
 </div>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">catalog:
+<pre class="highlightjs highlight"><code class="language-none hljs">catalog:
   rules:
     - allow: [Component, System, API, Template, Location, Resource, User, Group, Domain] <i class="conum" data-value="1"></i><b>(1)</b>
   providers:
@@ -294,6 +300,8 @@
         schedule: <i class="conum" data-value="7"></i><b>(7)</b>
           frequency: { minutes: 5 }
           timeout: { minutes: 3 }</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="colist arabic">
@@ -378,10 +386,14 @@ Deleting entities from the RHDH web UI for auto-discovered entities is not recom
 <div class="paragraph">
 <p>You can set the processing interval in your <code>app-config-rhdh</code> ConfigMap as follows. Values of 60 minutes or more, depending on your use-case is recommended. See <a href="https://backstage.io/docs/features/software-catalog/configuration/#processing-interval" class="bare">https://backstage.io/docs/features/software-catalog/configuration/#processing-interval</a> for more details on the possible configuration values.</p>
 </div>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">catalog:
+<pre class="highlightjs highlight"><code class="language-none hljs">catalog:
   processingInterval: { minutes: 60 }</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -406,9 +418,11 @@ Deleting entities from the RHDH web UI for auto-discovered entities is not recom
 <div class="paragraph">
 <p>For example, given the following configuration:</p>
 </div>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">catalog:
+<pre class="highlightjs highlight"><code class="language-none hljs">catalog:
   rules:
     - allow: [Component, API, Location, Template, User]
 
@@ -417,6 +431,8 @@ Deleting entities from the RHDH web UI for auto-discovered entities is not recom
       target: https://github.com/org/example/blob/master/org-data.yaml
       rules:
         - allow: [Group]</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="paragraph">
@@ -428,10 +444,14 @@ Deleting entities from the RHDH web UI for auto-discovered entities is not recom
 <div class="paragraph">
 <p>The following configuration will reject any kind of entities from being added to the catalog:</p>
 </div>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">catalog:
+<pre class="highlightjs highlight"><code class="language-none hljs">catalog:
   rules: []</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -449,9 +469,6 @@ Deleting entities from the RHDH web UI for auto-discovered entities is not recom
 <li>
 <p>You will use catalog YAML files from the <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps</a> GitHub repository. You can either use this repository directly, or fork a copy under your own organization that you created for RHDH integration in the previous course. Note that for GitHub auto-discovery to work correctly, you need to set up integration with GitHub using OAuth2 Apps correctly as outlined in the previous course (<code>Developer Hub Administration</code>).</p>
 </li>
-<li>
-<p>It is recommended to <strong>DISABLE</strong> RBAC for this course while you explore the various features and functionality of RHDH plugins. Do not enable RBAC unless you know exactly what you are doing, and if you have configured RBAC policies to allow all the features of RHDH.</p>
-</li>
 </ul>
 </div>
 </div>
@@ -466,9 +483,11 @@ Deleting entities from the RHDH web UI for auto-discovered entities is not recom
 <ol class="arabic">
 <li>
 <p>Inspect the top level catalog YAML file at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/catalog-info.yaml</a>. It contains a <code>Location</code> entity pointing to a set of entities that make up the <code>myapp</code> application.</p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
+<pre class="highlightjs highlight"><code class="language-none hljs">apiVersion: backstage.io/v1alpha1
 kind: Location <i class="conum" data-value="1"></i><b>(1)</b>
 metadata:
   name: myapp-location <i class="conum" data-value="2"></i><b>(2)</b>
@@ -479,6 +498,8 @@ spec:
     - ./system.yaml
     - ./myapp-db.yaml
     - ./myapp.yaml</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="colist arabic">
@@ -499,13 +520,15 @@ spec:
 </div>
 </li>
 <li>
-<p>Inspect the <code>group.yaml</code>, <code>system.yaml</code>, and <code>myapp-db.yaml</code> catalog descriptor files in the same repository. Note the different uses of the <code>Kind</code> and the <code>spec</code> section defining attributes for this type of entity (who owns it, what it depends on, and more). You can also reference entities from the catalog that were populated automatically - for example, teams and users information from GitHub Organizations.</p>
+<p>Inspect the <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/group.yaml">group.yaml</a> , <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/system.yaml">system.yaml</a>, and <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/myapp-db.yaml">myapp-db.yaml</a> catalog descriptor files in the same repository. Note the different uses of the <code>Kind</code> and the <code>spec</code> section defining attributes for this type of entity (who owns it, what it depends on, and more). You can also reference entities from the catalog that were populated automatically - for example, teams and users information from GitHub Organizations.</p>
 </li>
 <li>
 <p>Finally, inspect the <code>myapp</code> definition at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/myapp.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/myapp.yaml</a></p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
+<pre class="highlightjs highlight"><code class="language-none hljs">apiVersion: backstage.io/v1alpha1
 kind: Component <i class="conum" data-value="1"></i><b>(1)</b>
 metadata:
   name: myapp <i class="conum" data-value="2"></i><b>(2)</b>
@@ -534,6 +557,8 @@ spec:
   lifecycle: production <i class="conum" data-value="8"></i><b>(8)</b>
   dependsOn:
     - resource:myappdb <i class="conum" data-value="9"></i><b>(9)</b></code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="colist arabic">
@@ -581,16 +606,72 @@ spec:
 </div>
 </li>
 <li>
-<p>Navigate to the RHDH home page and then click <code>Create&#8230;&#8203; &gt; Register Existing Component</code>. Provide the link to the top level <code>Location</code> entity, that is <code><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/catalog-info.yaml</a></code> as the value in the <code>Select URL</code> field.</p>
-</li>
+<p>Make sure you have created a role using RBAC that have your github account added and created a new role.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
-<p>Click <code>Analyze</code>. If the YAML is valid, you will be shown the results of the analysis. Otherwise, you will get a descriptive error message. Fix the error in the YAML files, and proceed with the import.</p>
+<p>Select <strong>RBAC</strong> and select <strong>Create</strong>:</p>
 <div class="imageblock">
 <div class="content">
-<img src="_images/post-analysis.png" alt="post analysis" width="600">
+<img src="_images/create.png" alt="create">
 </div>
-<div class="title">Figure 2. Result of YAML Analysis</div>
+<div class="title">Figure 2. Create a role</div>
 </div>
+</li>
+<li>
+<p>Edit role name to <strong>CREATE-CATLOG-ROLE</strong> and select <strong>Next</strong>:</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/role1.png" alt="role1">
+</div>
+<div class="title">Figure 3. Add role name</div>
+</div>
+</li>
+<li>
+<p>Select your GitHub account user and select <strong>Next</strong>:</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/user1.png" alt="user1">
+</div>
+<div class="title">Figure 4. Add GitHub user</div>
+</div>
+</li>
+<li>
+<p>Select the <strong>catalog</strong> in <strong>Plugin</strong> dropdown and <strong>Resource type</strong> as shown in the below image:</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/perms.png" alt="perms">
+</div>
+<div class="title">Figure 5. Add catalog</div>
+</div>
+</li>
+<li>
+<p>Review the settings and click <strong>Create</strong> button.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Navigate to the RHDH home page and then click <code>Create&#8230;&#8203; &gt; Register Existing Component</code>.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/register.png" alt="register">
+</div>
+<div class="title">Figure 6. Register Component</div>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Provide the link to the top level <strong>Location</strong> entity, that is <code><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/catalog-info.yaml</a></code> as the value in the <strong>Select URL</strong> field and click <strong>Analyze</strong>.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/url.png" alt="url">
+</div>
+<div class="title">Figure 7. Register Component</div>
+</div>
+</li>
+<li>
+<p>If the YAML is valid, you will be shown the results of the analysis. Otherwise, you will get a descriptive error message. Fix the error in the YAML files, and proceed with the import.</p>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -598,28 +679,31 @@ spec:
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-If you see an error like <code>{"error":{"name":"NotAllowedError"&#8230;&#8203;}</code> after clicking <code>Analyze</code>, it means RBAC is enabled, and you have not configured the policies for this user to create components. Disable the RBAC dynamic plugin and remove the <code>permission</code> block from your <code>app-config-rhdh</code> ConfigMap, and then try this step again. Refer to the previous course (<code>Developer Hub Administration</code>) for details on how to enable and disable RBAC in RHDH.
+If you see an error like <code>{"error":{"name":"NotAllowedError"&#8230;&#8203;}</code> after clicking <code>Analyze</code>, it means RBAC is enabled, and you have not configured the policies for this user to create components. Disable the RBAC dynamic plugin and remove the <code>permission</code> block from your <code>app-config-rhdh</code> ConfigMap, and then try this step again. Else refer previous step to enable and configure RBAC in RHDH.
 </td>
 </tr>
 </table>
+</div>
+</li>
+</ol>
 </div>
 </li>
 <li>
 <p>Review the results of the analysis, and then Click <code>Import</code>.</p>
 <div class="imageblock">
 <div class="content">
-<img src="_images/import-myapp-success.png" alt="import myapp success" width="600">
+<img src="_images/review2.png" alt="review2" width="600">
 </div>
-<div class="title">Figure 3. Component Imported</div>
+<div class="title">Figure 8. Component Imported</div>
 </div>
 </li>
 <li>
 <p>Click on <code>View Component</code> to view the imported component details.</p>
 <div class="imageblock">
 <div class="content">
-<img src="_images/view-component-imported.png" alt="view component imported" width="600">
+<img src="_images/review3.png" alt="review3" width="600">
 </div>
-<div class="title">Figure 4. myapp Details Imported Successfully</div>
+<div class="title">Figure 9. myapp Details Imported Successfully</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -638,27 +722,77 @@ If you see any warnings or errors about missing entity references, then correct 
 <p>Click on the <code>Dependencies</code> tab in the component details page. Notice how RHDH has created a nice visualization of your application&#8217;s dependencies, systems, and owners.</p>
 <div class="imageblock">
 <div class="content">
-<img src="_images/comp-deps.png" alt="comp deps" width="600">
+<img src="_images/depend.png" alt="depend" width="600">
 </div>
-<div class="title">Figure 5. Component Dependencies</div>
+<div class="title">Figure 10. Component Dependencies</div>
 </div>
 </li>
 <li>
-<p>Switch back to the <code>Catalog</code> page and note you now have many more options in the <code>Kind</code> drop-down. Filter the catalog by selecting different options for <code>Kind</code> and <code>Type</code>. You can 'star' the component and have it appear on your RHDH home page for convenient access.</p>
+<p>Switch back to the <code>Catalog</code> page and note you now have many more options in the <code>Kind</code> drop-down.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/compo.png" alt="compo">
+</div>
+<div class="title">Figure 11. Kind</div>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Filter the catalog by selecting different options for <code>Kind</code> and <code>Type</code>. You can 'star' the component.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/star.png" alt="star">
+</div>
+<div class="title">Figure 12. Star the Component</div>
+</div>
 </li>
 <li>
-<p>Clean up. Delete the entities you imported. From the component details page, expand the menu in the top right corner (three vertical dots) and select <code>Unregister entity</code>. You will be prompted to review the details of the component, and a warning will be provided that this component and all its dependencies will be deleted from the catalog. Click <code>Unregister Location</code> to remove the component.</p>
+<p>The component appears on your RHDH home page for convenient access.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/home.png" alt="home">
+</div>
+<div class="title">Figure 13. Home page</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Cleaning up the catalog:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Select the <strong>Catalog</strong> and select <strong>Example component for RHDH</strong> as shown below:</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/ex.png" alt="ex">
+</div>
+<div class="title">Figure 14. Home page</div>
+</div>
+</li>
+<li>
+<p>Expand the menu in the top right corner (three vertical dots) and select <code>Unregister entity</code>.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/unregister.png" alt="unregister">
+</div>
+<div class="title">Figure 15. Home page</div>
+</div>
+<div class="paragraph">
+<p>You will be prompted to review the details of the component, and a warning will be provided that this component and all its dependencies will be deleted from the catalog. Click <code>Unregister Location</code> to remove the component.</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="_images/unregister-entity.png" alt="unregister entity">
 </div>
-<div class="title">Figure 6. Unregister Entity</div>
+<div class="title">Figure 16. Unregister Entity</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="_images/remove-entity.png" alt="remove entity" width="600">
 </div>
-<div class="title">Figure 7. Remove Entity from Catalog</div>
+<div class="title">Figure 17. Remove Entity from Catalog</div>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -671,6 +805,9 @@ There are several nuances to deleting entities from the catalog. For example, du
 </td>
 </tr>
 </table>
+</div>
+</li>
+</ol>
 </div>
 </li>
 </ol>
@@ -691,9 +828,11 @@ There are several nuances to deleting entities from the catalog. For example, du
 <ol class="arabic">
 <li>
 <p>Inspect the <code><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/tree/main/rhdh-discovery/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/tree/main/rhdh-discovery/catalog-info.yaml</a></code> file, which references the <code>petstore-api.yaml</code> file. The <code>petstore-api.yaml' file declares an `API</code> entity for the <code>Petstore</code> sample application. Note the <code>Kind</code> declaration of <code>API</code>, and the <code>spec</code> declaration for the <code>type</code> and <code>definition</code> pointing to the OpenAPI YAML file describing the API end points for the Petstore backend service.</p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
+<pre class="highlightjs highlight"><code class="language-none hljs">apiVersion: backstage.io/v1alpha1
 kind: <strong>API</strong>
 metadata:
   ...
@@ -706,33 +845,49 @@ metadata:
     $openapi: https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/petstore.yaml</strong></code></pre>
 </div>
 </div>
+</div>
+</div>
 </li>
 <li>
-<p>Configure the GitHub auto-discovery plugin in the <code>app-config-rhdh</code> ConfigMap. Notice that you do not mention the repositories where the catalog YAML files live, but only provide a regular expression path where you expect the YAML files to leave for each of the components you want to import into RHDH.</p>
-<div class="paragraph">
-<p>This configuration needs a disciplined approach to creating and maintaining the catalog YAML files, where every component you want to import into RHDH needs to follow the folder structure, naming convention of the YAML file, branch naming scheme described in the configuration. Add a <code>catalogPath</code> attribute along with a <code>filters</code> attribute. Finally, add a <code>rules</code> block to allow the import of different component types into RHDH.</p>
+<p>Configure the GitHub auto-discovery plugin in the <code>app-config-rhdh</code> ConfigMap.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Navigate to the <strong>Red Hat OpenShift</strong> console and select <strong>ConfigMaps</strong>:</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/config.png" alt="config">
 </div>
+<div class="title">Figure 18. Select ConfigMaps</div>
+</div>
+<div class="paragraph">
+<p>Select <code>app-config-rhdh</code> and select <strong>YAML</strong>. This configuration needs a disciplined approach to creating and maintaining the catalog YAML files, where every component you want to import into RHDH needs to follow the folder structure, naming convention of the YAML file, branch naming scheme described in the configuration. Add a <code>catalogPath</code> attribute along with a <code>filters</code> attribute. Finally, add a <code>rules</code> block to allow the import of different component types into RHDH.</p>
+</div>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre>data:
+<pre class="highlightjs highlight"><code class="language-none hljs">data:
   app-config-rhdh.yaml: |
     app:
-...
+    ...
     signInPage: github
-    catalog:
-      providers:
-        github:
-          providerId:
-            organization: "${GITHUB_ORGANIZATION}"
-            <strong>catalogPath: '/rhdh-discovery/catalog-info.yaml'
-            filters:
-              branch: 'main'
-              repository: '.</strong>'*
+    <strong>catalog:</strong>
+      <strong>providers:</strong>
+        <strong>github:</strong>
+          <strong>providerId:</strong>
+            <strong>organization: "${GITHUB_ORGANIZATION}"</strong>
+            <strong>catalogPath: '/rhdh-discovery/catalog-info.yaml'</strong>
+            <strong>filters:</strong>
+              <strong>branch: 'main'</strong>
+              <strong>repository: ".</strong>*<strong>"
             schedule:
               frequency:
               ...
-      <strong>rules:
-        - allow: [Component, System, API, Template, Location, Resource, User, Group, Domain]</strong></pre>
+      *rules:
+        - allow: [Component, System, API, Template, Location, Resource, User, Group, Domain]</strong></code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="admonitionblock warning">
@@ -748,17 +903,33 @@ In production systems, ensure that you set the schedule at a higher value (for e
 </table>
 </div>
 </li>
+</ol>
+</div>
+</li>
 <li>
 <p>To make RHDH auto-discover this entity, enable the GitHub auto-discovery plugin in the <code>dynamic-plugins-rhdh-local</code> ConfigMap:</p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- package: './dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-dynamic'
+<pre class="highlightjs highlight"><code class="language-none hljs">- package: './dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-dynamic'
   disabled: false</code></pre>
+</div>
+</div>
 </div>
 </div>
 </li>
 <li>
-<p>Restart rollout of the RHDH pod and wait for the RHDH pods to be recreated. RHDH will auto-discover your catalog YAML descriptor files under your GitHub Organization based on the <code>schedule</code> configuration. Inspect the RHDH container logs if you see any errors and fix the configuration in <code>app-config-rhdh</code> and redeploy. A successful scan by the plugin should result in logs like the following:</p>
+<p>Restart rollout of the RHDH pod and wait for the RHDH pods to be recreated.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/restart.png" alt="restart">
+</div>
+<div class="title">Figure 19. Restart Pod</div>
+</div>
+</li>
+<li>
+<p>RHDH will auto-discover your catalog YAML descriptor files under your GitHub Organization based on the <code>schedule</code> configuration. Inspect the RHDH container logs if you see any errors and fix the configuration in <code>app-config-rhdh</code> and redeploy. A successful scan by the plugin should result in logs like the following:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-none hljs">... Read 34 GitHub repositories (32 matching the pattern)...</code></pre>
@@ -783,7 +954,7 @@ If the components are not auto-discovered and you see no errors in the pod logs,
 <div class="content">
 <img src="_images/petstore-api.png" alt="petstore api">
 </div>
-<div class="title">Figure 8. API auto-discovered by RHDH</div>
+<div class="title">Figure 20. API auto-discovered by RHDH</div>
 </div>
 </li>
 <li>
@@ -792,7 +963,7 @@ If the components are not auto-discovered and you see no errors in the pod logs,
 <div class="content">
 <img src="_images/petstore-api-details.png" alt="petstore api details">
 </div>
-<div class="title">Figure 9. Petstore API Details</div>
+<div class="title">Figure 21. Petstore API Details</div>
 </div>
 </li>
 <li>
@@ -801,7 +972,7 @@ If the components are not auto-discovered and you see no errors in the pod logs,
 <div class="content">
 <img src="_images/petstore-swagger.png" alt="petstore swagger" width="600">
 </div>
-<div class="title">Figure 10. OpenAPI documentation</div>
+<div class="title">Figure 22. OpenAPI documentation</div>
 </div>
 </li>
 </ol>

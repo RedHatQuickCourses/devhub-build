@@ -183,9 +183,11 @@
 <div class="paragraph">
 <p>A template is defined using YAML files and has the following general structure:</p>
 </div>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: scaffolder.backstage.io/v1beta3
+<pre class="highlightjs highlight"><code class="language-none hljs">apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template <i class="conum" data-value="1"></i><b>(1)</b>
 # some metadata about the template itself
 metadata: <i class="conum" data-value="2"></i><b>(2)</b>
@@ -257,6 +259,8 @@ metadata: <i class="conum" data-value="2"></i><b>(2)</b>
       - title: Open in catalog
         icon: catalog
         entityRef: ${{ steps['register'].output.entityRef }}</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="colist arabic">
@@ -339,21 +343,33 @@ metadata: <i class="conum" data-value="2"></i><b>(2)</b>
 <p>Inspect the template definition at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml</a>. Inspect the <code>parameters</code>, <code>steps</code>, and <code>output</code> sections in particular to understand the features provided by the template.</p>
 </li>
 <li>
-<p>Navigate to the RHDH home page and then click <code>Create&#8230;&#8203; &gt; Register Existing Component</code>. Provide <code><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml</a></code> as the value in the <code>Select URL</code> field.</p>
+<p>Navigate to the RHDH home page and then click <code>Create&#8230;&#8203; &gt; Register Existing Component</code>.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/register.png" alt="register">
+</div>
+<div class="title">Figure 1. Register Component</div>
+</div>
 </li>
 <li>
-<p>Click <code>Analyze</code>. If the YAML is valid, you will be shown the results of the analysis. Otherwise, you will get a descriptive error message. Fix the error in the YAML files, and proceed with the import.</p>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-If you still have RBAC enabled without the proper policies to allow the current user to create new components, you will see an error in this step. Disable RBAC temporarily while you learn and explore the features of RHDH. You will need to restart the RHDH pod for the change to take effect.
-</td>
-</tr>
-</table>
+<p>Provide <code><a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/template.yaml</a></code> as the value in the <code>Select URL</code> field.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/url2.png" alt="url2">
+</div>
+<div class="title">Figure 2. Select URL</div>
+</div>
+</li>
+<li>
+<p>Click <code>Analyze</code>. If the YAML is valid, you will be shown the results of the analysis.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/url2review.png" alt="url2review">
+</div>
+<div class="title">Figure 3. Analyse results</div>
+</div>
+<div class="paragraph">
+<p>Otherwise, you will get a descriptive error message. Fix the error in the YAML files, and proceed with the import.</p>
 </div>
 </li>
 <li>
@@ -361,6 +377,12 @@ If you still have RBAC enabled without the proper policies to allow the current 
 </li>
 <li>
 <p>Navigate to the <code>Catalog</code> page in RHDH and select <code>Template</code> in the <code>Kind</code> drop-down to see your newly imported template displayed.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/template.png" alt="template">
+</div>
+<div class="title">Figure 4. Imported Template</div>
+</div>
 </li>
 <li>
 <p>To instantiate the template and create a new application, click <code>Create</code> in the RHDH left sidebar navigation menu, and then click <code>Choose</code> in the <code>React/Next.js SSR Template</code> card.</p>
@@ -368,20 +390,50 @@ If you still have RBAC enabled without the proper policies to allow the current 
 <div class="content">
 <img src="_images/select-template.png" alt="select template">
 </div>
-<div class="title">Figure 1. Select a template</div>
+<div class="title">Figure 5. Select a template</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you see don&#8217;t see the "Choose" button then make sure your RBAC role contains the plugin <code>scaffold</code> with permission <code>scaffolder.task.create</code>.
+</td>
+</tr>
+</table>
 </div>
 </li>
 <li>
 <p>Based on your parameter definition, you will be shown an HTML form asking for inputs. Enter <code>test-react-ssr-app</code> in the <code>Name</code> field and enter a descriptive comment in the <code>Description</code> field. Select <code>frontend-team</code> from the <code>Owner</code> drop-down field. Click <code>Next</code> when done.</p>
 <div class="imageblock">
 <div class="content">
-<img src="_images/template-input-step1.png" alt="template input step1">
+<img src="_images/fields.png" alt="fields">
 </div>
-<div class="title">Figure 2. Template Input - Simple Information</div>
+<div class="title">Figure 6. Template Input - Simple Information</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you see don&#8217;t see the fields like <strong>Name</strong>, <strong>Description</strong> etc then make sure your RBAC role contains the plugin <code>scaffold</code> with permission <code>scaffolder.template</code>.
+</td>
+</tr>
+</table>
 </div>
 </li>
 <li>
-<p>For the <code>Choose a location</code> step, the <code>Host</code> field is disabled and the default value from the template is filled in. Enter the name of your GitHub Organization in the <code>Owner</code> field, and <code>test-react-ssr-app</code> in the <code>Repository</code> field (this value identifies the name of the GitHub repository). Click <code>Review</code> when done.</p>
+<p>For the <code>Choose a location</code> step, the <code>Host</code> field is disabled and the default value from the template is filled in. Enter the name of your GitHub Organization in the <code>Owner</code> field, and <code>test-react-app</code> in the <code>Repository</code> field (this value identifies the name of the GitHub repository). Click <code>Review</code> when done.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/review.png" alt="review">
+</div>
+<div class="title">Figure 7. Repository Details</div>
+</div>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -401,7 +453,7 @@ Do NOT enter any RHDH group name of any other string in the Owner field in this 
 <div class="content">
 <img src="_images/template-inst-success.png" alt="template inst success">
 </div>
-<div class="title">Figure 3. Template Processing Complete</div>
+<div class="title">Figure 8. Template Processing Complete</div>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -419,13 +471,13 @@ If you have not created your GitHub App with proper permissions, it is possible 
 <div class="content">
 <img src="_images/github-app-perms.png" alt="github app perms">
 </div>
-<div class="title">Figure 4. GitHub Application Permissions</div>
+<div class="title">Figure 9. GitHub Application Permissions</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="_images/github-repo-level-perms.png" alt="github repo level perms">
 </div>
-<div class="title">Figure 5. GitHub Repository Level Permissions Detail</div>
+<div class="title">Figure 10. GitHub Repository Level Permissions Detail</div>
 </div>
 </li>
 <li>
@@ -434,7 +486,7 @@ If you have not created your GitHub App with proper permissions, it is possible 
 <div class="content">
 <img src="_images/new-react-app-repo.png" alt="new react app repo">
 </div>
-<div class="title">Figure 6. New Application GitHub Repository</div>
+<div class="title">Figure 11. New Application GitHub Repository</div>
 </div>
 </li>
 <li>

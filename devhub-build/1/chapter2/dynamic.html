@@ -189,9 +189,11 @@ Red Hat fully supports certain plugins (Topology, Tekton, Quay), while others ar
 <div class="paragraph">
 <p>If you prefer to edit the helm chart&#8217;s YAML directly, do the following:</p>
 </div>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">global:
+<pre class="highlightjs highlight"><code class="language-none hljs">global:
   dynamic:
     includes:
       - dynamic-plugins.default.yaml
@@ -202,6 +204,8 @@ Red Hat fully supports certain plugins (Topology, Tekton, Quay), while others ar
       - disabled: false <i class="conum" data-value="1"></i><b>(1)</b>
         package: &gt;- <i class="conum" data-value="2"></i><b>(2)</b>
           ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-dynamic</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="colist arabic">
@@ -249,7 +253,7 @@ Simply enabling a dynamic plugin in the helm chart may not provide the required 
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index#rhdh-supported-plugins" target="_blank" rel="noopener">Plugins available in RHDH 1.2</a></p>
+<p><a href="https://developers.redhat.com/rhdh/plugins#redhatnotpreinstalled" target="_blank" rel="noopener">Plugins available in RHDH 1.4</a></p>
 </li>
 <li>
 <p><a href="https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index" target="_blank" rel="noopener">Configuring Dynamic Plugins in RHDH</a></p>

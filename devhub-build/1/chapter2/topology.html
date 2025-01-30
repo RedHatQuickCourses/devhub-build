@@ -183,9 +183,11 @@
 <div class="paragraph">
 <p>In your <strong>catalog-info.yaml</strong> files, you need to add <code>backstage.io/kubernetes-id</code> annotation under your components <code>metadata</code> field:</p>
 </div>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
+<pre class="highlightjs highlight"><code class="language-none hljs">apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: hello
@@ -195,12 +197,16 @@ metadata:
     backstage.io/kubernetes-id: 'hello'</code></pre>
 </div>
 </div>
+</div>
+</div>
 <div class="paragraph">
 <p>Correspondingly on the Kubernetes resource side, you need to add a <code>backstage.io/kubernetes-id</code> label to the resources you want to track in RHDH:</p>
 </div>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: apps/v1
+<pre class="highlightjs highlight"><code class="language-none hljs">apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello
@@ -209,15 +215,19 @@ metadata:
     backstage.io/kubernetes-id: 'hello'</code></pre>
 </div>
 </div>
+</div>
+</div>
 <div class="paragraph">
 <p>Adding this label to every resource on the Kubernetes side quickly becomes repetitive and difficult to manage, especially when you have a large number of workloads deployed, and each workload has numerous resources deployed in the cluster.</p>
 </div>
 <div class="paragraph">
 <p>To simplify resource discovery, you can use label selectors to query the Kubernetes API server and return a list of resources matching your label. For example, to fetch all resources matching the label <code>app=hello</code>, add a <code>backstage.io/kubernetes-label-selector</code> annotation to your component catalog descriptor:</p>
 </div>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
+<pre class="highlightjs highlight"><code class="language-none hljs">apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: hello
@@ -225,6 +235,8 @@ metadata:
   ...
   annotations:
     backstage.io/kubernetes-label-selector: 'app=hello'</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="paragraph">
@@ -247,9 +259,11 @@ metadata:
 </li>
 <li>
 <p>Download and inspect the YAML file at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/1-cr.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/1-cr.yaml</a>. This file creates a <code>ClusterRole</code> that provides cluster-wide  <strong>read-only</strong> access to a service account. Adjust the values as per your environment.</p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">...
+<pre class="highlightjs highlight"><code class="language-none hljs">...
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -273,6 +287,8 @@ rules:
 ...</code></pre>
 </div>
 </div>
+</div>
+</div>
 <div class="colist arabic">
 <table>
 <tr>
@@ -291,35 +307,53 @@ rules:
 </li>
 <li>
 <p>Create the cluster role:</p>
-<div class="literalblock">
+<div class="exampleblock">
 <div class="content">
-<pre>$ oc apply -f 1-cr.yaml</pre>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"><strong>oc apply -f 1-cr.yaml</strong></code></pre>
+</div>
+</div>
 </div>
 </div>
 </li>
 <li>
 <p>Download and inspect the <code>ClusterRoleBinding</code> resource YAML file at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/2-crb.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/2-crb.yaml</a>. This file binds the previously created <code>ClusterRole</code> with the <code>default</code> service account in the <code>devhub</code> namespace. Adjust the values for your environment, and run it using the <code>oc</code> CLI:</p>
-<div class="literalblock">
+<div class="exampleblock">
 <div class="content">
-<pre>$ oc apply -f 2-crb.yaml</pre>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"><strong>oc apply -f 2-crb.yaml</strong></code></pre>
+</div>
+</div>
 </div>
 </div>
 </li>
 <li>
 <p>You need a service account token for the <code>default</code> service account to authenticate against the Kubernetes API server. Download and inspect the YAML file at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/3-sa-token.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/3-sa-token.yaml</a>. Change it for your environment and apply it:</p>
-<div class="literalblock">
+<div class="exampleblock">
 <div class="content">
-<pre>$ oc apply -f 3-sa-token.yaml</pre>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"><strong>oc apply -f 3-sa-token.yaml</strong>
+secret/rhdh-sa-token created</code></pre>
+</div>
+</div>
 </div>
 </div>
 </li>
 <li>
 <p>You may have to wait for a minute while a secret token is generated. To get the token value, run:</p>
-<div class="literalblock">
+<div class="exampleblock">
 <div class="content">
-<pre>$ oc -n devhub \
-  get secret rhdh-sa-token \
-  -o go-template='{{.data.token | base64decode}}'</pre>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs"><strong>oc -n devhub \
+    get secret rhdh-sa-token \
+    -o go-template='{{.data.token | base64decode}}'</strong>
+eyJhbGciOiJSUzI1NiIsImtpXXXXXXXXXXXXXX</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="paragraph">
@@ -327,7 +361,32 @@ rules:
 </div>
 </li>
 <li>
-<p>Edit the <code>rhdh-secrets</code> Secret resource in the <code>devhub</code> namespace (You should have created this secret in previous labs) and add a new key named <code>K8S_SA_TOKEN</code> and set it&#8217;s value to the token you generated in the previous step. You will refer to this secret as an environment variable in the <code>app-config.yaml</code> file.</p>
+<p>Edit the <code>rhdh-secrets</code> Secret resource in the <code>devhub</code> namespace (You should have created this secret in previous labs)</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Select "Secret" in Red Hat OpenShift Console:</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/secret.png" alt="secret">
+</div>
+<div class="title">Figure 1. Select Secret</div>
+</div>
+</li>
+<li>
+<p>Select <strong>rhdh-secrets</strong>, select <strong>YAML</strong> tab and add a new key named <code>K8S_SA_TOKEN</code> and set it&#8217;s value to the token you generated in the previous step.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/yaml_secret.png" alt="yaml secret">
+</div>
+<div class="title">Figure 2. Set K8S_SA_TOKEN secret</div>
+</div>
+<div class="paragraph">
+<p>You will refer to this secret as an environment variable in the <code>app-config.yaml</code> file.</p>
+</div>
+</li>
+</ol>
+</div>
 </li>
 <li>
 <p>You also need to add one more environment variable to the <code>rhdh-secrets</code> to prevent errors related to self-signed TLS certificates. Add this variable if and only if your cluster uses self-signed certificates. Add a new key called <strong>NODE_TLS_REJECT_UNAUTHORIZED</strong> and set its value to <strong>0</strong>.</p>
@@ -343,17 +402,23 @@ If you fail to set this variable when using self-signed TLS certificates, you wi
 </tr>
 </table>
 </div>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Error communicating with Kubernetes: FETCH_ERROR, message: request to https://api.cluster.... failed, reason: self-signed certificate in certificate chain</code></pre>
+<pre class="highlightjs highlight"><code class="language-none hljs">Error communicating with Kubernetes: FETCH_ERROR, message: request to https://api.cluster.... failed, reason: self-signed certificate in certificate chain</code></pre>
+</div>
+</div>
 </div>
 </div>
 </li>
 <li>
 <p>Edit the <code>app-config-rhdh</code> ConfigMap in the <code>devhub</code> namespace. Add the following section to configure the Kubernetes plugin (Add the <code>kubernetes:</code> key at the same level as the <code>app:</code> key):</p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">    app:
+<pre class="highlightjs highlight"><code class="language-none hljs">    app:
 ...
     kubernetes:
       serviceLocatorMethod:
@@ -376,6 +441,8 @@ If you fail to set this variable when using self-signed TLS certificates, you wi
                 - group: 'tekton.dev'
                   apiVersion: 'v1'
                   plural: 'taskruns'</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="colist arabic">
@@ -406,16 +473,38 @@ If you fail to set this variable when using self-signed TLS certificates, you wi
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/kuber.png" alt="kuber">
+</div>
+<div class="title">Figure 3. Kubernetes Settings</div>
+</div>
 </li>
 <li>
 <p>Edit the <code>dynamic-plugins-rhdh-local</code> ConfigMap and enable the Kubernetes backend and frontend plugins:</p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  - package: './dynamic-plugins/dist/backstage-plugin-kubernetes'
+<pre class="highlightjs highlight"><code class="language-none hljs">  - package: './dynamic-plugins/dist/backstage-plugin-kubernetes'
     disabled: false
   - package: './dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic'
     disabled: false</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/plugin_kuber.png" alt="plugin kuber">
+</div>
+<div class="title">Figure 4. Enable Kubernetes Plugin</div>
 </div>
 </li>
 <li>
@@ -423,9 +512,11 @@ If you fail to set this variable when using self-signed TLS certificates, you wi
 </li>
 <li>
 <p>You are now ready to deploy a simple nginx based web application. Inspect the deployment YAML resource at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/5-nginx-deploy.yml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/5-nginx-deploy.yml</a>. Adjust the values for your environment.</p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: apps/v1
+<pre class="highlightjs highlight"><code class="language-none hljs">apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-ex
@@ -444,6 +535,8 @@ kind: Route
 ...</code></pre>
 </div>
 </div>
+</div>
+</div>
 <div class="colist arabic">
 <table>
 <tr>
@@ -459,17 +552,24 @@ kind: Route
 </li>
 <li>
 <p>Deploy the application in the <code>myapps</code> namespace (Create this namespace/project if it does not exist)</p>
-<div class="literalblock">
+<div class="exampleblock">
 <div class="content">
-<pre>$ oc apply -f 5-nginx-deploy.yml -n myapps</pre>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">oc create namespace myapps
+oc apply -f 5-nginx-deploy.yml -n myapps</code></pre>
+</div>
+</div>
 </div>
 </div>
 </li>
 <li>
 <p>Finally, inspect the catalog YAML descriptor file for this component at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/6-catalog-info.yml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/6-catalog-info.yml</a>. Adjust the values for your environment.</p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
+<pre class="highlightjs highlight"><code class="language-none hljs">apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: nginx-ex
@@ -481,6 +581,8 @@ metadata:
     backstage.io/kubernetes-label-selector: 'app=nginx' <i class="conum" data-value="2"></i><b>(2)</b>
 spec:
 ...</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="colist arabic">
@@ -497,7 +599,47 @@ spec:
 </div>
 </li>
 <li>
-<p>Import the component into the RHDH catalog from the <code>Create &gt; Register Existing Component</code> page, and provide the full path to the <code>6-catalog-info.yml</code> file from the previous step. After the component is imported, verify that the component is listed in the <code>Catalog</code> page and click on <code>Nginx example service</code> to view the component details. You can safely ignore any warning messages about relations to other entities.</p>
+<p>Import the component into the RHDH catalog.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Select the <code>Create &gt; Register Existing Component</code> page from Red Hat Developer Hub.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/template.png" alt="template">
+</div>
+<div class="title">Figure 5. Import Component</div>
+</div>
+</li>
+<li>
+<p>Provide the full path to the <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/6-catalog-info.yml">6-catalog-info.yml</a> file from the previous step and click <strong>Analyse</strong>:</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/analyse.png" alt="analyse">
+</div>
+<div class="title">Figure 6. Analyse URL</div>
+</div>
+</li>
+<li>
+<p>Click <strong>Import</strong>:</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/import.png" alt="import">
+</div>
+<div class="title">Figure 7. Import Component</div>
+</div>
+</li>
+<li>
+<p>After the component is imported, verify that the component is listed in the <code>Catalog</code> page and click on <code>Nginx example service</code> to view the component details. You can safely ignore any warning messages about relations to other entities.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/view.png" alt="view">
+</div>
+<div class="title">Figure 8. View Component</div>
+</div>
+</li>
+</ol>
+</div>
 </li>
 <li>
 <p>Verify that a new <code>Kubernetes</code> tab is seen. Click on the <code>Kubernetes</code> tab to view the details provided by the Kubernetes plugin. You can ignore the warning messages about fetching kubernetes resources (This application does not have any tekton pipelines or tasks. You will create pipeline and task resources in subsequent labs for the RHDH Tekton plugin).</p>
@@ -505,7 +647,7 @@ spec:
 <div class="content">
 <img src="_images/kube-plugin-view.png" alt="kube plugin view">
 </div>
-<div class="title">Figure 1. Kubernetes Plugin View</div>
+<div class="title">Figure 9. Kubernetes Plugin View</div>
 </div>
 <div class="paragraph">
 <p>Verify that Kubernetes resources tagged with the labels that match your catalog YAML annotations are seen in this view.</p>
@@ -514,7 +656,7 @@ spec:
 <div class="content">
 <img src="_images/kube-plugin-resources.png" alt="kube plugin resources">
 </div>
-<div class="title">Figure 2. Kubernetes Resources for Component</div>
+<div class="title">Figure 10. Kubernetes Resources for Component</div>
 </div>
 </li>
 <li>
@@ -523,7 +665,7 @@ spec:
 <div class="content">
 <img src="_images/kubernetes-resources-view.png" alt="kubernetes resources view">
 </div>
-<div class="title">Figure 3. Kubernetes Pod View</div>
+<div class="title">Figure 11. Kubernetes Pod View</div>
 </div>
 </li>
 </ol>
@@ -553,10 +695,14 @@ spec:
 <ol class="arabic">
 <li>
 <p>Enable the Topology plugin in the <code>dynamic-plugins-rhdh-local</code> ConfigMap:</p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  - package: './dynamic-plugins/dist/janus-idp-backstage-plugin-topology'
+<pre class="highlightjs highlight"><code class="language-none hljs">  - package: './dynamic-plugins/dist/backstage-community-plugin-topology'
     disabled: false</code></pre>
+</div>
+</div>
 </div>
 </div>
 </li>
@@ -616,10 +762,7 @@ Due to the browser caching static assets like HTML and Javascript files, you may
 <p><a href="https://backstage.io/docs/features/kubernetes/configuration">Backstage Kubernetes Plugin Configuration</a></p>
 </li>
 <li>
-<p><a href="https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index#rhdh-supported-plugins" target="_blank" rel="noopener">Plugins available in RHDH 1.2</a></p>
-</li>
-<li>
-<p><a href="https://github.com/janus-idp/backstage-plugins/tree/main/plugins/topology">Topology Plugin for Backstage</a></p>
+<p><a href="https://developers.redhat.com/rhdh/plugins#redhatnotpreinstalled" target="_blank" rel="noopener">Plugins available in RHDH 1.4</a></p>
 </li>
 </ul>
 </div>

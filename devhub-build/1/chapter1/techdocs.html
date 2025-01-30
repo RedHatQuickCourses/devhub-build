@@ -274,9 +274,11 @@ The source document conversion and publication process happens completely detach
 <ol class="arabic">
 <li>
 <p>Explore the template file at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/skeleton/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/skeleton/catalog-info.yaml</a>. Note the <code>backstage.io/techdocs-ref</code> annotation that points to the root of the document sources relative to the <code>catalog-info.yaml</code> file</p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
+<pre class="highlightjs highlight"><code class="language-none hljs">apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   ...
@@ -287,6 +289,8 @@ metadata:
 spec:
   type: website
   ...</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="colist arabic">
@@ -304,9 +308,11 @@ spec:
 </li>
 <li>
 <p>Inspect the <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/skeleton/mkdocs.yml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/templates/react-ssr/skeleton/mkdocs.yml</a> file. It contains the MkDocs configuration for the component.</p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">site_name: ...
+<pre class="highlightjs highlight"><code class="language-none hljs">site_name: ...
 site_description: ...
 
 plugins:
@@ -318,6 +324,8 @@ nav: <i class="conum" data-value="2"></i><b>(2)</b>
       - Sub Section 1.1: section1/ss11.md
       - Sub Section 1.2: section1/ss12.md
       - Sub Section 1.3: section1/ss13.md</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="colist arabic">
@@ -335,9 +343,11 @@ nav: <i class="conum" data-value="2"></i><b>(2)</b>
 </li>
 <li>
 <p>The corresponding directory layout of the markdown source looks like the following:</p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">repo_root/
+<pre class="highlightjs highlight"><code class="language-none hljs">repo_root/
   docs/
     section1/
       ss11.md
@@ -348,18 +358,24 @@ nav: <i class="conum" data-value="2"></i><b>(2)</b>
   mkdocs.yml</code></pre>
 </div>
 </div>
+</div>
+</div>
 </li>
 <li>
 <p>RHDH has already enabled the <strong>techdocs</strong> plugin by default for an "all local" configuration. The default plugin YAML file inside the container has the following configured:</p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">...
+<pre class="highlightjs highlight"><code class="language-none hljs">...
 techdocs: <i class="conum" data-value="1"></i><b>(1)</b>
   generator:
     runIn: local
   builder: local
   publisher:
     type: local</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="colist arabic">
@@ -372,7 +388,16 @@ techdocs: <i class="conum" data-value="1"></i><b>(1)</b>
 </div>
 </li>
 <li>
-<p>The TechDocs dynamic plugin is enabled by default. In case it is not enabled, ensure the following entries are added to the <code>dynamic-plugins-rhdh-local</code> ConfigMap:</p>
+<p>The TechDocs dynamic plugin is enabled by default.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/plugin.png" alt="plugin">
+</div>
+<div class="title">Figure 3. TechDocs Plugin</div>
+</div>
+<div class="paragraph">
+<p>In case it is not enabled, ensure the following entries are added to the <code>dynamic-plugins-rhdh-local</code> ConfigMap:</p>
+</div>
 <div class="literalblock">
 <div class="content">
 <pre>./dynamic-plugins/dist/backstage-plugin-techdocs
@@ -392,7 +417,7 @@ techdocs: <i class="conum" data-value="1"></i><b>(1)</b>
 <div class="content">
 <img src="_images/techdocs-render.png" alt="techdocs render">
 </div>
-<div class="title">Figure 3. Rendered Documentation</div>
+<div class="title">Figure 4. Rendered Documentation</div>
 </div>
 </li>
 <li>
@@ -401,7 +426,7 @@ techdocs: <i class="conum" data-value="1"></i><b>(1)</b>
 <div class="content">
 <img src="_images/search-results.png" alt="search results">
 </div>
-<div class="title">Figure 4. Search Results</div>
+<div class="title">Figure 5. Search Results</div>
 </div>
 </li>
 </ol>

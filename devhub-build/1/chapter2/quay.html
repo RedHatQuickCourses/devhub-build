@@ -156,9 +156,11 @@
 <div class="paragraph">
 <p>In your <code>app-config.yaml</code> add a proxy endpoint for Quay:</p>
 </div>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">proxy:
+<pre class="highlightjs highlight"><code class="language-none hljs">proxy:
       '/quay/api': <i class="conum" data-value="1"></i><b>(1)</b>
         target: 'https://quay.io' <i class="conum" data-value="2"></i><b>(2)</b>
         headers:
@@ -168,6 +170,8 @@
         secure: true # false for self-signed certs in self-hosted versions of Quay
     quay:
       uiUrl: 'https://quay.io' <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="colist arabic">
@@ -194,10 +198,14 @@
 <div class="paragraph">
 <p>Enable the Quay dynamic plugin in the dynamic plugins YAML configuration:</p>
 </div>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  - package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-quay
+<pre class="highlightjs highlight"><code class="language-none hljs">  - package: './dynamic-plugins/dist/backstage-community-plugin-quay'
     disabled: false</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -230,9 +238,11 @@
 <ol class="arabic">
 <li>
 <p>Edit the <code>app-config-rhdh</code> ConfigMap and add a <code>proxy</code> endpoint for Quay.io at the same indentation level as the <code>app</code> and <code>kubernetes</code> attributes:</p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">proxy:
+<pre class="highlightjs highlight"><code class="language-none hljs">proxy:
       '/quay/api':
         target: 'https://quay.io'
         headers:
@@ -240,28 +250,45 @@
           #Authorization: 'Bearer mytoken' # for private registries only
         changeOrigin: true
         secure: true
-    quay:
+quay:
       uiUrl: 'https://quay.io'</code></pre>
 </div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="_images/proxy.png" alt="proxy" title="Quay Settings"></span></p>
 </div>
 </li>
 <li>
 <p>Enable the Quay dynamic plugin in the <code>dynamic-plugins-rhdh-local</code> ConfigMap:</p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- package: './dynamic-plugins/dist/janus-idp-backstage-plugin-quay'
+<pre class="highlightjs highlight"><code class="language-none hljs">- package: './dynamic-plugins/dist/backstage-community-plugin-quay'
   disabled: false</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="paragraph">
 <p>Restart the RHDH pod from the <code>Topology</code> view. Wait until the RHDH pod is fully restarted.</p>
 </div>
+<div class="paragraph">
+<p><span class="image"><img src="_images/restart.png" alt="restart" title="Restart Pod"></span></p>
+</div>
 </li>
 <li>
 <p>Inspect the catalog YAML descriptor files at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/quay/quay-registry.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/quay/quay-registry.yaml</a> for an RHDH component that tracks the OpenShift OKD container registry. You need to add an annotation for the Quay plugin to fetch container image information from the appropriate registry.</p>
+<div class="exampleblock">
+<div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: backstage.io/v1alpha1
+<pre class="highlightjs highlight"><code class="language-none hljs">apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata: <i class="conum" data-value="1"></i><b>(1)</b>
   name: myquay
@@ -275,6 +302,8 @@ metadata: <i class="conum" data-value="1"></i><b>(1)</b>
     quay.io/repository-slug: openshift/okd <i class="conum" data-value="2"></i><b>(2)</b>
 spec:
 ...</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="colist arabic">
@@ -291,10 +320,32 @@ spec:
 </div>
 </li>
 <li>
-<p>Import this component into RHDH using the <code>Create &gt; Register Existing Component</code> page. Once imported, click the <code>Example Quay Registry</code> item on the RHDH Catalog page.</p>
+<p>Import this component into RHDH.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Click the <strong>Create</strong> in Red Hat Developer Hub and select <strong>Register Existing Component</strong> page.</p>
+<div class="paragraph">
+<p><span class="image"><img src="_images/template.png" alt="template" title="Register Component"></span></p>
+</div>
 </li>
 <li>
-<p>Observe that a new tab named <code>Image Registry</code> is visible. Click on this tab to view the information for container images contained in the <code>openshift/okd</code> registry.</p>
+<p>Add the url <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/quay/quay-registry.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/quay/quay-registry.yaml</a> and click <strong>Analyse</strong>:</p>
+<div class="paragraph">
+<p><span class="image"><img src="_images/report.png" alt="report" title="Register Component"></span></p>
+</div>
+</li>
+<li>
+<p>Click <strong>Import</strong> and once imported, confim you can see the item present in RHDH Catalog page.</p>
+<div class="paragraph">
+<p><span class="image"><img src="_images/catlog.png" alt="catlog" title="RHDH Catalog"></span></p>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Click the <code>Example Quay Registry</code> item and observe that a new tab named <code>Image Registry</code> is visible. Click on this tab to view the information for container images contained in the <code>openshift/okd</code> registry.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/okd-images.png" alt="okd images">
