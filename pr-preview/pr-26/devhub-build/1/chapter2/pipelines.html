@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Tekton Plugin :: Building Developer Portals with Red Hat Developer Hub</title>
+    <link rel="prev" href="quay.html">
+    <link rel="next" href="gitops.html">
+    <meta name="generator" content="Antora 3.1.3">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <script>var uiRootPath = '../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://www.redhat.com" target="_blank"><img src="../../../_/img/redhat-logo.png" height="40px" alt="Red Hat"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="../../..">Building Developer Portals with Red Hat Developer Hub</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://github.com/RedHatQuickCourses/devhub-build/issues" target="_blank">Report Issues</a>
+      </div>
+    </div>
+  </nav>
+</header><div class="body">
+<div class="nav-container" data-component="devhub-build" data-version="1">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">Building Developer Portals with Red Hat Developer Hub</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../index.html">Home</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../chapter1/index.html">Software Templates</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../chapter1/catalog.html">Software Catalog Deep Dive</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../chapter1/templates.html">Software Templates</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../chapter1/techdocs.html">TechDocs and Search</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">RHDH Plugins</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="dynamic.html">Dynamic Plugins</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="topology.html">Kubernetes and Topology Plugin</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="quay.html">Quay Plugin</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="pipelines.html">Tekton Plugin</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="gitops.html">ArgoCD Plugin</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Building Developer Portals with Red Hat Developer Hub</span>
+    <span class="version">1</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../index.html">Building Developer Portals with Red Hat Developer Hub</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">1</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">Building Developer Portals with Red Hat Developer Hub</a></li>
+    <li><a href="index.html">RHDH Plugins</a></li>
+    <li><a href="pipelines.html">Tekton Plugin</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Tekton Plugin</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The RHDH Tekton plugin provides a quick, read-only visualization of your Tekton continuous integration (CI) pipelines and task runs in the RHDH web UI. This allows developers to get quick feedback about their CI builds and status without ever leaving the RHDH web UI. The plugin displays the latest status of pipeline runs and the status of the tasks in the pipelines. Developers can easily identify tasks that failed and take quick, remedial action.</p>
+</div>
+<div class="paragraph">
+<p>The Tekton plugin depends on the Kubernetes plugin for set-up and configuration. You must ensure that the Kubernetes plugin is aware of custom resources specific to Tekton (pipeline runs and task runs), and has read-only permissions to fetch information from the Kubernetes API server.</p>
+</div>
+<div class="paragraph">
+<p>You must also ensure that you have a <code>janus-idp.io/tekton</code> annotation in your catalog YAML descriptor files that match the name of the pipeline resource. You can, as usual, use label selectors to query pipeline resources (<code>Pipelinerun</code> and <code>Taskrun</code> resources inherit labels from their parent <code>Pipeline</code>).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lab_configuring_the_tekton_plugin"><a class="anchor" href="#_lab_configuring_the_tekton_plugin"></a>Lab: Configuring the Tekton Plugin</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_pre_requisites"><a class="anchor" href="#_pre_requisites"></a>Pre-requisites</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Install the <code>Red Hat OpenShift Pipelines</code> operator by following the official product documentation at <a href="https://access.redhat.com/documentation/en-us/red_hat_openshift_pipelines/1.14/html-single/installing_and_configuring/index#op-installing-pipelines-operator-in-web-console_installing-pipelines" class="bare">https://access.redhat.com/documentation/en-us/red_hat_openshift_pipelines/1.14/html-single/installing_and_configuring/index#op-installing-pipelines-operator-in-web-console_installing-pipelines</a></p>
+</li>
+<li>
+<p>(optional) Download the Tekton CLI (<code>tkn</code>) for your platform from <a href="https://mirror.openshift.com/pub/openshift-v4/clients/pipelines/latest" class="bare">https://mirror.openshift.com/pub/openshift-v4/clients/pipelines/latest</a>. This will come in handy when troubleshooting and debugging pipeline runs.</p>
+</li>
+<li>
+<p>You must have enabled and configured the Kubernetes plugin for RHDH as per the instructions in the <a href="topology.html" class="xref page">Kubernetes and Topology Plugin</a> section. The Kubernetes plugin must be made aware of the <code>pipelineruns</code> and <code>taskruns</code> custom resources in the <code>tekton.dev</code> group for the Tekton plugin to get data from pipeline runs. You must also ensure that the <code>ClusterRole</code> for the <code>default</code> service account has read-only access to these custom resources.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_steps"><a class="anchor" href="#_steps"></a>Steps</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Install <strong>OpenShift Pipelines</strong> operator in Red Hat OpenShift.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Log in to Red Hat OpenShift Console and navigate to the <strong>Operators</strong> and select <strong>OperatorHub</strong>:</p>
+<div class="paragraph">
+<p><span class="image"><img src="_images/pipeline.png" alt="pipeline" title="Select OperatorHub"></span></p>
+</div>
+</li>
+<li>
+<p>Search for <strong>Openshift Pipelines</strong> operator in OperatorHub:</p>
+<div class="paragraph">
+<p><span class="image"><img src="_images/pipe2.png" alt="pipe2" title="Search Openshift Pipelines"></span></p>
+</div>
+</li>
+<li>
+<p>Install the operator and once done move to the next step.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Log in to the OpenShift cluster as the cluster administrator using the <code>oc</code> CLI.</p>
+</li>
+<li>
+<p>Download and inspect the sample Tekton CI pipeline at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/pipeline.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/pipeline.yaml</a>. For simplicity&#8217;s sake, the pipeline consists of 4 tasks that each print a message to the console. You can use much more complex pipelines with more realistic workflows if you wish.</p>
+</li>
+<li>
+<p>Create the pipeline in the <code>myapps</code> namespace.</p>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">oc apply -f pipeline.yaml -n myapps</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>You should see the output as shown below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">task.tekton.dev/repo-clone created
+task.tekton.dev/compile-code created
+task.tekton.dev/run-tests created
+task.tekton.dev/deploy-app created
+pipeline.tekton.dev/mypipeline created</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Typically, pipelines are triggered by a Git repository commit, but for the purposes of this lab, we can launch the pipeline using the <code>oc</code> CLI and YAML files describing <code>PipelineRun</code> resources. Download and inspect the <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml</a> and <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-fail.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-fail.yaml</a> file. These simulate a successful and failed pipeline run respectively.</p>
+</li>
+<li>
+<p>Start the pipeline runs</p>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">oc apply -f run-ok.yaml -n myapps
+oc apply -f run-fail.yaml -n myapps</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>Enable the Tekton plugin in the dynamic plugin YAML configuration file:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Navigate to <strong>Developer</strong> mode in Red Hat OpenShift Console and select <strong>ConfigMaps</strong>:</p>
+<div class="paragraph">
+<p><span class="image"><img src="_images/plugin_enable.png" alt="plugin enable" title="Select ConfigMaps"></span></p>
+</div>
+</li>
+<li>
+<p>Select <strong>dynamic-plugins-rhdh-local</strong> and select <strong>YAML</strong> tab and add below plugin details:</p>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">  - package: './dynamic-plugins/dist/backstage-community-plugin-tekton'
+    disabled: false</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="_images/operator.png" alt="operator" title="Enable Plugin"></span></p>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Restart the RHDH pod from the <code>Topology</code> view.
+Wait until the RHDH container is fully up and running.</p>
+<div class="paragraph">
+<p><span class="image"><img src="_images/restart_rollout.png" alt="restart rollout" title="Restart Pods"></span></p>
+</div>
+</li>
+<li>
+<p>Finally, inspect the catalog YAML descriptor file for this component at <a href="https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/catalog-info.yaml" class="bare">https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/catalog-info.yaml</a>. Adjust the values for your environment. Note the <code>janus-idp.io/tekton</code> annotation to match the name of the pipeline resource (<code>mypipeline</code>), plus the label selector for the pipeline.</p>
+<div class="exampleblock">
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: mypipeline
+  title: A Simple Tekton Pipeline
+  description: |
+    This is a simple Tekton Pipeline
+  annotations:
+    backstage.io/kubernetes-id: 'mypipeline'
+    backstage.io/kubernetes-namespace: myapps
+    backstage.io/kubernetes-label-selector: 'app=mypipeline'
+    janus-idp.io/tekton : mypipeline
+spec:
+  type: pipeline
+...</code></pre>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>Import the component into the RHDH catalog from the <code>Create &gt; Register Existing Component</code> page, and provide the full path to the <code>catalog-info.yml</code> file from the previous step. After the component is imported, verify that the component is listed in the <code>Catalog</code> page and click on <code>A Simple Tekton Pipeline</code> to view the component details.</p>
+</li>
+<li>
+<p>Verify that you can see a new tab named <code>CI</code> on the component details page. Click on it to open the details page. You should see the result of the two pipeline runs.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/pipeline-runs.png" alt="pipeline runs">
+</div>
+<div class="title">Figure 1. Pipeline Runs</div>
+</div>
+</li>
+<li>
+<p>Hover over the <code>TASK STATUS</code> column and you should see a high-level summary of the tasks (how many passed, failed, or skipped).</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/task-status.png" alt="task status">
+</div>
+<div class="title">Figure 2. Task Status</div>
+</div>
+</li>
+<li>
+<p>You can expand each of the pipeline runs (by expanding the greater than symbol to left of the pipelinerun name) and view the detailed status. Note that the <code>tests</code> task has failed in the <code>run-fail</code> pipeline run.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/expand-pipeline-runs.png" alt="expand pipeline runs">
+</div>
+<div class="title">Figure 3. Pipeline Run Details</div>
+</div>
+</li>
+<li>
+<p>Click on the failed <code>tests</code> task in the <code>run-fail</code> pipeline run to view the logs. In an actual application, you will see the unit test failure stack trace and other logs. In this case, the task simply prints a message.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/failed-task.png" alt="failed task">
+</div>
+<div class="title">Figure 4. Failed Task Log</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references"><a class="anchor" href="#_references"></a>References</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://access.redhat.com/documentation/en-us/red_hat_plug-ins_for_backstage/2.0/html-single/tekton_plugin_for_backstage/index">Tekton plugin for Backstage</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="quay.html">Quay Plugin</a></span>
+  <span class="next"><a href="gitops.html">ArgoCD Plugin</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <img src="../../../_/img/rhl-logo-red.png" height="40px" alt="Red Hat"  href="https://redhat.com" >
+</footer><script id="site-script" src="../../../_/js/site.js" data-ui-root-path="../../../_"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
