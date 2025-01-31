@@ -18,14 +18,34 @@ You must also ensure that you have a `janus-idp.io/tekton` annotation in your ca
 
 === Steps
 
+. Install *OpenShift Pipelines* operator in Red Hat OpenShift.
+
+.. Log in to Red Hat OpenShift Console and navigate to the *Operators* and select *OperatorHub*:
++
+image:pipeline.png[title=Select OperatorHub]
+
+.. Search for *Openshift Pipelines* operator in OperatorHub:
++
+image:pipe2.png[title=Search Openshift Pipelines]
+
+.. Install the operator and once done move to the next step.
+
 . Log in to the OpenShift cluster as the cluster administrator using the `oc` CLI.
 
 . Download and inspect the sample Tekton CI pipeline at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/pipeline.yaml. For simplicity's sake, the pipeline consists of 4 tasks that each print a message to the console. You can use much more complex pipelines with more realistic workflows if you wish.
 
 . Create the pipeline in the `myapps` namespace.
 +
+====
+[source,subs="verbatim,quotes"]
+----
+oc apply -f pipeline.yaml -n myapps
+----
+====
++
+You should see the output as shown below:
++
 ```bash
-$ oc apply -f pipeline.yaml -n myapps
 task.tekton.dev/repo-clone created
 task.tekton.dev/compile-code created
 task.tekton.dev/run-tests created
@@ -33,28 +53,48 @@ task.tekton.dev/deploy-app created
 pipeline.tekton.dev/mypipeline created
 ```
 
-. Typically, pipelines are triggered by a Git repository commit, but for the purposes of this lab, we can launch the pipeline using the `oc` CLI and YAML files describing `PipelineRun` resources. Inspect the https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml and https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-fail.yaml file. These simulate a successful and failed pipeline run respectively.
+. Typically, pipelines are triggered by a Git repository commit, but for the purposes of this lab, we can launch the pipeline using the `oc` CLI and YAML files describing `PipelineRun` resources. Download and inspect the https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-ok.yaml and https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/run-fail.yaml file. These simulate a successful and failed pipeline run respectively.
 
 . Start the pipeline runs
-```bash
-$ oc apply -f run-ok.yaml -n myapps
-pipelinerun.tekton.dev/run-ok created
-$ oc apply -f run-fail.yaml -n myapps
-pipelinerun.tekton.dev/run-fail created
-```
++
+====
+[source,subs="verbatim,quotes"]
+----
+oc apply -f run-ok.yaml -n myapps
+oc apply -f run-fail.yaml -n myapps
+----
+====
 
 . Enable the Tekton plugin in the dynamic plugin YAML configuration file:
-+
-```yaml
-  - package: './dynamic-plugins/dist/janus-idp-backstage-plugin-tekton'
-    disabled: false
-```
 
-. Restart the RHDH pod from the `Topology` view. Wait until the RHDH container is fully up and running.
+.. Navigate to *Developer* mode in Red Hat OpenShift Console and select *ConfigMaps*:
++
+image:plugin_enable.png[title=Select ConfigMaps]
+
+.. Select *dynamic-plugins-rhdh-local* and select *YAML* tab and add below plugin details:
++
+====
+[source,subs="verbatim,quotes"]
+----
+  - package: './dynamic-plugins/dist/backstage-community-plugin-tekton'
+    disabled: false
+----
+====
++
+Example:
++
+image:operator.png[title=Enable Plugin]
+
+. Restart the RHDH pod from the `Topology` view.
+Wait until the RHDH container is fully up and running.
++
+image:restart_rollout.png[title=Restart Pods]
 
 . Finally, inspect the catalog YAML descriptor file for this component at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/ci-cd/catalog-info.yaml. Adjust the values for your environment. Note the `janus-idp.io/tekton` annotation to match the name of the pipeline resource (`mypipeline`), plus the label selector for the pipeline.
 +
-```yaml
+====
+[source,subs="verbatim,quotes"]
+----
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
@@ -70,7 +110,8 @@ metadata:
 spec:
   type: pipeline
 ...
-```
+----
+====
 
 . Import the component into the RHDH catalog from the `Create > Register Existing Component` page, and provide the full path to the `catalog-info.yml` file from the previous step. After the component is imported, verify that the component is listed in the `Catalog` page and click on `A Simple Tekton Pipeline` to view the component details.
 
