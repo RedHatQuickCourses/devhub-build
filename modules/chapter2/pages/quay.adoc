@@ -44,7 +44,7 @@ Enable the Quay dynamic plugin in the dynamic plugins YAML configuration:
 
 This hands-on lab uses a publicly available container registry that is freely accessible and hosted in the https://quay.io container registry.
 
-* If you want to use a private container registry then you need to generate authentication tokens for your account on the https://quay.io website
+* If you want to use a private container registry then you need to generate authentication tokens for your account on the https://quay.io website.
 * Consult the product documentation for Quay enterprise registry to install and set up account authentication.
 
 === Steps

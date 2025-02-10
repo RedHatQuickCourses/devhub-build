@@ -15,7 +15,7 @@ image::catalog-concepts.png[title=Catalog Import Process]
 
 To populate an entity in the Catalog typically involves three phases corresponding to three logical software components in RHDH:
 
-. *Entity Providers* are responsible for communicating with different types of entities and import raw data into RHDH.
+. *Entity Providers* are responsible for communicating with different types of entities and importing raw data into RHDH.
 . *Processors* validate, analyze, enrich, and transform the raw entity data into its final form.
 . *Stitchers*  gather data emitted by various processors and populate the Catalog API.
 
@@ -44,7 +44,7 @@ Location::
 A location acts as a proxy that references other locations to locate catalog data (YAML files).
 
 Template::
-A `Template` is an RHDH entity that describes a set of source files and structure, from which you can create instances of applications,services, CI/CD pipelines, Infrastructure as Code (IaC) playbooks, operating system and virtual machine provisioning scripts and more. These instances are then automatically populated and tracked in the RHDH Software Catalog. A Template can contain a mix of source code, configuration files, build system configuration, and all the dependencies that are required for an application or a service. The Template is parsed by RHDH, which then provides a visual interface to create application instances from it. Dynamic parts that meed user input are modeled as `Parameters` in the template. Input forms corresponding to the parameters are automatically created by RHDH in the front-end portal.
+A `Template` is an RHDH entity that describes a set of source files and structure, from which you can create instances of applications, services, CI/CD pipelines, Infrastructure as Code (IaC) playbooks, operating system and virtual machine provisioning scripts and more. These instances are then automatically populated and tracked in the RHDH Software Catalog. A Template can contain a mix of source code, configuration files, build system configuration, and all the dependencies that are required for an application or a service. The Template is parsed by RHDH, which then provides a visual interface to create application instances from it. Dynamic parts that meed user input are modeled as `Parameters` in the template. Input forms corresponding to the parameters are automatically created by RHDH in the front-end portal.
 
 System::
 A `System` is a logical grouping of `Resources` and `Components` that provides one or more `APIs`. A System abstracts away the resources and private APIs between the components for any consumers. This means that as the owner, you can evolve the implementation, in terms of components and resources, without your consumers being affected. 
@@ -83,7 +83,7 @@ This approach is useful for already existing components and APIs that you want t
 
 === New Components with Software Templates
 
-Instantiating a Template will automatically populate the Catalog with the instance of the application. This is a fast, efficient, less error prone way to create new components providing self-service capabilities to your developers. You will learn how to create Software Templates and instantiate applications from them in more detail in the next section.
+Instantiating a Template will automatically populate the Catalog with the instance of the application. This is a fast, efficient, less error-prone way to create new components providing self-service capabilities to your developers. You will learn how to create Software Templates and instantiate applications from them in more detail in the next section.
 
 === GitHub Auto-Discovery
 
@@ -119,13 +119,13 @@ catalog:
 <4> Path to the catalog YAML files (can use wildcards here).
 <5> Tells RHDH to look for YAML files in the mentioned GitHub branch. (Optional)
 <6> Regular expression matching the repository names(s) - in this case all repositories in the GitHub Org. (Optional)
-<7> Scheduled interval at which RHDH should fetch and update catalog information. (Optional)
+<7> The scheduled interval at which RHDH should fetch and update catalog information. (Optional)
 
 See https://backstage.io/docs/integrations/github/discovery/ for full details about the different ways you can configure `catalogPath`, `branch`, and `repository` settings.
 
 == Updating and Deleting Components
 
-To update component details, teams owning the corresponding Git repository where the catalog YAML files reside, should update it using normal Git workflow policies. RHDH then automatically fetches the updated information based on a configurable schedule (minutes, hours or days) and then re-indexes and updates the Catalog.
+To update component details, teams owning the corresponding Git repository where the catalog YAML files reside, should update it using normal Git workflow policies. RHDH then automatically fetches the updated information based on a configurable schedule (minutes, hours, or days) and then re-indexes and updates the Catalog.
 
 To remove entities from the Catalog, you can delete them from the RHDH component details page. This action will delete the entity and all dependent entities related to it.
 
@@ -135,9 +135,9 @@ NOTE: Deleting entities from the RHDH web UI for auto-discovered entities is not
 
 == Catalog Processing Interval and Scheduling
 
-The Catalog pulls data from external sources at periodic intervals. The default is 100-150 seconds (just over 2 minutes). Depending on how many entities to fetch and process, RHDH auto adjusts this interval to avoid overloading the processing loop. It is not a good idea to keep the interval at very low values due to the fact that external sources, for example, GitHub/GitLab etc may have throttling limits, and you may be denied access if the provider feels you are orchestrating a denial of service type attack (DDoS).
+The Catalog pulls data from external sources at periodic intervals. The default is 100-150 seconds (just over 2 minutes). Depending on how many entities to fetch and process, RHDH auto-adjusts this interval to avoid overloading the processing loop. It is not a good idea to keep the interval at very low values due to the fact that external sources, for example, GitHub/GitLab, etc may have throttling limits, and you may be denied access if the provider feels you are orchestrating a denial of service type attack (DDoS).
 
-You can set the processing interval in your `app-config-rhdh` ConfigMap as follows. Values of 60 minutes or more, depending on your use-case is recommended. See https://backstage.io/docs/features/software-catalog/configuration/#processing-interval for more details on the possible configuration values.
+You can set the processing interval in your `app-config-rhdh` ConfigMap as follows. Values of 60 minutes or more, depending on your use-case are recommended. See https://backstage.io/docs/features/software-catalog/configuration/#processing-interval for more details on the possible configuration values.
 
 ```yaml
 catalog:
@@ -146,9 +146,9 @@ catalog:
 
 == Querying the Catalog
 
-The information contained in the catalog YAML files are presented in the `Catalog` page of RHDH. You can filter and search for component information, and use various built-in and custom plugins work on processing the items in the Catalog.
+The information contained in the catalog YAML files is presented on the `Catalog` page of RHDH. You can filter and search for component information, and use various built-in and custom plugins work on processing the items in the Catalog.
 
-Most plugins (core, community provided, and Red Hat provided) act on information indexed by RHDH, and integrate with the RHDH Catalog API, which provides a uniform interface to the information in the catalog.
+Most plugins (core, community-provided, and Red Hat-provided) act on information indexed by RHDH, and integrate with the RHDH Catalog API, which provides a uniform interface to the information in the catalog.
 
 == Catalog Rules
 
@@ -168,7 +168,7 @@ catalog:
         - allow: [Group]
 ```
 
-You can add entities of the kind `Component`, `API`, `Location`, `User` and `Template` from any location, and `Group` entities from the `org-data.yaml` file, which will also be read as a statically configured location.
+You can add entities of the kind `Component`, `API`, `Location`, `User`, and `Template` from any location, and `Group` entities from the `org-data.yaml` file, which will also be read as a statically configured location.
 
 Note that if the `catalog.rules` key is present, it will override the default value. Therefore, you need to add rules for the default kinds if you want them to be allowed.
 
@@ -179,7 +179,7 @@ catalog:
   rules: []
 ```
 
-== Hands on Labs
+== Hands-on Labs
 
 === Pre-requisites
 
@@ -189,11 +189,11 @@ catalog:
 
 === Lab 1: Populating the Catalog Manually
 
-In this lab , you will import an example web application called `myapp` into the RHDH Catalog. `myapp` depends on a PostgreSQL database resource. The catalog YAML descriptor files are stored in a GitHub repository.
+In this lab, you will import an example web application called `myapp` into the RHDH Catalog. `myapp` depends on a PostgreSQL database resource. The catalog YAML descriptor files are stored in a GitHub repository.
 
 ==== Steps
 
-. Inspect the top level catalog YAML file at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/catalog-info.yaml. It contains a `Location` entity pointing to a set of entities that make up the `myapp` application.
+. Inspect the top-level catalog YAML file at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/catalog-info.yaml. It contains a `Location` entity pointing to a set of entities that make up the `myapp` application.
 +
 [subs=+quotes,yaml]
 ----
@@ -212,9 +212,9 @@ spec:
 +
 <1> Indicates that this is a `Location` kind.
 <2> A unique name that identifies this location entity.
-<3> A list of entities that are provided by this Location. In this case, a `Group`, a `System`, a database `Resource` and a `Component` respectively.
+<3> A list of entities that are provided by this Location. In this case, a `Group`, a `System`, a database `Resource`, and a `Component` respectively.
 
-. Inspect the `group.yaml`, `system.yaml`, and `myapp-db.yaml` catalog descriptor files in the same repository. Note the different uses of the `Kind` and the `spec` section defining attributes for this type of entity (who owns it, what it depends on, and more). You can also reference entities from the catalog that were populated automatically - for example, teams and users information from GitHub Organizations.
+. Inspect the `group.yaml`, `system.yaml`, and `myapp-db.yaml` catalog descriptor files in the same repository. Note the different uses of the `Kind` and the `spec` section defining attributes for this type of entity (who owns it, what it depends on, and more). You can also reference entities from the catalog that were populated automatically - for example, teams and user information from GitHub Organizations.
 
 . Finally, inspect the `myapp` definition at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/catalog/myapp.yaml
 +
@@ -356,7 +356,7 @@ WARNING: In production systems, ensure that you set the schedule at a higher val
   disabled: false
 ```
 
-. Restart rollout of the RHDH pod and wait for the RHDH pods to be recreated. RHDH will auto-discover your catalog YAML descriptor files under your GitHub Organization based on the `schedule` configuration. Inspect the RHDH container logs if you see any errors and fix the configuration in `app-config-rhdh` and redeploy. A successful scan by the plugin should result in logs like the following:
+. Restart the rollout of the RHDH pod and wait for the RHDH pods to be recreated. RHDH will auto-discover your catalog YAML descriptor files under your GitHub Organization based on the `schedule` configuration. Inspect the RHDH container logs if you see any errors fix the configuration in `app-config-rhdh` and redeploy. A successful scan by the plugin should result in logs like the following:
 +
 ```
 ... Read 34 GitHub repositories (32 matching the pattern)...
@@ -372,7 +372,7 @@ image::petstore-api.png[title=API auto-discovered by RHDH]
 +
 image::petstore-api-details.png[title=Petstore API Details]
 
-. Click in the `Definition` tab and notice how RHDH has detected the OpenAPI definition for this API and renders a nice swagger page for the API end points.
+. Click in the `Definition` tab and notice how RHDH has detected the OpenAPI definition for this API and renders a nice swagger page for the API endpoints.
 +
 image::petstore-swagger.png[title=OpenAPI documentation,width=600]
 

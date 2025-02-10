@@ -2,7 +2,7 @@
 
 The RHDH ArgoCD plugin provides a read-only visualization of your ArgoCD and OpenShift GitOps application deployments in the RHDH web UI. This allows developers to get quick feedback about their application deployment status without ever leaving the RHDH web UI. The plugin displays the latest deployment status, as well as information about historical deployments. Developers can easily identify deployments that failed and take quick, remedial action.
 
-When importing ArgoCD `Application` resources into RHDH, you must ensure that you have a `argocd/app-name` annotation in your catalog YAML descriptor files that match the name of the ArgoCD `Application` resource.
+When importing ArgoCD `Application` resources into RHDH, you must ensure that you have an `argocd/app-name` annotation in your catalog YAML descriptor files that match the name of the ArgoCD `Application` resource.
 
 == Lab: Configuring the Tekton Plugin
 

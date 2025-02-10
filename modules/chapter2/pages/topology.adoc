@@ -77,7 +77,7 @@ The following hands-on labs describe the detailed steps to enable and configure 
 
 === Steps
 
-. Log in to the OpenShift cluster using the `oc` CLI tool as a cluster administrator (for RHDP based classrooms, usually `admin`. Consult the RHDP Service details page for log in details).
+. Log in to the OpenShift cluster using the `oc` CLI tool as a cluster administrator (for RHDP-based classrooms, usually `admin`. Consult the RHDP Service details page for login details).
 
 . Download and inspect the YAML file at https://github.com/RedHatQuickCourses/devhub-qc-apps/blob/main/kube/1-cr.yaml. This file creates a `ClusterRole` that provides cluster-wide  *read-only* access to a service account. Adjust the values as per your environment.
 +
@@ -107,7 +107,7 @@ rules:
 ```
 +
 <1> Lists of Kubernetes resources for which you want the plugin to fetch data from the Kubernetes API
-<2> Permissions allowed for this role. In this case, read-only permissions to list, get and watch these resources
+<2> Permissions allowed for this role. In this case, read-only permissions to list, get, and watch these resources
 +
 This file lists a number of custom resources that the plugin uses to fetch data. Add other resources to this YAML based on your workload.
 
@@ -170,11 +170,11 @@ Error communicating with Kubernetes: FETCH_ERROR, message: request to https://ap
 ```
 +
 <1> Kubernetes Cluster API Server endpoint (Get this from your RHDP Service Details page). Replace `guid` with your unique GUID
-<2> A unique name for this Kubernetes cluster. You can add multiple Kubernetes clusters under the `clusters:` key, each with its own unique name and configuration
-<3> Use service accounts for authentication
+<2> A unique name for this Kubernetes cluster. You can add multiple Kubernetes clusters under the `clusters:` key, each with its own unique name and configuration.
+<3> Use service accounts for authentication.
 <4> Token for the service account that connects to the Kubernetes API server
-<5> Kubernetes custom resources that should be visible in RHDH. The base Kubernetes plugin only understands the vanilla Kubernetes API resources. Routes, pipelines and tasks are additions on top of the base Kubernetes API added by layered products like OpenShift Pipelines and the OpenShift platform router
-<6> For self-signed certificates, set this flag to `true`
+<5> Kubernetes custom resources that should be visible in RHDH. The base Kubernetes plugin only understands the vanilla Kubernetes API resources. Routes, pipelines, and tasks are additions on top of the base Kubernetes API added by layered products like OpenShift Pipelines and the OpenShift platform router.
+<6> For self-signed certificates, set this flag to `true`.
 
 . Edit the `dynamic-plugins-rhdh-local` ConfigMap and enable the Kubernetes backend and frontend plugins:
 +
@@ -209,7 +209,7 @@ kind: Route
 ...
 ```
 +
-<1> Labels to be applied on this Deployment resource
+<1> Labels to be applied to this Deployment resource
 <2> Label that identifies this component uniquely for the RHDH catalog
 
 . Deploy the application in the `myapps` namespace (Create this namespace/project if it does not exist)

@@ -6,7 +6,7 @@ You learnt about the `TechDocs` feature of RHDH in the first introductory course
 
 TechDocs uses the popular MkDocs library to generate documentation for your applications. You write markdown files (*.md* file extension) alongside your application's source code, and store them either in the same repository where you maintain the application, or an external repository, which can then be referenced in your catalog YAML files.
 
-Your raw plain text source markdown files are then converted to HTML, and then displayed as HTML in the RHDH web UI. There are several ways to configure how RHDH fetches, generates and publishes documents.
+Your raw plain text source markdown files are then converted to HTML, and then displayed as HTML in the RHDH web UI. There are several ways to configure how RHDH fetches, generates, and publishes documents.
 
 == TechDocs Concepts and Terminology
 
@@ -19,7 +19,7 @@ Generator::
 The generator uses the raw markdown files input and converts it to HTML. The RHDH container has an in-built version of MkDocs packaged inside it.
 
 Publisher::
-The publisher stores the generated HTML files either locally on the RHDH container file system, or in external cloud storage (AWS S3, GCP Cloud Storage, Azure Blob etc).
+The publisher stores the generated HTML files either locally on the RHDH container file system, or in external cloud storage (AWS S3, GCP Cloud Storage, Azure Blob, etc).
 
 Builder::
 Builders are closely linked to the generator stage and typically offer multiple ways to build the markdown content to HTML. By default, RHDH uses a locally installed builder to generate the HTML files. You can also configure an external CI/CD workflow to fetch the markdown source, build the HTML externally, and publish the generated HTML to external storage. RHDH can then be configured to fetch the generated HTML files from external storage.
@@ -34,17 +34,17 @@ image::techdocs-arch-local.png[title=TechDocs Architecture for Local Storage and
 . The RHDH backend converts the raw markdown to HTML and publishes it to the local file system inside the container.
 . The client is then sent the generated HTML files from local file system storage. RHDH intelligently caches the generated HTML files so that subsequent requests to documentation are faster.
 
-The "all local" approach is recommended only for small sized installations of RHDH with a few components. This approach will not scale to medium sized and large installations with hundreds or thousands of components. Recall that RHDH is running as a container, so this approach results is duplicating the HTML files and other processes across all the RHDH pods.
+The "all local" approach is recommended only for small-sized installations of RHDH with a few components. This approach will not scale to medium-sized and large installations with hundreds or thousands of components. Recall that RHDH is running as a container, so this approach results is duplicating the HTML files and other processes across all the RHDH pods.
 
-The following diagram illustrates the production recommended external publication and builder configuration of TechDocs:
+The following diagram illustrates the production-recommended external publication and builder configuration of TechDocs:
 
 image::techdocs-arch-external.png[title=TechDocs Architecture for External Storage and Publishing]
 
-. A CI/CD workflow (GitHub Actions, Jenkins scripts etc) converts the markdown to HTML and stores the generated files in external cloud storage.
+. A CI/CD workflow (GitHub Actions, Jenkins scripts, etc) converts the markdown to HTML and stores the generated files in external cloud storage.
 . The backend registers the location of the HTML files for all the components where TechDocs is enabled.
 . When a client requests documentation for a component, the backend fetches the HTML and other static files from external storage and sends it to the client.
 
-NOTE: The source document conversion and publication process happens completely detached (asynchronously) in the CI/CD workflow (in github actions, gitlab pipeline runners, etc.), irrespective of user requests for documentation.
+NOTE: The source document conversion and publication process happens completely detached (asynchronously) in the CI/CD workflow (in github actions, GitLab pipeline runners, etc.), irrespective of user requests for documentation.
 
 This is the recommended set up for production. CI/CD workflows convert the markdown to HTML asynchronously based on webhook triggers on the documentation repository and publish the generated HTML to external cloud storage. RHDH acts as a pure stateless engine and fetches the HTML for a component based on client request. This approach can scale to large installations with hundreds or thousands of components.
 

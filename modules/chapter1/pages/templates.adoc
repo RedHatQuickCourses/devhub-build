@@ -1,6 +1,6 @@
 = Software Templates
 
-The first course in the learning path for RHDH introduced you to the general concept of a `Software Template`, also called `Golden Path Template`, or just `Template`. 
+The first course in the learning path for RHDH introduced you to the general concept of a `Software Template`, also called the `Golden Path Template`, or just `Template`. 
 
 This section briefly discusses the concepts and terminology about templates, and then walks you through a hands-on experience of creating software templates. You will also learn how to create applications from the template and auto-populate the generated application in the Catalog.
 
@@ -21,10 +21,10 @@ Parameters::
 Inputs to your templates are declared in the parameters section. You need to describe the type (String, Numbers, Hidden, Boolean etc) of the parameter, if they are mandatory, and provide default values, if any. These are rendered as HTML forms in RHDH when you instantiate the template. Values provided by the users are then replaced in the template (in the `${{var}}` variable placeholders).
 
 Properties::
-Properties are the detailed specification for Parameters, along with other UI hints for RHDH. You can make RHDH look up entity details from the Catalog (as a drop-down, for example) instead of the user manually typing in the values in the form.
+Properties are the detailed specifications for Parameters, along with other UI hints for RHDH. You can make RHDH look up entity details from the Catalog (as a drop-down, for example) instead of the user manually typing in the values in the form.
 
 Steps::
-Steps describe the detailed actions that RHDH should perform when instantiating the template to create applications. Each step is rendered as separate HTML forms in the RHDH web UI. This usually involves fetching all the template files and overriding the placeholder variables, and then publishing the generated code to Git, followed by generation and registration of the application in the Catalog.
+Steps describe the detailed actions that RHDH should perform when instantiating the template to create applications. Each step is rendered as separate HTML forms in the RHDH web UI. This usually involves fetching all the template files and overriding the placeholder variables, and then publishing the generated code to Git, followed by the generation and registration of the application in the Catalog.
 
 Built-in Actions::
 Steps rely on a number of built-in actions that perform some of the common tasks when instantiating the template. A complete list of actions is available at the https://RHDH_URL/create/actions. Replace *RHDH_URL* with the actual URL of your RHDH instance. This page displays all the available actions that you can reuse in your template, along with a detailed description of the inputs to the actions.
@@ -73,7 +73,7 @@ metadata: <2>
       properties: <4>
       ...
 
-  # fetch templates, override placeholder variables, publish to Git repo.
+  # fetch templates, override placeholder variables, and publish to Git repo.
   # finally generate the catalog info YAML files
   steps: <5>
     - id: fetch-template

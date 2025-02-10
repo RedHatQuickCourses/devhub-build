@@ -4,13 +4,13 @@ This section briefly explains the rationale for dynamic plugins and how to enabl
 
 == Dynamic Plugins in RHDH
 
-As you already learnt in the first introductory course in the learning path, RHDH as a platform consists of a small modular core and an extensive set of plugins that provide most of the functionality. In the upstream *Backstage.io* platform, enabling a plugin means modifying the platform's source code to load a bunch of TypeScript/JavaScript, and other static files (HTML, CSS, images etc.). You then have to stop and restart the runtime to enable the plugin.
+As you already learned in the first introductory course in the learning path, RHDH as a platform consists of a small modular core and an extensive set of plugins that provide most of the functionality. In the upstream *Backstage.io* platform, enabling a plugin means modifying the platform's source code to load a bunch of TypeScript/JavaScript, and other static files (HTML, CSS, images, etc.). You then have to stop and restart the runtime to enable the plugin.
 
-This approach of changing source code and restarting for enabling plugins will not work for RHDH, because you need to recompile the source code, build a new container image and then re-deploy the new container image. 
+This approach of changing source code and restarting for enabling plugins will not work for RHDH, because you need to recompile the source code, build a new container image, and then re-deploy the new container image. 
 
 RedHat has introduced the concept of a *dynamic plugin* to overcome this hurdle. A set of curated plugins are pre-baked into the container image, but not enabled by default. The dynamic plugin framework is based on the Node.js Scalprum library (https://github.com/scalprum/scaffolding). To enable or disable a plugin, you edit the *app-config.yaml* or the RHDH Helm chart YAML values and turn plugins on or off. In this manner, RHDH allows you to control plugin lifecycle and configuration without recompiling or rebuilding container images.
 
-RHDH is pre-loaded with a selection of dynamic plugins. Most of these dynamic plugins are disabled by default due to the need for mandatory configuration. For a complete list of dynamic plugins that are included, see the https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index#rhdh-supported-plugins[dynamic plugins matrix] section in the `Administration guide for Red Hat Developer Hub`. 
+RHDH is pre-loaded with a selection of dynamic plugins. Most of these dynamic plugins are disabled by default due to the need for mandatory configuration. For a complete list of dynamic plugins that are included, see the https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index#rhdh-supported-plugins[dynamic plugins matrix] section in the `Administration Guide for Red Hat Developer Hub`. 
 
 NOTE: Red Hat fully supports certain plugins (Topology, Tekton, Quay), while others are community-supported projects.
 
@@ -51,11 +51,11 @@ WARNING: Simply enabling a dynamic plugin in the helm chart may not provide the 
 
 === RHDH Operator
 
-If you installed RHDH using the operator, enable or disable dynamic plugins in the `dynamic-plugins-rhdh-local` ConfigMap and restarting the RHDH pod. The YAML snippet shown for the helm chart based installation is also valid for the operator based installs. The plugin configuration in the *app-config-rhdh* ConfigMap remains the same.
+If you installed RHDH using the operator, enable or disable dynamic plugins in the `dynamic-plugins-rhdh-local` ConfigMap and restart the RHDH pod. The YAML snippet shown for the helm chart-based installation is also valid for the operator-based installs. The plugin configuration in the *app-config-rhdh* ConfigMap remains the same.
 
 If you wish to include a dynamic plugin that is not included in RHDH, or if you wish to develop your own custom plugins, consult the Janus IDP plugins repository at https://github.com/janus-idp/backstage-plugins. 
 
-A nice demonstration on how to create a custom plugin for RHDH is shown https://www.youtube.com/watch?v=yVzjTU3JamE[here^]. You can also host custom plugins in your own NPM registry and include them by following the steps at https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index#ref-example-dynamic-plugin-helm-installations[here^].
+A nice demonstration on how to create a custom plugin for RHDH is shown https://www.youtube.com/watch?v=yVzjTU3JamE[here^]. You can also host custom plugins in your own NPM registry and include them by following the steps https://docs.redhat.com/en/documentation/red_hat_developer_hub/1.2/html-single/configuring_plugins_in_red_hat_developer_hub/index#ref-example-dynamic-plugin-helm-installations[here^].
 
 == References
 
